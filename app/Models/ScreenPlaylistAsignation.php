@@ -39,4 +39,14 @@ class ScreenPlaylistAsignation extends Model
 		'active' => 'required'
   ];
 
+	public function screen()
+	{
+		return $this->belongsTo(\App\Models\Screen::class);
+	}
+
+	public function versionPlaylist()
+	{
+		return $this->belongsTo(\App\Models\VersionPlaylist::class);
+	}
+
 }

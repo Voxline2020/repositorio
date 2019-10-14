@@ -1,17 +1,20 @@
 @extends('layouts.principal')
 
 @section('content')
+@php
+		$screenActive = $screens->where('state', 1)->count();
+		$screenInactive = $screens->where('state', 0)->count();
+@endphp
 <div class="container">
 	@include('flash::message')
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
-			<br><br><br><br><br>
-			<h4 >Reproductores</h4>
+			<h4>Estado Reproductores</h4>
 			<div id="chart_div" style="width:650; height:500"></div>
 		</div>
 
 		<div class="col-sm-12 col-md-6">
-			<h4 class=font-weight-bold> Bienvenido {{$user}} </h4>
+			<h4 class=font-weight-bold> Bienvenido {{ Auth::user()->name }} </h4>
 			@php $mytime = Carbon\Carbon::now()@endphp
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
 			<br><br>
@@ -47,7 +50,7 @@
 		data.addColumn('number', 'Slices');
 		data.addRows([
 			['activa(s)', {{ $screenActive }}],
-			['inactiva(s)', {{$screenInactive}}],
+			['inactiva(s)', {{ $screenInactive }}],
 		]);
 
 		// Set chart options

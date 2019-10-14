@@ -37,4 +37,14 @@ class VersionPlaylistDetail extends Model
 		'version_id' => 'required'
   ];
 
+	public function content()
+	{
+			return $this->belongsTo(\App\Models\Content::class);
+	}
+
+	public function versionPlaylist()
+	{
+			return $this->belongsTo(\App\Models\VersionPlaylist::class,'version_id');
+	}
+
 }

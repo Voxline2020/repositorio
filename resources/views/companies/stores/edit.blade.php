@@ -1,23 +1,17 @@
 @extends('layouts.principal')
 
 @section('content')
-    <section class="content-header">
-        <h4>
-            Editar Sucursal
-        </h4>
-   </section>
-   <div class="content">
-       @include('adminlte-templates::common.errors')
-       <div class="box box-primary">
-           <div class="box-body">
-               <div class="row">
-                   {!! Form::model($store, ['route' => ['stores.update', $store->id], 'method' => 'patch']) !!}
+	<div class="row">
+		<div class="col-md-12">
+			<h2>
+				Editar sucursal {{ $store->name }}
+			</h2>
+		</div>
+	</div>
 
-                        @include('store.fields')
-
-                   {!! Form::close() !!}
-               </div>
-           </div>
-       </div>
-   </div>
+	{!! Form::model($store, ['route' => ['companies.stores.update', $company,$store], 'method' => 'put']) !!}
+	<div class="row">
+		@include('companies.stores.fields')
+	</div>
+	{!! Form::close() !!}
 @endsection

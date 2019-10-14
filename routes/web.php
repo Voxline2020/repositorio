@@ -58,7 +58,11 @@ Route::resource('events', 'EventController');
 Route::group(['prefix' => 'events'], function () {
 	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
 	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
-	Route::get('{eventId}/{id}', "EventController@Assign")->name('events.Assign');
+	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
+
+
+
+
 });
 
 //SECTION Companies
@@ -106,10 +110,14 @@ Route::group(['prefix' => 'screens'], function () {
 });
 
 //SECTION Clients
-Route::resource('clients', 'ClientController');
+Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
+// Route::resource('clients', 'ClientController');
 Route::group(['prefix' => 'clients'], function () {
-	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
+	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 	Route::get('screen/{id}','ScreenController@create')->name('screens.createOneParam'); // ruta para recoger 1 parametro que es el id de computador y crear una pantalla.
+	Route::get('/events', "EventController@index")->name('clients.events.index');
+	Route::get('/events/{event}/', "EventController@showClient")->name('clients.events.show');
+
 });
 
 //SECTION File

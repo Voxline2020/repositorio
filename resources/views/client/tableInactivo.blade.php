@@ -6,23 +6,23 @@
 				<th>Nombre</th>
 				<th>Fecha Inicio</th>
 				<th>Fecha Termino</th>
-
 				<th colspan="3">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($events as $event)
-
-			@if($event->state==0 && $event->initdate > \Carbon\Carbon::now()->format('Y-m-d\TH:i:s'))
+			@php
+			$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
+					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->take(5);
+			@endphp
+			@foreach($eventsInactive as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
 				<td>{!! $event->initdate!!}</td>
 				<td>{!! $event->enddate!!}</td>
 				<td>
-					<a href="{{route('events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
+					<a href="{{route('clients.events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
 				</td>
 			</tr>
-			@endif
 			@endforeach
 		</tbody>
 	</table>

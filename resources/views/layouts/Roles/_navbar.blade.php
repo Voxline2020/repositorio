@@ -23,8 +23,8 @@
 					<a class="nav-link" href="{{ route('users.index') }}">Usuarios</a>
 				</li>
 			@elseif(Auth::user()->hasRole('Cliente'))
-				<li class="nav-item {{ Route::is('events.index') ? 'active': null }}">
-					<a class="nav-link" href="{{ route('events.index') }}">Eventos</a>
+				<li class="nav-item {{ Route::is('events.clients.index') ? 'active': null }}">
+					<a class="nav-link" href="{{ route('clients.events.index') }}">Eventos</a>
 				</li>
 			@endif
 			<li class="nav-item">

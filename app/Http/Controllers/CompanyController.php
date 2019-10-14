@@ -156,9 +156,82 @@ class CompanyController extends AppBaseController
 	//SECTION Sucursales Compañia
 	public function indexStore(Company $company, Request $request)
 	{
-		return view('companies.stores.index',compact('company'));
+		$stores = Store::where('company_id', $company->id);
+		if(isset($request['nameFilter']) && !empty($request['nameFilter'])){
+			$stores = $stores->where('name', 'like', '%'.$request['nameFilter'].'%');
+		}
+		else if(isset($request['addressFilter']) && !empty($request['addressFilter'])){
+			$stores = $stores->where('address', 'like', '%'.$request['addressFilter'].'%');
+		}
+		$stores = $stores->get();
+		return view('companies.stores.index',compact('company', 'stores'));
 	}
-	public function showBranch($id)
+	public function showStore(Company $company, Store $store)
+	{
+		if (empty($company)) {
+			Flash::error('Compañia no encontrada');
+			return redirect(route('companies.stores.index', compact('company')));
+		}
+		return view('companies.stores.show', compact('company','store'));
+	}
+	public function createStore(Company $company)
+	{
+		return view('companies.stores.create', compact('company'));
+	}
+
+	public function storeStore(Company $company, Request $request)
+	{
+		$input = $request->all();
+
+		$store = Store::create($input);
+		Flash::success('Tienda agregada con exito.');
+		return redirect(route('companies.stores.index',compact('company')));
+	}
+	public function editStore(Company $company, Store $store)
+	{
+		if (empty($store) || empty($company)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(route('stores.index'));
+		}
+		return view('companies.stores.edit', compact('company', 'store'));
+	}
+	public function updateStore(Company $company, Store $store, Request $request)
+	{
+		if (empty($store)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(url()->previous());
+		}
+		$store->fill($request->all());
+		$store->save();
+		Flash::success('Tienda editada');
+		return redirect(route('companies.stores.index',$company));
+	}
+	public function destroyStore(Company $company, Store $store)
+	{
+		if (empty($store)) {
+			Flash::error('tienda no encontrada');
+			return redirect(route('companies.stores.index',$company));
+		}
+		$store->delete();
+		Flash::success('Tienda borrada');
+		return redirect(route('companies.stores.index',$company));
+	}
+
+	//SECTION Computadores Sucursales Compañia
+	public function indexStoreComputers(Company $company, Request $request)
+	{
+		$stores = Store::where('company_id', $company->id);
+		if(isset($request['nameFilter']) && !empty($request['nameFilter'])){
+			$stores = $stores->where('name', 'like', '%'.$request['nameFilter'].'%');
+		}
+		else if(isset($request['addressFilter']) && !empty($request['addressFilter'])){
+			$stores = $stores->where('address', 'like', '%'.$request['addressFilter'].'%');
+		}
+		$stores = $stores->get();
+		return view('companies.stores.index',compact('company', 'stores'));
+	}
+
+	public function showStoreComputers($id)
 	{
 		$company = $this->companyRepository->find($id);
 		if (empty($company)) {
@@ -167,48 +240,112 @@ class CompanyController extends AppBaseController
 		}
 		return view('companies.show')->with('company', $company);
 	}
-	public function createStore()
+	public function createStoreComputers(Company $company)
 	{
-		return view('companies.create');
+		return view('companies.stores.create', compact('company'));
 	}
 
-	public function storeStore(CreateCompanyRequest $request)
+	public function storeStoreComputers(Company $company, Request $request)
 	{
 		$input = $request->all();
-		$company = $this->companyRepository->create($input);
-		Flash::success('Compañia agregada con exito.');
-		return redirect(route('companies.index'));
+
+		$store = Store::create($input);
+		Flash::success('Tienda agregada con exito.');
+		return redirect(route('companies.stores.index',compact('company')));
 	}
-	public function editStore($id)
+	public function editStoreComputers(Company $company, Store $store)
+	{
+		if (empty($store) || empty($company)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(route('stores.index'));
+		}
+		return view('companies.stores.edit', compact('company', 'store'));
+	}
+	public function updateStoreComputers(Company $company, Store $store, Request $request)
+	{
+		if (empty($store)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(url()->previous());
+		}
+		$store->fill($request->all());
+		$store->save();
+		Flash::success('Tienda editada');
+		return redirect(route('companies.stores.index',$company));
+	}
+	public function destroyStoreComputers(Company $company, Store $store)
+	{
+		if (empty($store)) {
+			Flash::error('tienda no encontrada');
+			return redirect(route('companies.stores.index',$company));
+		}
+		$store->delete();
+		Flash::success('Tienda borrada');
+		return redirect(route('companies.stores.index',$company));
+	}
+
+	//SECTION Pantallas Computadores Sucursales Compañia
+	public function indexStoreComputersScreens(Company $company, Request $request)
+	{
+		$stores = Store::where('company_id', $company->id);
+		if(isset($request['nameFilter']) && !empty($request['nameFilter'])){
+			$stores = $stores->where('name', 'like', '%'.$request['nameFilter'].'%');
+		}
+		else if(isset($request['addressFilter']) && !empty($request['addressFilter'])){
+			$stores = $stores->where('address', 'like', '%'.$request['addressFilter'].'%');
+		}
+		$stores = $stores->get();
+		return view('companies.stores.index',compact('company', 'stores'));
+	}
+	public function showStoreComputersScreens($id)
 	{
 		$company = $this->companyRepository->find($id);
 		if (empty($company)) {
 			Flash::error('Compañia no encontrada');
 			return redirect(route('companies.index'));
 		}
-		return view('companies.edit')->with('company', $company);
+		return view('companies.show')->with('company', $company);
 	}
-	public function updateStore($id, UpdateCompanyRequest $request)
+	public function createStoreComputersScreens(Company $company)
 	{
-		$company = $this->companyRepository->find($id);
-		if (empty($company)) {
-			Flash::error('compañia no encontrada');
-			return redirect(route('companies.index'));
-		}
-		$company = $this->companyRepository->update($request->all(), $id);
-		Flash::success('compañia editada');
-		return redirect(route('companies.index'));
+		return view('companies.stores.create', compact('company'));
 	}
-	public function destroyStore($id)
+
+	public function storeStoreComputersScreens(Company $company, Request $request)
 	{
-		$company = $this->companyRepository->find($id);
-		if (empty($company)) {
-			Flash::error('compañia no encontrada');
-			return redirect(route('companies.index'));
+		$input = $request->all();
+
+		$store = Store::create($input);
+		Flash::success('Tienda agregada con exito.');
+		return redirect(route('companies.stores.index',compact('company')));
+	}
+	public function editStoreComputersScreens(Company $company, Store $store)
+	{
+		if (empty($store) || empty($company)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(route('stores.index'));
 		}
-		$this->companyRepository->delete($id);
-		Flash::success('Compañia borrada');
-		return redirect(route('companies.index'));
+		return view('companies.stores.edit', compact('company', 'store'));
+	}
+	public function updateStoreComputersScreens(Company $company, Store $store, Request $request)
+	{
+		if (empty($store)) {
+			Flash::error('Tienda no encontrada');
+			return redirect(url()->previous());
+		}
+		$store->fill($request->all());
+		$store->save();
+		Flash::success('Tienda editada');
+		return redirect(route('companies.stores.index',$company));
+	}
+	public function destroyStoreComputersScreens(Company $company, Store $store)
+	{
+		if (empty($store)) {
+			Flash::error('tienda no encontrada');
+			return redirect(route('companies.stores.index',$company));
+		}
+		$store->delete();
+		Flash::success('Tienda borrada');
+		return redirect(route('companies.stores.index',$company));
 	}
 
 }

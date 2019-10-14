@@ -39,7 +39,8 @@ class Event extends Model
         'initdate',
         'enddate',
         'state',
-        'slug'
+        'slug',
+				'company_id'
     ];
 
     /**
@@ -52,7 +53,8 @@ class Event extends Model
         'initdate' => 'dateTime-local',
         'enddate' => 'dateTime-local',
         'state' => 'boolean',
-        'slug' => 'string'
+        'slug' => 'string',
+			'company_id' =>'integer'
 		];
 
 		protected $attributes = [

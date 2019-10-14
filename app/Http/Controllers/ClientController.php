@@ -23,13 +23,9 @@ class ClientController extends Controller
 	//mostrar compañias
 	public function index(Request $request)
 	{
-		$user = Auth::user()->name;
-		$events = $this->eventRepository->all();
-		$screens= Screen::all();
-		$modelComputer = Computer::all();
-		$modelStore = Store::all();
-		$screenActive = Screen::where('state', '1')->count();
-		$screenInactive= Screen::where('state', '0')->count();
-		return view('client.index',compact('screenActive' ,'screenInactive','user','screens','events','modelComputer','modelStore'));
+
+		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
+		$screens= Screen::orderBy('state', 'asc')->get();
+		return view('client.index',compact('screens','events'));
 	}
 }

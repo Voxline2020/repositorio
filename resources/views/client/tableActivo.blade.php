@@ -2,26 +2,25 @@
 	<table class="table table-hover">
 		<thead>
 			<tr>
-
 				<th>Nombre</th>
 				<th>Fecha Inicio</th>
 				<th>Fecha Termino</th>
-
 				<th colspan="3">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($events as $event)
-			@if($event->state==1)
+			@php
+					$eventsActive = $events->where('state',1)->take(5);
+			@endphp
+			@foreach($eventsActive as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
 				<td>{!! $event->initdate!!}</td>
 				<td>{!! $event->enddate!!}</td>
 				<td>
-					<a href="{{route('events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
+					<a href="{{route('clients.events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
 				</td>
 			</tr>
-			@endif
 			@endforeach
 		</tbody>
 	</table>

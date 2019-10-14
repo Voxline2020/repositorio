@@ -79,13 +79,18 @@ class Computer extends Model
   /**
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    **/
-  public function computers()
+  public function store()
   {
-    return $this->hasMany(\App\Models\Computer::class);
+    return $this->belongsTo(\App\Models\Store::class);
 	}
 
 	public function type()
   {
 		return $this->belongsTo(\App\Models\AccessType::class, 'type_id','id');
+	}
+
+	public function screens()
+	{
+		return $this->hasMany(\App\Models\Screen::class);
 	}
 }

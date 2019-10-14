@@ -38,4 +38,19 @@ class VersionPlaylist extends Model
 
   ];
 
+	public function playlist()
+	{
+			return $this->belongsTo(\App\Models\Playlist::class);
+	}
+
+	public function versionPlaylistDetails()
+	{
+			return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
+	}
+
+	public function screenPlaylistAsignations()
+	{
+			return $this->hasMany(\App\Models\ScreenPlaylistAsignation::class, 'version_id');
+	}
+
 }

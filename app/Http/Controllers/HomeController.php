@@ -24,18 +24,10 @@ class HomeController extends Controller
     public function dash()
     {
 			if(Auth::user()->hasRole('Administrador')){
-				$companies = Company::all();
-				return view('companies.index',compact('companies'));
+				return redirect(route('companies.index'));
 			}
 			else if(Auth::user()->hasRole('Cliente')){
-				$user = Auth::user()->name;
-				$events = \App\Models\Event::all();
-				$screens= \App\Models\Screen::all();
-				$modelComputer = \App\Models\Computer::all();
-				$modelStore = \App\Models\Store::all();
-				$screenActive = \App\Models\Screen::where('state', '1')->count();
-				$screenInactive= \App\Models\Screen::where('state', '0')->count();
-				return view('client.index',compact('screenActive' ,'screenInactive','user','screens','events','modelComputer','modelStore'));
+				return redirect(route('clients.index'));
 			}
 			else if(Auth::user()->hasRole('Supervisor')){
 

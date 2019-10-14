@@ -47,6 +47,74 @@ class EventController extends Controller
 		$listsStore = Store::all();
 		return view('events.index', compact('lists', 'listsStore'))
 			->with('events', $events);
+
+
+		// $filter = $request->get('nameFiltrar');
+		// $filterSector = $request->get('sector');
+		// $filterFloor = $request->get('floor');
+		// $filterType = $request->get('type');
+		// $filterState = $request->get('state');
+		// $i = 0;
+		// $version_playlist_details = null;
+		// $screen_playlist_asignations = null;
+		// $event = Event::where('id', $id)->first();
+		// $screens2 = array();
+		// $contents = Content::where('event_id', $id)->paginate();
+		// foreach ($contents as $content) {
+		// 	$version_playlist_details =  VersionPlaylistDetail::where('content_id', $content->id)->get();
+		// 	if ($version_playlist_details != null) {
+		// 		foreach ($version_playlist_details as $version_playlist_detail) {
+		// 			$screen_playlist_asignations = \DB::table('screen_playlist_asignation')->where('version_id', $version_playlist_detail->version_id)->get();
+		// 			if ($screen_playlist_asignations != null) {
+		// 				foreach ($screen_playlist_asignations as $screen_playlist_asignation) {
+		// 					if ($filter != null) {
+		// 						$screens = Screen::where([
+		// 							['id', $screen_playlist_asignation->screen_id],
+		// 							['name', 'LIKE', "%$filter%"]
+		// 						])->first();
+		// 					} else {
+		// 						if ($filterSector != null) {
+		// 							$screens = Screen::where([
+		// 								['id', $screen_playlist_asignation->screen_id],
+		// 								['sector', $filterSector]
+		// 							])->first();
+		// 						} else {
+		// 							if ($filterFloor != null) {
+		// 								$screens = Screen::where([
+		// 									['id', $screen_playlist_asignation->screen_id],
+		// 									['floor', $filterFloor]
+		// 								])->first();
+		// 							} else {
+		// 								if ($filterType != null) {
+		// 									$screens = Screen::where([
+		// 										['id', $screen_playlist_asignation->screen_id],
+		// 										['type', $filterType]
+		// 									])->first();
+		// 								} else {
+		// 									if ($filterState != null) {
+		// 										$screens = Screen::where([
+		// 											['id', $screen_playlist_asignation->screen_id],
+		// 											['state', $filterState]
+		// 										])->first();
+		// 									} else {
+		// 										$screens = Screen::where([
+		// 											['id', $screen_playlist_asignation->screen_id]
+		// 										])->first();
+		// 									}
+		// 								}
+		// 							}
+		// 						}
+		// 					}
+		// 					if ($screens != null) {
+		// 						$screens2[$i] = $screens;
+		// 						$i++;
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		// return view('events.ScreenShow', compact('screens2', 'event'));
 	}
 
 	/**
@@ -88,12 +156,11 @@ class EventController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function show($id)
+	public function show(Event $event)
 	{
-		$event = Event::where('id', $id)->paginate();
-		$eventName = Event::where('id', $id)->first();
-		$content = Content::where('event_id', $id)->paginate();
+		$content = Content::where('event_id', $event->id)->paginate();
 		$lists = Event::all();
+
 
 		if (empty($event)) {
 			Flash::error('Evento no encontrado');
@@ -182,6 +249,44 @@ class EventController extends Controller
 		$ok = $content->save();
 		Flash::success('Content updated successfully.');
 		return redirect(route('contents.index'));
+	}
+
+	public function indexClient(){
+		$content = Content::all()->where('event_id', $event->id);
+		$lists = Event::all();
+
+		if (empty($event)) {
+			Flash::error('Evento no encontrado');
+
+			return redirect(route('contents.index'));
+		}
+
+		return view('events.index', compact('event, lists'));
+	}
+
+	public function showClient(Event $event, Request $request){
+		$screens_id = [];
+
+		foreach ($event->contents as $content) {
+			foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
+				if($versionPlaylistDetail->versionPlaylist->state == 1)
+				{
+					foreach($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
+						if($screenPlaylistAsignation->active == 1){
+							$screen = $screenPlaylistAsignation->screen;
+							array_push($screens_id, $screen->id);
+						}
+					}
+				}
+			}
+		}
+
+		$screens = Screen::find($screens_id);
+		if(isset($request['sectorFilter']) && !empty($request['sectorFilter'])){
+			$screens = $screens->where('sector', ' like', '%'.$request['sectorFilter'].'%');
+		}
+
+		return view('client.events.show', compact('screens', 'event'));
 	}
 
 
@@ -347,6 +452,7 @@ class EventController extends Controller
 	}
 
 
+	//index cliente eventos
 	public function filterScreen_by_name(Request $request, $id)
 	{
 		$filter = $request->get('nameFiltrar');

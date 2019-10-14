@@ -51,14 +51,16 @@ class Screen extends Model
 		'width' => 'required',
 		'computer_id'=>'required'
 	];
-	public function screens()
-  {
-    return $this->hasMany(\App\Models\Screen::class);
-	}
 
 	public function computer()
   {
 		return $this->belongsTo(\App\Models\Computer::class);
 	}
+
+	public function screenPlaylistAsignations()
+	{
+			return $this->hasMany(\App\Models\ScreenPlaylistAsignation::class);
+	}
+
 
 }
