@@ -4,6 +4,7 @@
             <tr>
 								<th>Nombre</th>
 								<th>Direccion</th>
+								<th>Cant. Reprod.</th>
 								{{-- <th>Link mapa</th> --}}
 								<th>Acciones</th>
 
@@ -14,6 +15,14 @@
             <tr>
 								<td>{!! $store->name !!}</td>
 								<td>{!! $store->address !!}</td>
+
+								@php
+										$screensQty = 0;
+										foreach ($store->computers as $computer) {
+											$screensQty += $computer->screens->count();
+										}
+								@endphp
+								<td>{!! $screensQty !!}</td>
 								{{-- <td>{!! $store->link_map !!}</td> --}}
                 <td>
                     {!! Form::open(['route' => ['companies.stores.destroy',$company,$store], 'method' => 'delete']) !!}

@@ -25,8 +25,8 @@
 				<td></td>
 				<td>
 					<div class='btn-group'>
-							<a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}" class="btn btn-info"><i
-									class="fas fa-info-circle"></i></a>
+							{{-- <a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}" class="btn btn-info"><i
+									class="fas fa-info-circle"></i></a> --}}
 					</div>
 				</td>
 			</tr>
