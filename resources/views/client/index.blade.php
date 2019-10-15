@@ -2,8 +2,8 @@
 
 @section('content')
 @php
-		$screenActive = $screens->where('state', 1)->count();
-		$screenInactive = $screens->where('state', 0)->count();
+		$screenActive = $screensCount->where('state', 1)->count();
+		$screenInactive = $screensCount->where('state', 0)->count();
 @endphp
 <div class="container">
 	@include('flash::message')
