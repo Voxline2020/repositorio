@@ -24,8 +24,8 @@
 				<td>{!! $event->enddate!!}</td>
 				<td>
 					<div class='btn-group'>
-						<a href="{!! route('events.edit', [$event->id]) !!}" class='btn btn-info btn-xs'><i
-								class="fas fa-info-circle"></i></a>
+						{{-- <a href="{!! route('events.edit', [$event->id]) !!}" class='btn btn-info btn-xs'><i
+								class="fas fa-info-circle"></i></a> --}}
 					</div>
 				</td>
 			</tr>
