@@ -160,7 +160,7 @@ class EventController extends Controller
 	{
 		$content = Content::where('event_id', $event->id)->paginate();
 		$lists = Event::all();
-
+		$listsStore = Store::all();
 
 		if (empty($event)) {
 			Flash::error('Evento no encontrado');
@@ -168,7 +168,7 @@ class EventController extends Controller
 			return redirect(route('contents.index'));
 		}
 
-		return view('events.index', compact('event, lists'));
+		return view('events.show', compact('content', 'lists', 'listStore'));
 	}
 
 	/**
