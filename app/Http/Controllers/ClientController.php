@@ -25,7 +25,8 @@ class ClientController extends Controller
 	{
 
 		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
-		$screens= Screen::orderBy('state', 'asc')->get();
-		return view('client.index',compact('screens','events'));
+		$screens= Screen::with('computer','computer.store')->orderBy('state', 'asc')->paginate();
+		$screensCount = Screen::with('computer','computer.store')->orderBy('state', 'asc')->get();
+		return view('client.index',compact('screens','events','screensCount'));
 	}
 }

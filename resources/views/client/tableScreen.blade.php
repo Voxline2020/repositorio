@@ -21,10 +21,15 @@
 				<td style="color:#01DF01;">Activo</td>
 				@endif
 				<td>{{$screen->computer->store->name}}</td>
-				<td></td>
-				<td></td>
+				<td>09:30 15/10/2019</td>
+				<td>
+					<a href="#" class="btn btn-primary"><i
+					class="fas fa-camera"></i></a>
+				</td>
 				<td>
 					<div class='btn-group'>
+							<a href="#" class="btn btn-info"><i
+							class="fas fa-info-circle"></i></a>
 							{{-- <a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}" class="btn btn-info"><i
 									class="fas fa-info-circle"></i></a> --}}
 					</div>
@@ -33,4 +38,6 @@
 			@endforeach
 		</tbody>
 	</table>
+	{{ $screens->links() }}
+
 </div>

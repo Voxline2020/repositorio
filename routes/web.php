@@ -92,7 +92,6 @@ Route::resource('stores', 'StoreController');
 Route::group(['prefix' => 'stores'], function () {
 	Route::get('{id}/show', 'StoreController@show')->name('store.show'); //ruta para obtener id
 	Route::get('{id}/filter_by_name', 'StoreController@filter_by_name')->name('stores.filter_by_name'); //ruta para filtrar la sucursal con nombre
-
 	Route::get('editTwoParam/{id}/{company_id}','StoreController@edit')->name('stores.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
 	Route::get('create/{id}','StoreController@create')->name('stores.createOneParam');// ruta para recoger 1 parametro que es la id de la compañiay crear una sucursal.
 
@@ -135,3 +134,8 @@ Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent
 //SECTION Video Descargar
 Route::get('video/{id}/d','DownloadContent@download')->name('download.content');
 
+//SECTION Events Old
+Route::resource('eventsOld', 'EventControllerOld');
+Route::get('contents/editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
+Route::get('eventOld/filter_by_name', ['uses' => 'EventControllerOld@filter_by_name', 'as' => 'eventsOld.filter_by_name' ]);
+Route::get('eventsOld/{id}/AssignContent', "EventController@indexAssignContent")->name('eventsOld.indexAssignContent');

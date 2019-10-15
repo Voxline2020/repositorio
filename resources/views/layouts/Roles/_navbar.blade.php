@@ -17,7 +17,7 @@
 					<a class="nav-link" href="{{ route('playlists.index') }}">Playlists</a>
 				</li>
 				{{-- <li class="nav-item {{ Route::is('events.index') ? 'active': null }}">
-					<a class="nav-link" href="{{ route('events.index') }}">Eventos</a>
+					<a class="nav-link" href="{{ route('eventsOld.index') }}">Eventos</a>
 				</li> --}}
 				<li class="nav-item {{ Route::is('users.index') ? 'active': null }}">
 					<a class="nav-link" href="{{ route('users.index') }}">Usuarios</a>
