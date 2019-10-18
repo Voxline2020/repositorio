@@ -1,21 +1,17 @@
 @extends('layouts.principal')
 
 @section('content')
-<section class="content-header">
-	<h1>
-		Eventos
-	</h1>
-</section>
-<div class="content">
-	<div class="box box-primary">
-		<div class="box-body">
-			<div class="row" style="padding-left: 20px">
-				@include('events.show_fields')
-				<a href="{!! route('events.index') !!}" class="btn btn-default">Back</a>
-			</div>
-		</div>
+<div class="row">
+	<div class="col-md-9">
+		<h2> Evento {{ $event->name }} </h2>
 	</div>
+	<div class="col-md-3">
+		<a class="btn btn-primary w-100"  href="{!!  url()->previous() !!}">Atras</a>
+	</div>
+
 </div>
 
-
+<div class="row my-lg-4 my-md-4 my-sm-1">
+	@include('companies.events._show_fields')
+</div>
 @endsection

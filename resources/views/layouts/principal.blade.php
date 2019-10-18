@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="{{ asset('vendor/fontawesome5/css/all.css') }}">
 	<link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.css') }}">
 	<link rel="stylesheet" href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/dropzonejs/dropzone.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/tempusdominus/css/tempusdominus-bootstrap-4.css') }}">
 </head>
 
 <body>
@@ -31,23 +33,13 @@
 	<script src="{{ asset('vendor/fontawesome5/js/all.js') }}"></script>
 	<script src="{{ asset('js/vendor/moments/momentjs-with-locales.js') }}"></script>
 	<script src="{{ asset('js/app.js') }}"></script>
-	<script src="{{ asset('js/dropzone.js') }}"></script>
-	<script src="{{  asset('vendor/select2/js/select2.js')}}"></script>
+	<script src="{{ asset('vendor/dropzonejs/dropzone.js') }}"></script>
+	<script src="{{ asset('vendor/select2/js/select2.js')}}"></script>
+	<script src="{{ asset('vendor/tempusdominus/js/tempusdominus-bootstrap-4.js')}}"></script>
+	<script src="{{ asset('vendor/moment/moment-with-locales.js')}}"></script>
+
 	<!-- Languaje -->
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
-	</script>
-
-	@yield('scripts')
 	<script>
-		$(function () {
-				$('.datepicker').datetimepicker({
-					format: "Y-m-d H:i:s",
-    			language: "es",
-    			autoclose: true
-				})
-		});
 
 		$(function () {
 			$('.js-select2').select2({

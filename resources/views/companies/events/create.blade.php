@@ -1,26 +1,17 @@
 @extends('layouts.principal')
 
 @section('content')
-@section('script')
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			@include('adminlte-templates::common.errors')
-		</div>
-		<div class="col-sm-12">
-			<h1>
-				Nuevo Evento
-			</h1>
-		</div>
-		<div class="col-sm-12">
-				@include('flash::message')
-			{!! Form::open(['route' => 'events.store']) !!}
-			<div class="row">
-				@include('events.fields')
-			</div>
-			{!! Form::close() !!}
-		</div>
+<div class="row">
+	<div class="col-md-12">
+		<h2>
+			Nuevo evento para {{ $company->name }}
+		</h2>
 	</div>
 </div>
-@endsection
+
+{!! Form::open(['route' => ['companies.events.store', $company]]) !!}
+<div class="row">
+	@include('companies.events._fields')
+</div>
+{!! Form::close() !!}
 @endsection
