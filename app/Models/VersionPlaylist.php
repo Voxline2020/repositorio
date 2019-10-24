@@ -19,7 +19,8 @@ class VersionPlaylist extends Model
     'name',
 		'slug',
 		'version',
-		'state'
+		'state',
+		'playlist_id'
   ];
 
 
@@ -48,9 +49,13 @@ class VersionPlaylist extends Model
 			return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
 	}
 
-	public function screenPlaylistAsignations()
+	public function getStateStringAttribute()
 	{
-			return $this->hasMany(\App\Models\ScreenPlaylistAsignation::class, 'version_id');
+		if($this->state == 0){
+			return "Inactivo";
+		}
+		return "Activo";
 	}
+
 
 }

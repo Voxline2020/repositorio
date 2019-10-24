@@ -43,6 +43,10 @@ class ComputerController extends AppBaseController
 			['computers' => $computer]
 		);
 	}
+
+
+
+
 	//Creacion computadores
 	//Vista de creacion
 	public function create()
@@ -97,6 +101,24 @@ class ComputerController extends AppBaseController
 		Flash::success('Computador borrado');
 		return redirect(route('computers.index'));
 	}
+
+	//mostrar computadores con id en especifico
+	public function getInfo(Computer $computer, $key)
+	{
+
+		if($key == "voxline55"){
+			$computer = Computer::with('screens')->where('id', $computer->id)->get();
+			dd($computer);
+
+			return response()->json($computer);
+		}
+		else {
+			return abort(404);
+		}
+	}
+
+
+
 	// filtros y otros.
 	//llenado de select dinamico
 	public function getStores(Request $request)

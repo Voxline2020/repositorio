@@ -36,6 +36,8 @@ Route::group(['prefix' => 'computers'], function () {
 	Route::get('filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
+
+	Route::get('{computer}/get/{key}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
 
 //SECTION Users
@@ -65,6 +67,8 @@ Route::group(['prefix' => 'events'], function () {
 	//ANCHOR Asignations
 	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
 	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
+	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
+
 });
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 

@@ -63,5 +63,10 @@ class Screen extends Model
 			return $this->hasMany(\App\Models\ScreenPlaylistAsignation::class);
 	}
 
+	public function playlist()
+	{
+		return $this->belongsTo(\App\Models\Playlist::class);
+	}
+
 
 }

@@ -102,6 +102,7 @@ class Event extends Model
 		# code...
 	}
 
+
 	public function getEndDateFAttribute()
 	{
 		$endDate = Carbon::create($this->enddate, 'America/Santiago')->format('d/m/Y H:i');
@@ -114,7 +115,6 @@ class Event extends Model
 			return "Inactivo";
 		}
 		return "Activo";
-
 	}
 
 }

@@ -49,12 +49,14 @@
 										{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger
 										btn-xs', 'onclick' => "return confirm('Estas seguro?')"]) !!} -->
 						{{-- <a href="{{route('screens.AssignContent',$content->id) }}" class='btn btn-primary btn-xs'><i
-								class="fas fa-desktop"></i></a> --}}
-						<a href="{{route('events.assignations',[$event, $content]) }}" class='btn btn-primary btn-xs'><i
-								class="fas fa-desktop"></i></a>
+							class="fas fa-desktop"></i></a> --}}
+						@if ($content->versionPlaylistDetails->count() > 0)
+							<a href="{{route('events.assignations.show',[$event, $content]) }}" class='btn btn-warning btn-xs'><i class="fas fa-eye"></i></a>
+						@else
+							<a href="{{route('events.assignations',[$event, $content]) }}" class='btn btn-primary btn-xs'><i class="fas fa-desktop"></i></a>
+						@endif
 						<a href="{{route('contents.download',$content) }}" class='btn btn-success btn-xs'><i
 								class="fa fa-download"></i></a>
-
 						{!! Form::close() !!}
 					</td>
 				</tr>
