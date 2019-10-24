@@ -25,6 +25,8 @@ Route::resource('contents', 'ContentController');
 Route::group(['prefix' => 'contents'], function () {
 	Route::get('editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
 	Route::get('{id}/view','ContentController@ScreenView')->name('contents.ScreenView');
+	Route::get('{content}/d','ContentController@download')->name('contents.download');
+
 });
 
 //SECTION Computers
@@ -59,8 +61,13 @@ Route::group(['prefix' => 'events'], function () {
 	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
 	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
 	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
-	Route::post('{event}/fileStore', 'EventController@fileStore')->name('events.fileStore');
+
+	//ANCHOR Asignations
+	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
+	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
 });
+Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
+
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');

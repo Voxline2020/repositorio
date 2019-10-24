@@ -1,8 +1,7 @@
 @extends('layouts.principal')
 
 @section('content')
-<div class="container">
-	@include('flash::message')
+
 	<div class="row">
 		<div class="col-md-9">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
@@ -96,5 +95,4 @@
 	</div>
 </div>
 {!! Form::close() !!}
-</div>
 @endsection

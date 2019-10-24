@@ -12,6 +12,8 @@ use Flash;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Support\Str as Str;
+
 
 class CompanyController extends AppBaseController
 {
@@ -99,8 +101,8 @@ class CompanyController extends AppBaseController
   //ANCHOR Eventos Compañia
   public function indexEvent(Company $company, Request $request)
   {
-    $events = Event::where('company_id', $company->id)->get();
-    $lists = Event::where('company_id', $company->id)->get();
+    $events = Event::with('contents')->where('company_id', $company->id)->get();
+    $lists = Event::with('contents')->where('company_id', $company->id)->get();
     $listsStore = Store::all();
     return view('companies.events.index', compact('lists', 'listsStore', 'events', 'company'));
   }
@@ -123,7 +125,8 @@ class CompanyController extends AppBaseController
 			$request->merge([
 				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
 				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
-				'state'=>'0'
+				'state'=>'0',
+				'slug'=>Str::slug($request['name'])
 				]);
 			$input = $request->all();
 			Event::create($input);

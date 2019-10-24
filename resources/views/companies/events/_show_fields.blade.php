@@ -1,12 +1,12 @@
 <div class="col-md-4">
-	<h4><span class="badge badge-light">Duracion evento:
-			{!!number_format((int)(strtotime($event->enddate)-strtotime($event->initdate))/60/60/24)!!} dia(s)</span></h4>
+	<h4>Duracion evento:
+			{!!number_format((int)(strtotime($event->enddate)-strtotime($event->initdate))/60/60/24)!!} dia(s)</h4>
 </div>
 <div class="col-md-4">
-	<h4><span class="badge badge-light">Fecha inicio: {!! $event->initdate!!}</span></h4>
+	<h4>Fecha inicio: {!! $event->initdate!!}</h4>
 </div>
 <div class="col-md-4">
-	<h4><span class="badge badge-light">Fecha Termino: {!! $event->enddate!!}</span></h4>
+	<h4>Fecha Termino: {!! $event->enddate!!}</h4>
 </div>
 @if($event->contents->count()==0)
 <div class="col-md-12">
@@ -49,8 +49,7 @@
 										<a href="{!! route('contents.edit', [$content->id]) !!}" class='btn btn-warning btn-xs'><i
 												class="fas fa-edit"></i></a>
 										{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger
-										btn-xs',
-										'onclick' => "return confirm('Estas seguro?')"]) !!} -->
+										btn-xs', 'onclick' => "return confirm('Estas seguro?')"]) !!} -->
 					<a href="{{route('screens.AssignContent',$content->id) }}" class='btn btn-primary btn-xs'><i
 							class="fas fa-desktop"></i></a>
 					<a href="{{route('download.content',$content->id) }}" class='btn btn-info btn-xs'><i
@@ -93,12 +92,11 @@
 
 				});
 				this.on("complete", function(file) {
-						// myDropzone.removeFile(file);
-						// if(myDropzone.files.length==0){
-						// 	console.log("hola");
-						// 		$('#form').submit();
-						// 		// location.reload();
-						// }
+						myDropzone.removeFile(file);
+						if(myDropzone.files.length==0){
+								$('#form').submit();
+								location.reload();
+						}
 				});
 
 				// this.on("success",
@@ -107,7 +105,7 @@
 
 				this.on('sending', function(file, xhr, formData) {
 						// Append all form inputs to the formData Dropzone will POST
-						var data = $('#frmTarget').serializeArray();
+						var data = $('#my-dropzone').serializeArray();
 						$.each(data, function(key, el) {
 								formData.append(el.name, el.value);
 						});

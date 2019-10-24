@@ -14,13 +14,15 @@ use Response;
 use App\Models\Event;
 use App\Models\Content;
 use App\Repositories\ContentRepository;
-
 use App\Models\Store;
-
 use App\Models\VersionPlaylistDetail;
 use App\Models\ScreenPlaylistAsignation;
 use App\Models\Screen;
 use App\Models\Computer;
+use Auth;
+use Illuminate\Support\Str as Str;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class EventController extends Controller
@@ -136,10 +138,9 @@ class EventController extends Controller
 	 */
 	public function store(CreateEventRequest $request)
 	{
-
-
 		if ($request->initdate <= $request->enddate) {
 			$input = $request->all();
+			$request->merge(['slug'=>Str::slug($request['name'])]);
 			$event = $this->eventRepository->create($input);
 			Flash::success('Evento agregado exitosamente');
 			return redirect(route('events.index'));
@@ -149,43 +150,60 @@ class EventController extends Controller
 		}
 	}
 
-	public function fileStore(Event $event, Request $request){
-		dd($request->file('file'));
+	public function fileStore( Request $request)
+	{
 		$files = $request->file('file');
-		
-		$path = public_path() . '/storage/app/videos/' . $eventName->name;
-		File::makeDirectory($path, $mode = 0777, true, true);
+
+		$event = null;
+		if(isset($request['event_id']) && !empty($request['event_id'])){
+			$event = Event::find($request['event_id']);
+		}
+		else{
+			return response('Event id sin valor', 404)->header('Content-Type', 'text/plain');
+		}
+
+
 		if ($request->hasFile('file')) {
 			//Rescata valores de los archivos subidos
 			foreach ($files as $file) {
+				//Analizar Video
 				$getID3 = new \getID3;
 				$fileX = $getID3->analyze($file);
-
 				$filetype = $file->getClientOriginalExtension();
 				$mime = $file->getClientMimeType();
 				$user_id = Auth::user()->id;
 				$size = $file->getSize();
 				$width = $fileX['video']['resolution_x'];
 				$height = $fileX['video']['resolution_y'];
-				$name = Str::slug(str_replace("_", " ", $eventName->name . '_' . $width . 'X' . $height));
-				$original_name = Str::slug(str_replace("_", " ", $eventName->name . '_' . $width . 'X' . $height));
-				$slug = Str::slug(str_replace("_", "", $name));
-				$file->move($path, $original_name . '.mp4');
 
-				//TODO: verificar si tiene una lista asignada para cambiar el path dir a la lista correspondiente
-				$request->merge(['user_id' => $user_id]);
-				$request->merge(['location' => $path]);
-				$request->merge(['original_name' => $original_name]);
-				$request->merge(['slug' => $slug]);
-				$request->merge(['filetype' => $filetype]);
-				$request->merge(['mime' => $mime]);
-				$request->merge(['event_id' => $id]);
-				$request->merge(['size' => $size]);
-				$request->merge(['width' => $width]);
-				$request->merge(['height' => $height]);
-				$request->merge(['name' => $name]);
+				//Nombre archivo
+				$name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+				$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+				$slug = Str::slug($name);
+
+				//Guardar archivos
+				$path = Storage::disk('videos')->put($event->slug."/".$name, $file);
+
+				$request->merge([
+					'user_id' => $user_id,
+					'location' => $path,
+					'original_name' => $original_name,
+					'slug' => $slug,
+					'filetype' => $filetype,
+					'mime' => $mime,
+					'event_id' => $event->id,
+					'size' => $size,
+					'width' => $width,
+					'height' => $height,
+					'name' => $name
+				]);
+
+				// $file->move($path, $original_name . '.mp4');
+
 				$input = $request->all();
-				$content = $this->contentRepository->create($input);
+				if($this->contentRepository->create($input)){
+					return response('OK', 200)->header('Content-Type', 'text/plain');
+				}
 			}
 		}
 
@@ -273,24 +291,66 @@ class EventController extends Controller
 		return redirect(route('events.index'));
 	}
 
-	public function indexAssignContent(Request $request, $id)
-	{
-		$event = Event::where('id', $id)->first();
-		$contents = $this->contentRepository->all();
+	//ANCHOR Asignations
 
-		return view('events.indexAssignContent', compact('event'))
-			->with('contents', $contents);
-	}
-	public function Assign($eventId, $id)
+	public function indexAssign(Event $event, Content $content, Request $request)
 	{
-		$content = Content::find($id);
-		$content->event_id = $eventId;
-		$ok = $content->save();
-		Flash::success('Content updated successfully.');
-		return redirect(route('contents.index'));
+
+		$screens = Screen::with(['computer' => function ($query) use($event) {
+			$query->with(['store'=>function ($query) use ($event){
+				$query->where('company_id',$event->company->id);
+			}]);
+
+		}])->orderBy('computer_id','ASC')->paginate();
+		$screens->appends(request()->query());
+
+		return view('events.assignations.index', compact('event','content','screens'))->with('screensChbx',$request->screensChbx);
 	}
 
-	public function indexClient(){
+	public function storeAssign(Event $event, Request $request)
+	{
+		dd($request->all());
+		$screensId = $request->input('screensChbx');
+		foreach ($screensId as $key => $screenId) {
+			$screen = Screen::find($screenId);
+			if(isset($screen) || !empty($screen)){
+				 foreach ($screen->screenPlaylistAsignations as $screenPlaylistAsignation) {
+					$vplaylist = $screenPlaylistAsignation->versionPlaylist;
+					if($vplaylist)
+				 }
+			}
+		}
+		return redirect(route('events.show', $event));
+	}
+
+	public function ScreenPlaylistAsign(Request $request, $id)
+	{
+		$content = Content::where('id', $id)->first();
+		$screen = $this->screenRepository->all();
+		if ($request->pantallas != null) {
+			foreach ($request->pantallas as $idScreen) {
+				$playlist_asign = ScreenPlaylistAsignation::where('screen_id', $idScreen)->get();
+				if ($playlist_asign != null) {
+					$version_playlist_detail = new VersionPlaylistDetail;
+					$playlist_asign = ScreenPlaylistAsignation::where('screen_id', $idScreen)->get();
+					foreach ($playlist_asign as $playlist_asigns) {
+						$version_playlist_detail->version_id = $playlist_asigns->version_id;
+					}
+					$version_playlist_detail->content_id = $id;
+					$version_playlist_detail->save();
+				}
+			}
+			Flash::success('pantalla asignada con contenido');
+			return redirect(url()->previous());
+		}
+		else {
+			Flash::error('no ha seleccionado ninguna pantalla');
+			return redirect(url()->previous());
+		}
+	}
+
+	public function indexClient()
+	{
 		$content = Content::all()->where('event_id', $event->id);
 		$lists = Event::all();
 
@@ -303,15 +363,15 @@ class EventController extends Controller
 		return view('events.index', compact('event, lists'));
 	}
 
-	public function showClient(Event $event, Request $request){
+	public function showClient(Event $event, Request $request)
+	{
 		$screens_id = [];
 
 		foreach ($event->contents as $content) {
 			foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
-				if($versionPlaylistDetail->versionPlaylist->state == 1)
-				{
-					foreach($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
-						if($screenPlaylistAsignation->active == 1){
+				if ($versionPlaylistDetail->versionPlaylist->state == 1) {
+					foreach ($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
+						if ($screenPlaylistAsignation->active == 1) {
 							$screen = $screenPlaylistAsignation->screen;
 							array_push($screens_id, $screen->id);
 						}
@@ -321,8 +381,8 @@ class EventController extends Controller
 		}
 
 		$screens = Screen::find($screens_id);
-		if(isset($request['sectorFilter']) && !empty($request['sectorFilter'])){
-			$screens = $screens->where('sector', ' like', '%'.$request['sectorFilter'].'%');
+		if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
+			$screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
 		}
 
 		return view('client.events.show', compact('screens', 'event'));
@@ -441,7 +501,7 @@ class EventController extends Controller
 																	if ($computer != null) {
 																		$store = Store::where([
 																			['id', $computer->store_id],
-																			['id',$filterStore]
+																			['id', $filterStore]
 																		])->first();
 																		if ($store != null) {
 																			$eventsFinal[$i] = $event;

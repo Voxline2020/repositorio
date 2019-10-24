@@ -122,6 +122,16 @@ class Content extends Model
     return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
   }
 
- 
+	public function getResolutionAttribute()
+	{
+		return $this->width.'x'.$this->height;
+	}
+
+	public function getSizeMBAttribute()
+	{
+		return number_format($this->size/1000000, 3)." mb";
+	}
+
+
 
 }

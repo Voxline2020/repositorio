@@ -15,18 +15,13 @@
 			@foreach($events as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
-				@if($event->state==0)
-				<td style="color:#FF0000;">Inactivo</td>
-				@endif
-				@if($event->state==1)
-				<td style="color:#01DF01;">Activo</td>
-				@endif
+				<td class="{{ $event->StateString == "Activo" ? "green-text" : "red-text" }}">{{ $event->StateString }}</td>
 				<td class="{!! $event->contents->count() == 0 ? 'red-text': '' !!}">
 					{!! $event->contents->count() !!}
 				</td>
 
-				<td>{!! $event->initdate!!}</td>
-				<td>{!! $event->enddate!!}</td>
+				<td>{!! $event->InitDateF!!}</td>
+				<td>{!! $event->EndDateF!!}</td>
 				<td>
 					<div class='btn-group'>
 						{!! Form::open(['route' => ['events.destroy',  $event], 'method' => 'delete']) !!}

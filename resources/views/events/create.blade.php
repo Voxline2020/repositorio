@@ -11,7 +11,7 @@
 
 {!! Form::open(['route' => ['companies.events.store', $company]]) !!}
 <div class="row">
-	@include('companies.events._fields')
+	@include('events._fields')
 </div>
 {!! Form::close() !!}
 @endsection

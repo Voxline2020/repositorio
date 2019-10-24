@@ -6,12 +6,12 @@
 		<h2> Evento {{ $event->name }} </h2>
 	</div>
 	<div class="col-md-3">
-		<a class="btn btn-primary w-100"  href="{!!  url()->previous() !!}">Atras</a>
+		<a href="{!! route('companies.events.index', $event->company) !!}" class="btn btn-info">Atras</a>
 	</div>
 
 </div>
 
 <div class="row my-lg-4 my-md-4 my-sm-1">
-	@include('companies.events._show_fields')
+	@include('events._show_fields')
 </div>
 @endsection

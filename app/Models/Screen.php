@@ -19,7 +19,8 @@ class Screen extends Model
     'name',
 		'height',
 		'width',
-		'computer_id'
+		'computer_id',
+		'playlist_id'
   ];
 
 

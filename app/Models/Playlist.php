@@ -80,5 +80,10 @@ class Playlist extends Model
         return $this->hasMany(\App\Models\VersionPlaylist::class);
 		}
 
-		
+		public function screen()
+		{
+				return $this->hasOne(\App\Models\Screen::class);
+		}
+
+
 }

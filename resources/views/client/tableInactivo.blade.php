@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			@php
-			$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
+					$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
 					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->take(5);
 			@endphp
 			@foreach($eventsInactive as $event)

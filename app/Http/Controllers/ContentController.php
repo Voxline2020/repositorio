@@ -56,37 +56,6 @@ class ContentController extends Controller
 	}
 
 	/**
-	 * Store a newly created Content in storage.
-	 *
-	 * @param CreateContentRequest $request
-	 *
-	 * @return Response
-	 */
-	public function store(CreateContentRequest $request)
-	{
-		if ($request->hasFile('video')) {
-			$slug = Str::slug(str_replace(".mp4", "", $request['name']));
-			$original_name = str_replace(".mp4", "", $request->file('video')->getClientOriginalName());
-			$filetype = $request->file('video')->getClientOriginalExtension();
-			$mime = $request->file('video')->getClientMimeType();
-
-			//TODO: verificar si tiene una lista asignada para cambiar el path dir a la lista correspondiente
-			$path_dir = "sin-lista";
-
-			$path = public_path() . '/uploads/';
-			$path_storage = Storage::disk('videos')->put($path_dir, $request->file('video'));
-			$request->merge(['location' => $path_storage]);
-			$request->merge(['original_name' => $original_name]);
-			$request->merge(['slug' => $slug]);
-			$request->merge(['filetype' => $filetype]);
-			$request->merge(['mime' => $mime]);
-		}
-		$input = $request->all();
-		$content = $this->contentRepository->create($input);
-		return redirect(route('contents.index'));
-	}
-
-	/**
 	 * Display the specified Content.
 	 *
 	 * @param  int $id
@@ -170,6 +139,10 @@ class ContentController extends Controller
 		Flash::success('Contenido eliminado exitosamente.');
 
 		return redirect(url()->previous());
+	}
+
+	public function download(Content $content){
+		return Storage::disk('videos')->download($content->location, $content->name.'.'.$content->filetype);
 	}
 
 	public function ScreenView($id)
