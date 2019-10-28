@@ -69,7 +69,7 @@ class Playlist extends Model
      **/
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'user_id');
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     /**
@@ -80,5 +80,10 @@ class Playlist extends Model
         return $this->hasMany(\App\Models\VersionPlaylist::class);
 		}
 
-		
+		public function screen()
+		{
+				return $this->hasOne(\App\Models\Screen::class);
+		}
+
+
 }

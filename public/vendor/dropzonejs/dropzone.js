@@ -2532,9 +2532,7 @@ var Dropzone = function (_Emitter) {
 
     // Takes care of adding other input elements of the form to the AJAX request
 
-	},
-	
-	{
+  }, {
     key: "_addFormElementData",
     value: function _addFormElementData(formData) {
       // Take care of other input elements

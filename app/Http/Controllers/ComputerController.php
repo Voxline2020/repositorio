@@ -13,6 +13,8 @@ use App\Models\Computer;
 use App\Models\AccessType;
 use Flash;
 use Response;
+use Illuminate\Support\Arr;
+
 
 class ComputerController extends AppBaseController
 {
@@ -43,6 +45,10 @@ class ComputerController extends AppBaseController
 			['computers' => $computer]
 		);
 	}
+
+
+
+
 	//Creacion computadores
 	//Vista de creacion
 	public function create()
@@ -97,6 +103,43 @@ class ComputerController extends AppBaseController
 		Flash::success('Computador borrado');
 		return redirect(route('computers.index'));
 	}
+
+	//mostrar computadores con id en especifico
+	public function getInfo(Computer $computer, $key)
+	{
+
+		if($key == "voxline55"){
+			// $computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
+			$jsonResponse = [];
+			$jsonResponse['code'] = $computer->code;
+			foreach ($computer->screens as $screen) {
+				$jsonResponse['screens']['id'] = $screen->id;
+				$jsonResponse['screens']['name'] = $screen->name;
+				$jsonResponse['screens']['width'] = $screen->width;
+				$jsonResponse['screens']['height'] = $screen->height;
+				foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
+					if($versionPlaylist->state == 1){
+						$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
+						foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
+							$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
+							$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
+							$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
+							$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
+						}
+					}
+				}
+			}
+
+
+			return response()->json($jsonResponse);
+		}
+		else {
+			return abort(404);
+		}
+	}
+
+
+
 	// filtros y otros.
 	//llenado de select dinamico
 	public function getStores(Request $request)

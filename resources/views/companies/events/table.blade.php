@@ -15,25 +15,20 @@
 			@foreach($events as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
-				@if($event->state==0)
-				<td style="color:#FF0000;">Inactivo</td>
-				@endif
-				@if($event->state==1)
-				<td style="color:#01DF01;">Activo</td>
-				@endif
+				<td class="{{ $event->StateString == "Activo" ? "green-text" : "red-text" }}">{{ $event->StateString }}</td>
 				<td class="{!! $event->contents->count() == 0 ? 'red-text': '' !!}">
 					{!! $event->contents->count() !!}
 				</td>
 
-				<td>{!! $event->initdate!!}</td>
-				<td>{!! $event->enddate!!}</td>
+				<td>{!! $event->InitDateF!!}</td>
+				<td>{!! $event->EndDateF!!}</td>
 				<td>
 					<div class='btn-group'>
-						{!! Form::open(['route' => ['companies.events.destroy', $company, $event], 'method' => 'delete']) !!}
+						{!! Form::open(['route' => ['events.destroy',  $event], 'method' => 'delete']) !!}
 						<div class='btn-group'>
-							<a href="{!! route('companies.events.show', [$company, $event]) !!}" class='btn btn-primary btn-xs'><i
+							<a href="{!! route('events.show', [ $event]) !!}" class='btn btn-primary btn-xs'><i
 							class="fas fa-eye"></i></a>
-							<a href="{!! route('companies.events.edit', [$company, $event]) !!}" class='btn btn-warning btn-xs'><i
+							<a href="{!! route('events.edit', [ $event]) !!}" class='btn btn-warning btn-xs'><i
 									class="fas fa-edit"></i></a>
 							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 							'onclick' => "return confirm('Estas seguro?')"]) !!}

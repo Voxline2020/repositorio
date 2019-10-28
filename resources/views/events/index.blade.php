@@ -1,11 +1,13 @@
 @extends('layouts.principal')
 
 @section('content')
-<div class="container">
-	@include('flash::message')
+
 	<div class="row">
 		<div class="col-md-9">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
+		</div>
+		<div class="col-md-3">
+			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company) !!}">Nuevo Evento</a>
 		</div>
 	</div>
 	<br>
@@ -16,14 +18,14 @@
 			Fecha Inicio:
 		</div>
 		<div class="col-md-3">
-			{!! Form::input('dateTime-local', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio'])
+			{!! Form::input('date', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio'])
 			!!}
 		</div>
 		<div class="col-md-1">
 			Fecha Termino:
 		</div>
 		<div class="col-md-4">
-			{!! Form::input('dateTime-local', 'enddate', null,['class' => 'form-control','placeholder' => 'Fecha termino'])
+			{!! Form::input('date', 'enddate', null,['class' => 'form-control','placeholder' => 'Fecha termino'])
 			!!}
 		</div>
 		<div class="col-md-3">
@@ -34,8 +36,7 @@
 			</select>
 		</div>
 	</div>
-	<br>
-	<div class="row">
+	{{-- <div class="row">
 		<div class="col-md-3">
 			<select name="sector" id="sector" class="form-control">
 				<option null selected disabled>Sector</option>
@@ -71,29 +72,27 @@
 				<option null selected disabled>Sucursal</option>
 				@foreach ($listsStore as $list)
 				<option value="{{$list->id}}">{{$list->name}}</option>
-				@endforeach
-			</select>
-		</div>
-	</div>
-	<br>
-	<div class="row">
-		<br>
-		<div class="col-md-12">
-			{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'buscar evento']) !!}
-		</div>
-	</div>
-	<br>
-	<div class="row">
-		<div class="col-md-3">
-			<button type="submit" class="btn btn-info w-100">Filtrar </button>
-		</div>
-	</div>
-	<br>
-	<div class="row">
-		<div class="col-md-12">
-			@include('events.table')
-		</div>
-	</div>
-	{!! Form::close() !!}
+	@endforeach
+	</select>
 </div>
+</div> --}}
+<div class="row">
+	<br>
+	<div class="col-md-12">
+		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'buscar evento']) !!}
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-3">
+		<button type="submit" class="btn btn-info w-100">Filtrar</button>
+	</div>
+</div>
+<br>
+<div class="row">
+	<div class="col-md-12">
+		@include('companies.events.table')
+	</div>
+</div>
+{!! Form::close() !!}
 @endsection

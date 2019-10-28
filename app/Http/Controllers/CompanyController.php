@@ -11,6 +11,9 @@ use App\Repositories\CompanyRepository;
 use Flash;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Carbon\Carbon;
+use Illuminate\Support\Str as Str;
+
 
 class CompanyController extends AppBaseController
 {
@@ -95,33 +98,43 @@ class CompanyController extends AppBaseController
       ->with('companies', $companies);
   }
 
-  //SECTION Eventos Compañia
+  //ANCHOR Eventos Compañia
   public function indexEvent(Company $company, Request $request)
   {
-    $events = Event::where('company_id', $company->id)->get();
-    $lists = Event::where('company_id', $company->id)->get();
+    $events = Event::with('contents')->where('company_id', $company->id)->get();
+    $lists = Event::with('contents')->where('company_id', $company->id)->get();
     $listsStore = Store::all();
     return view('companies.events.index', compact('lists', 'listsStore', 'events', 'company'));
   }
   public function showEvent(Company $company, Event $event)
   {
-
     if (empty($company) || empty($event)) {
       Flash::error('Compañia no encontrada');
       return redirect(route('companies.events.index', $company));
     }
     return view('companies.events.show', compact('company','event'));
   }
-  public function createEvent()
+  public function createEvent(Company $company)
   {
-    return view('companies.events.create');
+    return view('companies.events.create', compact('company'));
   }
-  public function storeEvent(CreateCompanyRequest $request)
+  public function storeEvent(Company $company, Request $request)
   {
-    $input = $request->all();
-    $company = $this->companyRepository->create($input);
-    Flash::success('Compañia agregada con exito.');
-    return redirect(route('companies.index'));
+		if ($request->initdate <= $request->enddate) {
+			//Format Init Date
+			$request->merge([
+				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+				'state'=>'0',
+				'slug'=>Str::slug($request['name'])
+				]);
+			$input = $request->all();
+			Event::create($input);
+			Flash::success('Evento agregado exitosamente');
+			return redirect(route('companies.events.index', $company));
+		}
+    Flash::error('Error al agregar el evento.');
+    return redirect(route('companies.events.index', $company));
   }
   public function editEvent($id)
   {
@@ -155,7 +168,7 @@ class CompanyController extends AppBaseController
     return redirect(route('companies.index'));
   }
 
-  //SECTION Sucursales Compañia
+  //ANCHOR Sucursales Compañia
   public function indexStore(Company $company, Request $request)
   {
     $stores = Store::with(['computers','computers.screens'])->where('company_id', $company->id);

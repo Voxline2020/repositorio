@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon as Carbon;
 
 /**
  * Class Event
@@ -87,9 +88,33 @@ class Event extends Model
         return $this->hasMany(\App\Models\Content::class);
     }
 
+
+
 	public function company()
 	{
 		return $this->belongsTo(\App\Models\Company::class, 'company_id');
+	}
+
+	public function getInitDateFAttribute()
+	{
+		$initDate = Carbon::create($this->initdate, 'America/Santiago')->format('d/m/Y H:i');
+		return $initDate;
+		# code...
+	}
+
+
+	public function getEndDateFAttribute()
+	{
+		$endDate = Carbon::create($this->enddate, 'America/Santiago')->format('d/m/Y H:i');
+		return $endDate;
+
+	}
+	public function getStateStringAttribute()
+	{
+		if($this->state == 0){
+			return "Inactivo";
+		}
+		return "Activo";
 	}
 
 }

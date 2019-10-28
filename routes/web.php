@@ -25,6 +25,8 @@ Route::resource('contents', 'ContentController');
 Route::group(['prefix' => 'contents'], function () {
 	Route::get('editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
 	Route::get('{id}/view','ContentController@ScreenView')->name('contents.ScreenView');
+	Route::get('{content}/d','ContentController@download')->name('contents.download');
+
 });
 
 //SECTION Computers
@@ -34,6 +36,8 @@ Route::group(['prefix' => 'computers'], function () {
 	Route::get('filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
+
+	Route::get('{computer}/get/{key}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
 
 //SECTION Users
@@ -60,31 +64,76 @@ Route::group(['prefix' => 'events'], function () {
 	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
 	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
 
-
-
+	//ANCHOR Asignations
+	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
+	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
+	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
 
 });
+Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
+
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');
 Route::group(['prefix' => 'companies'], function () {
-	//events
-	Route::get('/{company}/events', 'CompanyController@indexEvent')->name('companies.events.index');
-	Route::get('/{company}/events/create', 'CompanyController@createEvent')->name('companies.events.create');
-	Route::post('/{company}/events', 'CompanyController@storeEvent')->name('companies.events.store');
-	Route::get('/{company}/events/{event}/edit', 'CompanyController@editEvent')->name('companies.events.edit');
-	Route::put('/{company}/events/{event}/update', 'CompanyController@updateEvent')->name('companies.events.update');
-	Route::get('/{company}/events/{event}', 'CompanyController@showEvent')->name('companies.events.show');
-	Route::delete('/{company}/events/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
+	//Events
+	Route::group(['prefix' => '{company}/events'], function () {
+		Route::get('/', 'CompanyController@indexEvent')->name('companies.events.index');
+		Route::get('/create', 'CompanyController@createEvent')->name('companies.events.create');
+		Route::post('/', 'CompanyController@storeEvent')->name('companies.events.store');
+		Route::get('/{event}/edit', 'CompanyController@editEvent')->name('companies.events.edit');
+		Route::put('/{event}', 'CompanyController@updateEvent')->name('companies.events.update');
+		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
+		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
+	});
+
+	//BASE
+	// Route::group(['prefix' => '{company}/stores'], function () {
+	// 	Route::get('/', 'CompanyController@indexStore')->name('companies.stores.index');
+	// 	Route::get('/create', 'CompanyController@createStore')->name('companies.stores.create');
+	// 	Route::post('/', 'CompanyController@storeStore')->name('companies.stores.store');
+	// 	Route::get('/{store}/edit', 'CompanyController@editStore')->name('companies.stores.edit');
+	// 	Route::put('/{store}', 'CompanyController@updateStore')->name('companies.stores.update');
+	// 	Route::get('/{store}', 'CompanyController@showStore')->name('companies.stores.show');
+	// 	Route::delete('/{store}', 'CompanyController@destroyStore')->name('companies.stores.destroy');
+	// });
 
 	//Stores
-	Route::get('/{company}/stores', 'CompanyController@indexStore')->name('companies.stores.index');
-	Route::get('/{company}/stores/create', 'CompanyController@createStore')->name('companies.stores.create');
-	Route::post('/{company}/stores', 'CompanyController@storeStore')->name('companies.stores.store');
-	Route::get('/{company}/stores/{store}/edit', 'CompanyController@editStore')->name('companies.stores.edit');
-	Route::put('/{company}/stores/{store}/update', 'CompanyController@updateStore')->name('companies.stores.update');
-	Route::get('/{company}/stores/{store}', 'CompanyController@showStore')->name('companies.stores.show');
-	Route::delete('/{company}/stores/{store}', 'CompanyController@destroyStore')->name('companies.stores.destroy');
+	Route::group(['prefix' => '{company}/stores'], function () {
+		//Indice de tiendas
+		Route::get('/', 'CompanyController@indexStore')->name('companies.stores.index');
+		Route::get('/create', 'CompanyController@createStore')->name('companies.stores.create');
+		Route::post('/', 'CompanyController@storeStore')->name('companies.stores.store');
+		Route::get('/{store}/edit', 'CompanyController@editStore')->name('companies.stores.edit');
+		Route::put('/{store}', 'CompanyController@updateStore')->name('companies.stores.update');
+		Route::get('/{store}', 'CompanyController@showStore')->name('companies.stores.show');
+		Route::delete('/{store}', 'CompanyController@destroyStore')->name('companies.stores.destroy');
+
+		Route::group(['prefix' => '{store}/computers'], function () {
+			// Route::get('/', 'CompanyController@indexStoreComputer')->name('companies.stores.computers.index');
+			// Route::get('/create', 'CompanyController@createComputerStore')->name('companies.stores.computers.create');
+			// Route::post('/', 'CompanyController@storeStoreComputer')->name('companies.stores.computers.store');
+			// Route::get('/{computer}/edit', 'CompanyController@editStoreComputer')->name('companies.stores.computers.edit');
+			// Route::put('/{computer}', 'CompanyController@updateStoreComputer')->name('companies.stores.computers.update');
+			// Route::get('/{computer}', 'CompanyController@showStoreComputer')->name('companies.stores.computers.show');
+			// Route::delete('/{computer}', 'CompanyController@destroyStoreComputer')->name('companies.stores.computers.destroy');
+
+			// Route::group(['prefix' => '{computer}/screens'], function () {
+			// 	Route::get('/', 'CompanyController@indexStoreComputersScreen')->name('companies.stores.computers.screens.index');
+			// 	Route::get('/create', 'CompanyController@createComputerStoreScreen')->name('companies.stores.computers.screens.create');
+			// 	Route::post('/', 'CompanyController@storeStoreComputerScreen')->name('companies.stores.computers.screens.store');
+			// 	Route::get('/{screen}/edit', 'CompanyController@editStoreComputerScreen')->name('companies.stores.computers.screens.edit');
+			// 	Route::put('/{screen}', 'CompanyController@updateStoreComputerScreen')->name('companies.stores.computers.screens.update');
+			// 	Route::get('/{screen}', 'CompanyController@showStoreComputerScreen')->name('companies.stores.computers.screens.show');
+			// 	Route::delete('/{screen}', 'CompanyController@destroyStoreComputerScreen')->name('companies.stores.computers.screens.destroy');
+			// });
+		});
+
+
+	});
+
+
+
 });
 
 //SECTION Stores

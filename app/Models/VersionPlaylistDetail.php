@@ -17,7 +17,7 @@ class VersionPlaylistDetail extends Model
 
   public $fillable = [
     'content_id',
-		'version_id'
+		'version_playlist_id'
   ];
 
 
@@ -27,6 +27,12 @@ class VersionPlaylistDetail extends Model
    * @var array
    */
 
+	protected $casts = [
+		'content_id' => 'integer',
+		'version_playlist_id' => 'integer',
+	];
+
+
   /**
    * Validation rules
    *
@@ -34,7 +40,7 @@ class VersionPlaylistDetail extends Model
    */
   public static $rules = [
 		'content_id' => 'required',
-		'version_id' => 'required'
+		'version_playlist_id' => 'required'
   ];
 
 	public function content()
@@ -44,7 +50,7 @@ class VersionPlaylistDetail extends Model
 
 	public function versionPlaylist()
 	{
-			return $this->belongsTo(\App\Models\VersionPlaylist::class,'version_id');
+			return $this->belongsTo(\App\Models\VersionPlaylist::class, 'version_playlist_id');
 	}
 
 }
