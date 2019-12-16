@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -177,6 +178,8 @@ return [
 
 				Spatie\Permission\PermissionServiceProvider::class,
 			Barryvdh\DomPDF\ServiceProvider::class,
+			Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
 
 
 
