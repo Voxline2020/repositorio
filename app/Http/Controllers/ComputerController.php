@@ -46,9 +46,6 @@ class ComputerController extends AppBaseController
 		);
 	}
 
-
-
-
 	//Creacion computadores
 	//Vista de creacion
 	public function create()
@@ -129,8 +126,6 @@ class ComputerController extends AppBaseController
 					}
 				}
 			}
-
-
 			return response()->json($jsonResponse);
 		}
 		else {

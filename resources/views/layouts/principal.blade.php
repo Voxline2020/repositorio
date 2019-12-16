@@ -7,7 +7,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-	<title>{{ config('app.name', 'Laravel') }}</title>
+	<title>{{ config('app.name', 'VxCMS') }}</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">

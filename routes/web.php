@@ -26,7 +26,6 @@ Route::group(['prefix' => 'contents'], function () {
 	Route::get('editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
 	Route::get('{id}/view','ContentController@ScreenView')->name('contents.ScreenView');
 	Route::get('{content}/d','ContentController@download')->name('contents.download');
-
 });
 
 //SECTION Computers
@@ -37,7 +36,12 @@ Route::group(['prefix' => 'computers'], function () {
 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
-	Route::get('{computer}/get/{key}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+});
+
+
+Route::group(['prefix' => 'pivot'], function () {
+	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
 
 //SECTION Users
@@ -143,9 +147,6 @@ Route::group(['prefix' => 'stores'], function () {
 	Route::get('{id}/filter_by_name', 'StoreController@filter_by_name')->name('stores.filter_by_name'); //ruta para filtrar la sucursal con nombre
 	Route::get('editTwoParam/{id}/{company_id}','StoreController@edit')->name('stores.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
 	Route::get('create/{id}','StoreController@create')->name('stores.createOneParam');// ruta para recoger 1 parametro que es la id de la compañiay crear una sucursal.
-
-
-
 });
 
 //SECTION Screen

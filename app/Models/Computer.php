@@ -89,6 +89,11 @@ class Computer extends Model
 		return $this->belongsTo(\App\Models\AccessType::class, 'type_id','id');
 	}
 
+	public function pivots()
+	{
+		return $this->hasMany(\App\Models\ComputerPivot::class);
+	}
+
 	public function screens()
 	{
 		return $this->hasMany(\App\Models\Screen::class);
