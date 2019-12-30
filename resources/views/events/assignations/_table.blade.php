@@ -6,23 +6,29 @@
 			<thead class="thead-dark">
 				<tr>
 					<th>Pantalla</th>
+					<th>Sucursal</th>
+					<th>Tipo</th>
 					<th>Medidas</th>
 					<th>Asignado A</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($screens as $screen)
-				<tr>
-					<td>{!! $screen->name !!}</td>
-					<td>{!! $screen->Resolution !!}</td>
-					<td>
+					
+					<tr>
+						<td>{!! $screen->name !!}</td>
+						<td>{!! $screen->computer->store->name !!}</td>
+						<td>{!! $screen->type !!}</td>
+						<td>{!! $screen->height !!}x{!! $screen->width !!}</td>
+						<td>
 
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" id="screenChbx{{ $screen->id }}" name="screensChbx[]" value="{{ $screen->id }}" class="custom-control-input">
-							<label class="custom-control-label" style="width:2rem; height:2rem;" for="screenChbx{{ $screen->id }}"></label>
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" id="screenChbx{{ $screen->id }}" name="screensChbx[]" value="{{ $screen->id }}" class="custom-control-input">
+								<label class="custom-control-label" style="width:2rem; height:2rem;" for="screenChbx{{ $screen->id }}"></label>
 
-						</div>
-				</tr>
+							</div>
+					</tr>
+
 				@endforeach
 			</tbody>
 		</table>

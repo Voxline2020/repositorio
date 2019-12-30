@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateContentRequest;
 use App\Models\Content;
 use App\Models\Event;
+use App\Models\Store;
 use App\Models\Screen;
 use App\Models\ScreenPlaylistAsignation;
 use App\Models\VersionPlaylistDetail;

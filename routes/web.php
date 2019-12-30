@@ -162,8 +162,10 @@ Route::group(['prefix' => 'screens'], function () {
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 // Route::resource('clients', 'ClientController');
 Route::group(['prefix' => 'clients'], function () {
+	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
 	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 	Route::get('screen/{id}','ScreenController@create')->name('screens.createOneParam'); // ruta para recoger 1 parametro que es el id de computador y crear una pantalla.
+	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('/events', "EventController@index")->name('clients.events.index');
 	Route::get('/events/{event}/', "EventController@showClient")->name('clients.events.show');
 

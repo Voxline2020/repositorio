@@ -1,3 +1,31 @@
+@if(Auth::user()->hasRole('Supervisor'))
+@foreach ($companies as $company)
+	@if($company->id ==  auth()->user()->company_id)
+	<div class="col-md-4 p-1">
+		<div class="card">
+			<img src="https://picsum.photos/400/200" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title"> Administracion</h5>
+				<div class="row p-0 m-0">
+					<div class="col-lg-6 py-1 px-1">
+						<a href="{{ route('companies.stores.index', [$company]) }}" class="btn btn-success w-100">Sucursales</a>
+					</div>
+					<div class="col-lg-6 py-1 px-1">
+						<a href="#" class="btn btn-danger w-100">Incidencias</a>
+					</div>
+					<div class="col-lg-6 py-1 px-1">
+						<a href="{{ route('companies.events.index', [$company]) }}" class="btn btn-warning w-100">Eventos</a>
+					</div>
+					<div class="col-lg-6 py-1 px-1">
+							<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100">Computadores</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@endif
+@endforeach
+@elseif(Auth::user()->hasRole('Administrador'))
 @foreach ($companies as $company)
 <div class="col-md-4 p-1">
 	<div class="card">
@@ -14,16 +42,16 @@
 				<div class="col-lg-6 py-1 px-1">
 					<a href="{{ route('companies.events.index', [$company]) }}" class="btn btn-warning w-100">Eventos</a>
 				</div>
-				{{-- <div class="col-lg-6 py-1 px-1">
-						<a href="#" class="btn btn-primary w-100">Go somewhere</a>
-				</div> --}}
+				<div class="col-lg-6 py-1 px-1">
+							<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100">Computadores</a>
+					</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 @endforeach
 
+@if(Auth::user()->hasRole('Administrador'))
 <div class="col-md-4 p-1">
 	<div class="card h-100 ">
 		<a href="{!! route('companies.create') !!}"
@@ -31,3 +59,5 @@
 			style="font-size:3rem">+</a>
 	</div>
 </div>
+@endif
+@endif

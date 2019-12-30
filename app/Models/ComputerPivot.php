@@ -61,8 +61,11 @@ class ComputerPivot extends Model
    **/
   public function computers()
   {
-    return $this->hasMany(\App\Models\computer::class);
+    return $this->hasMany(\App\Models\Computer::class);
 	}
-
+  public function onpivots()
+  {
+    return $this->hasMany(\App\Models\ComputerOnPivot::class);
+	}
 
 }

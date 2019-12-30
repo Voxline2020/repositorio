@@ -55,25 +55,23 @@ class ComputerPivotController extends AppBaseController
 
   public function getInfo($code, $pass)
   {
-    $pivot = ComputerPivot::where('code', $code)->where('pass', $pass)->first();
+    $pivot = ComputerPivot::with(['onpivots','onpivots.computer','onpivots.computer.screens'])->where('code', $code)->where('pass', $pass)->first();
     if (isset($pivot)) {
       $jsonResponse = [];
       $jsonResponse['code'] = $pivot->code;
-      foreach ($pivot->computers as $computer) {
-        $jsonResponse['computer']['code'] = $computer->code;
-        foreach ($computer->screens as $screen) {
-          $jsonResponse['screens']['id'] = $screen->id;
-          $jsonResponse['screens']['name'] = $screen->name;
-          $jsonResponse['screens']['width'] = $screen->width;
-          $jsonResponse['screens']['height'] = $screen->height;
-          foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
+      foreach($pivot->onpivots as $onpivot){
+        foreach ($onpivot->computer->screens as $screen) {
+          $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['name'] = $screen->name;
+          $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['width'] = $screen->width;
+          $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['height'] = $screen->height;
+          foreach ($screen->playlist->versionPlaylists as $versionPlaylist); {
             if ($versionPlaylist->state == 1) {
-              $jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
+              $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['playlist']['version'] = $versionPlaylist->version;
               foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
-                $jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
-                $jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
-                $jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
-                $jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download', $vPlaylistDetail->content->id);
+                $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
+                $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
+                $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
+                $jsonResponse['computers'][$onpivot->computer->code]['screens'][$screen->id]['playlist'][$key]['download'] = route('contents.download', $vPlaylistDetail->content->id);
               }
             }
           }

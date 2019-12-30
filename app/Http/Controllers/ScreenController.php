@@ -35,9 +35,11 @@ class ScreenController extends AppBaseController
 	//mostrar pantallas
 	public function index(Request $request)
 	{
+		$computers = Computer::all();
 		$screens = $this->screenRepository->all();
 		return view('screen.index')
-			->with('screens', $screens);
+			->with('screens', $screens)
+			->with('computers', $computers);
 	}
 	//mostrar pantallas con id en especifico
 	public function show($id)
@@ -149,6 +151,18 @@ class ScreenController extends AppBaseController
 			['screens' => $screen],
 			compact('content')
 		);
+	}
+	public function changeStatus($id, Request $request)
+	{
+		$screen = $this->screenRepository->find($id);	
+		$screen->state = $request['state'];
+		if (empty($request)) {
+			Flash::error('Error');
+			return redirect(url()->previous());
+		}
+		$screen->save();
+		Flash::success('Estado actualizado');
+		return redirect(url()->previous($screen));
 	}
 
 }

@@ -5,9 +5,11 @@
 	<div class="col-md-9">
 		<h1 class="font-weight-bold"> Sucursales {{ $company->name }} </h1>
 	</div>
+	@if(Auth::user()->hasRole('Administrador'))
 	<div class="col-md-3">
 		<a class="btn btn-success w-100" href="{!! route('companies.stores.create',$company->id) !!}">Nueva sucursal</a>
 	</div>
+	@endif
 </div>
 {{ Form::open(['route' =>['companies.stores.index',$company], 'method' => 'GET']) }}
 <div class="row">

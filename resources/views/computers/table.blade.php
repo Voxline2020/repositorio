@@ -13,7 +13,7 @@
 			<tr>
 				<td>{!! $computer->code !!}</td>
 				<td>{!! $computer->location !!}</td>
-			<td>{{ $computer->type->name}}</td>
+			<td>{{ $computer->type}}</td>
 				<td>
 					{!! Form::open(['route' => ['computers.destroy', $computer->id], 'method' => 'delete']) !!}
 					<div class='btn-group'>

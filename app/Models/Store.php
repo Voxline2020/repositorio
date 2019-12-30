@@ -75,4 +75,8 @@ class Store extends Model
 	{
 		return $this->belongsTo(\App\Models\Company::class);
 	}
+	public function screens()
+	{
+	  return $this->hasMany(\App\Models\Screen::class);
+	  }
 }

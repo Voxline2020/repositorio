@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Computer;
 use App\Models\Content;
 use App\Models\Event;
+use App\Models\Company;
 use App\Models\Playlist;
 use App\Models\Screen;
 use App\Models\ScreenPlaylistAsignation;
@@ -42,11 +43,13 @@ class EventController extends Controller
    */
   public function index(Request $request)
   {
-    $events = $this->eventRepository->all();
-    $lists = Event::all();
+    $id = auth()->user()->company_id;
+    $company = Company::where('id', $id)->first();
+    // $events = $this->eventRepository->all();
+    $events = Event::where('company_id', $id)->orderBy('state', 'asc')->paginate();
+    // $lists = Event::where('company_id', $id);
     $listsStore = Store::all();
-    return view('events.index', compact('lists', 'listsStore'))
-      ->with('events', $events);
+    return view('events.index', compact('events', 'listsStore'))->with('company', $company);
 
     // $filter = $request->get('nameFiltrar');
     // $filterSector = $request->get('sector');
@@ -291,14 +294,16 @@ class EventController extends Controller
   public function indexAssign(Event $event, Content $content, Request $request)
   {
 
-    $screens = Screen::with(['computer' => function ($query) use ($event) {
-      $query->with(['store' => function ($query) use ($event) {
-        $query->where('company_id', $event->company->id);
-      }]);
+    $screens = Screen::whereHas('computer', function ($query) {
+			$query->whereHas('store', function ($query) {
+				$query->where('company_id', Auth::user()->company_id);
+			});
 
-    }])->where('width', $content->width)->where('height', $content->height)->orderBy('computer_id', 'ASC')->paginate();
+    })->where('width', $content->width)->where('height', $content->height)->orderBy('computer_id', 'ASC')->paginate();
     $screens->appends(request()->query());
 
+
+    // dd($screens);
     return view('events.assignations.index', compact('event', 'content', 'screens'))->with('screensChbx', $request->screensChbx);
   }
 
@@ -399,7 +404,7 @@ class EventController extends Controller
       });
     })->get();
 
-		// dd($screens);
+		//dd($screens);
 
     return view('events.assignations.showAssignations', compact('event', 'content','screens'));
   }

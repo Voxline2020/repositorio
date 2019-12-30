@@ -4,23 +4,7 @@
 
 <div class="row">
 				<label>	</label>
-		<div class="col-md-4">
-				<h4><span class="badge badge-light  pull-right">Lugar:{!! $computers->location !!}</span></h4>
-		</div>
-		<div class="col-md-4">
-				<h4><span class="badge badge-light">Tipo: {{ $computers->type->name}}</span></h4>
-		</div>
-		<div class="col-md-4">
-				@if($computers->type_id==1)
-				<h4><span class="badge badge-light">Acceso: {{ $computers->teamviewer_code}}</span></h4>
-			@endif
-			@if($computers->type_id==2)
-			<h4><span class="badge badge-light">Acceso: {{ $computers->aamyy_code}}</span></h4>
-			@endif
-			@if($computers->type_id==3)
-			<h4><span class="badge badge-light">Acceso: {{ $computers->ip}}</span></h4>
-			@endif
-		</div>
+
 
 	</div>
 <div class="table-responsive">

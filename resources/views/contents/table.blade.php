@@ -18,7 +18,7 @@
 				<td>{!! $content->width !!}</td>
 				<td>{!! $content->height !!}</td>
 				@if (isset($content->user_id) && !is_null($content->user_id))
-				<td>{!! $content->user->name !!}</td>
+				<td>{!! $content->user_id !!}</td>
 				@endif
 				<td>
 					{{-- {!! Form::open(['route' => ['contents.destroy', $content->id], 'method' => 'delete']) !!}

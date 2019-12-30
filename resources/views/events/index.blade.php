@@ -6,8 +6,9 @@
 		<div class="col-md-9">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
 		</div>
+		
 		<div class="col-md-3">
-			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company) !!}">Nuevo Evento</a>
+			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company->id) !!}">Nuevo Evento</a>
 		</div>
 	</div>
 	<br>

@@ -1,5 +1,5 @@
 <div class="table-responsive">
-	<table class="table table-hover">
+	<table class="table table-hover" id="events-table">>
 		<thead>
 			<tr>
 				<th>Nombre</th>
@@ -40,4 +40,5 @@
 			@endforeach
 		</tbody>
 	</table>
+	{{ $events->links() }}
 </div>

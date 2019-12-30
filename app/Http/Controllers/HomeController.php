@@ -30,7 +30,7 @@ class HomeController extends Controller
 				return redirect(route('clients.index'));
 			}
 			else if(Auth::user()->hasRole('Supervisor')){
-
+                return redirect(route('clients.index'));
 			}
 			else if(Auth::user()->hasRole('Diseño')){
 

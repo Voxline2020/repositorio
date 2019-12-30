@@ -50,9 +50,16 @@ class ComputerController extends AppBaseController
 	//Vista de creacion
 	public function create()
 	{
-		$types = AccessType::all();
+		// $types = AccessType::all();
+		// $stores = Store::all();
+		// return view('computer.create', compact('stores', 'types'));
+
+		$types= AccessType::all();
+		$lists = Company::all();
 		$stores = Store::all();
-		return view('computer.create', compact('stores', 'types'));
+		$companies = Company::all();
+		$computer = $this->computerRepository->all();
+		return view('computers.create', compact('companies', 'stores', 'lists','types'));
 	}
 
 	//Request de creacion (POST)
@@ -68,13 +75,16 @@ class ComputerController extends AppBaseController
 	public function edit($id, $store_id)
 	{
 		$types = AccessType::all();
+		$lists = Company::all();
 		$stores = Store::where('id', $store_id)->get();
+		$companies = Company::all();
 		$computer = $this->computerRepository->find($id);
+		// $computer = Computer::where('store_id', $id);
 		if (empty($computer)) {
 			Flash::error('Computador no encontrado');
 			return redirect(route('computers.index'));
 		}
-		return view('computer.edit', compact('stores', 'types'))->with('computer', $computer);
+		return view('computers.edit', compact('stores', 'types'))->with('computer', $computer);
 	}
 	//Request de editar (POST)
 	public function update($id, UpdateComputerRequest $request)
@@ -106,7 +116,7 @@ class ComputerController extends AppBaseController
 	{
 
 		if($key == "voxline55"){
-			// $computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
+			//$computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
 			$jsonResponse = [];
 			$jsonResponse['code'] = $computer->code;
 			foreach ($computer->screens as $screen) {

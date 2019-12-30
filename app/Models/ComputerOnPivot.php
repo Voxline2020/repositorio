@@ -49,7 +49,7 @@ class ComputerOnPivot extends Model
 
 	public function computerPivot()
 	{
-		return $this->belongsTo(\App\Models\ComputerPivot::class);
+		return $this->belongsTo(\App\Models\ComputerPivot::class,'computer_pivot_id', 'id');
 	}
 
 	public function computer()

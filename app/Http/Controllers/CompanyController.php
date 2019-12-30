@@ -7,6 +7,7 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\Store;
+use Auth;
 use App\Repositories\CompanyRepository;
 use Flash;
 use Illuminate\Http\Request;

@@ -26,6 +26,10 @@
 				<li class="nav-item {{ Route::is('events.clients.index') ? 'active': null }}">
 					<a class="nav-link" href="{{ route('clients.events.index') }}">Eventos</a>
 				</li>
+			@elseif(Auth::user()->hasRole('Supervisor'))
+				<li class="nav-item {{ Route::is('clients.events.index') ? 'active': null }}">
+					<a class="nav-link" href="{{ route('clients.events.index') }}">Eventos</a>
+				</li>
 			@endif
 			<li class="nav-item">
 				<a class="nav-link" href="{{ route('logout') }}">{{ __('Cerrar sesion') }}</a>
