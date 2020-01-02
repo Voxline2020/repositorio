@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateComputerRequest;
 use App\Http\Requests\UpdateComputerRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\ComputerRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -32,7 +33,14 @@ class ComputerController extends AppBaseController
 		$lists = Company::all();
 		$stores = Store::all();
 		$companies = Company::all();
-		$computer = $this->computerRepository->all();
+		// $computer = $this->computerRepository->all();
+		if(Auth::user()->company_id == null){
+			$computer = Computer::whereHas('store', function ($query) {})->paginate();
+		}else{
+		$computer = Computer::whereHas('store', function ($query) {
+			$query->where('company_id', Auth::user()->company_id);
+		})->paginate();
+		};
 		return view('computers.index', compact('companies', 'stores', 'lists','types'))
 			->with('computers', $computer);
 	}

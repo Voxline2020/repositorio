@@ -7,7 +7,7 @@
 	</div>
 	<div class="btn-group">
 		<div class="col-md-6">
-		<a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+		<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false" aria-controls="collapseExample">
 		Agregar
 		</a>
 		</div>
@@ -21,7 +21,7 @@
 <div class="row my-lg-4 my-md-4 my-sm-1">
 	@include('events._show_fields')
 </div>
-<div class="collapse" id="collapseExample">
+<div class="collapse" id="AgregarContenido">
 <div class="col-md-12">
 	<table class="table table-hover">
 		<thead class="thead-dark">

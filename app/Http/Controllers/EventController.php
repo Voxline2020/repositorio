@@ -451,25 +451,35 @@ class EventController extends Controller
   public function showClient(Event $event, Request $request)
   {
     $screens_id = [];
+    // foreach ($event->contents as $key => $content) {
+    //   foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
+    //     if ($versionPlaylistDetail->versionPlaylist->state == 1) {
+    //       foreach ($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
+    //         if ($screenPlaylistAsignation->active == 1) {
+    //           $screen = $screenPlaylistAsignation->screen;
+    //           array_push($screens_id, $screen->id);
+    //         }
+    //       }
+    //     }
+    //   }
 
-    foreach ($event->contents as $content) {
-      foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
-        if ($versionPlaylistDetail->versionPlaylist->state == 1) {
-          foreach ($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
-            if ($screenPlaylistAsignation->active == 1) {
-              $screen = $screenPlaylistAsignation->screen;
-              array_push($screens_id, $screen->id);
-            }
-          }
-        }
+    foreach ($event->contents AS $content) {
+      $screens = Screen::whereHas('playlist', function ($query) use ($content) {
+        $query->whereHas('versionPlaylists', function ($query) use ($content){
+          $query->whereHas('versionPlaylistDetails', function ($query) use ($content){
+            $query->where('content_id', $content->id);
+          });
+        });
+      })->get();
+      foreach($screens AS $screen){
+        array_push($screens_id, $screen->id);
       }
     }
-
-    $screens = Screen::find($screens_id);
+    $screens = Screen::find(array_unique($screens_id));
     if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
       $screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
     }
-
+    
     return view('client.events.show', compact('screens', 'event'));
   }
 

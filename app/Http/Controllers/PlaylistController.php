@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\VersionPlaylist;
 use App\Models\VersionPlaylistDetail;
 use App\Models\Playlist;
+use App\Models\Content;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
@@ -34,8 +35,6 @@ class PlaylistController extends AppBaseController
     {
                 $playlists = Playlist::wherehas('versionPlaylists', function ($query) {
                     $query->whereHas('versionPlaylistDetails', function ($query) {
-                    //     $query->whereHas('content', function ($query) {
-                    //     });
                     });
                 })->paginate();
 				$version= VersionPlaylist::where('state','1')->first();
@@ -93,10 +92,16 @@ class PlaylistController extends AppBaseController
      */
     public function show($id)
     {
-        $playlist = $this->playlistRepository->find($id);
+        // $playlist = $this->playlistRepository->find($id);
+        $playlist = Playlist::wherehas('versionPlaylists', function ($query) {
+            $query->whereHas('versionPlaylistDetails', function ($query) {
+                $query->whereHas('content', function ($query) {
+                });
+            });
+        })->find($id);
 
         if (empty($playlist)) {
-            Flash::error('Playlist not found');
+            Flash::error('No se encontro el Playlist');
 
             return redirect(route('playlists.index'));
         }

@@ -8,7 +8,7 @@
 			<h2 class=font-weight-bold>{{$event->name}} &#x1F4C6;</h2>
 		</div>
 		<div class="col-md-3">
-			<button type="button" class="btn btn-primary w-100" onclick="location.href='/events'">Volver </button>
+			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
 		</div>
 	</div>
 	<br>

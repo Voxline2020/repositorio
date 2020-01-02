@@ -1,20 +1,25 @@
 <div class="table-responsive">
+	<h3>Contenidos:</h3>
 	<table class="table">
 		<thead>
 			<tr>
 				<th>Nombre</th>
-				<th>Descripcion</th>
-				<th>Slug</th>
-				<th colspan="3">Acciones</th>
+				<th>Resolucion</th>
+				<th>Tipo</th>
+				<th>Tamaño</th>
 			</tr>
 		</thead>
 		<tbody>
+			@foreach($playlist->versionPlaylists AS $version)
+			@endforeach
+			@foreach($version->versionPlaylistDetails AS $detail)
 			<tr>
-				<td>{!! $playlist->name !!}</td>
-				<td>{!! $playlist->description !!}</td>
-				<td>{!! $playlist->slug !!}</td>
-				<td></td>
+				<td>{!! $detail->content->name !!}</td>
+				<td>{!! $detail->content->height !!}x{!! $detail->content->width !!}</td>
+				<td>{!! $detail->content->filetype !!}</td>
+				<td>{!! $detail->content->size !!}</td>
 			</tr>
+			@endforeach
 		</tbody>
 	</table>
 </div>

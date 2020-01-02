@@ -38,8 +38,7 @@
 				</td>
 				<td>
 					<div class='btn-group'>
-							<a href="{{ route('screens.show',[$screen->id]) }}" class='btn btn-info'><i class="fas fa-eye"></i></a>
-							<a href="{{ route('screens.show',[$screen->computer_id]) }}" class="btn btn-info"><i class="fas fa-info-circle"></i></a>
+							<a href="{{ route('playlists.show',[$screen->playlist_id]) }}" class="btn btn-info"><i class="fas fa-info-circle"></i></a>
 							<a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}" class="btn btn-warning"><i
 									class="fas fa-edit"></i></a>
 					</div>
