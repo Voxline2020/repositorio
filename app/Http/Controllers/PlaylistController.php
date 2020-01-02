@@ -33,11 +33,11 @@ class PlaylistController extends AppBaseController
     public function index(Request $request)
     {
                 $playlists = Playlist::wherehas('versionPlaylists', function ($query) {
-                    // $query->whereHas('versionPlaylistDetails', function ($query) {
+                    $query->whereHas('versionPlaylistDetails', function ($query) {
                     //     $query->whereHas('content', function ($query) {
                     //     });
-                    // });
-                })->get();
+                    });
+                })->paginate();
 				$version= VersionPlaylist::where('state','1')->first();
                 $version_details= VersionPlaylistDetail::where('version_playlist_id',$version->id)->get();   
 				$url=array();
