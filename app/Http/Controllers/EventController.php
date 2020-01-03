@@ -43,10 +43,9 @@ class EventController extends Controller
    */
   public function index(Request $request)
   {
-    $id = auth()->user()->company_id;
-    $company = Company::where('id', $id)->first();
+    $company = Company::where('id',  auth()->user()->company_id)->first();
     // $events = $this->eventRepository->all();
-    $events = Event::where('company_id', $id)->orderBy('state', 'asc')->paginate();
+    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate();
     // $lists = Event::where('company_id', $id);
     $listsStore = Store::all();
     return view('events.index', compact('events', 'listsStore'))->with('company', $company);
@@ -280,7 +279,7 @@ class EventController extends Controller
     $event = $this->eventRepository->find($id);
 
     if (empty($event)) {
-      Flash::error('Event not found');
+      Flash::error('Evento no encontrado');
 
       return redirect(route('events.index'));
     }
@@ -462,7 +461,6 @@ class EventController extends Controller
     //       }
     //     }
     //   }
-
     foreach ($event->contents AS $content) {
       $screens = Screen::whereHas('playlist', function ($query) use ($content) {
         $query->whereHas('versionPlaylists', function ($query) use ($content){
@@ -520,129 +518,157 @@ class EventController extends Controller
     $filterState = $request->get('state');
     $filterDate = $request->get('initdate');
     $filterDateEnd = $request->get('enddate');
-    $filterSector = $request->get('sector');
-    $filterFloor = $request->get('floor');
-    $filterType = $request->get('type');
-    if ($filter != null) {
-      $events = Event::where('name', 'LIKE', "%$filter%")->paginate();
-    } else {
+    $company = Company::where('id',  auth()->user()->company_id)->first();
+    $listsStore = Store::all();
+    if ($filter != null || $filterState != null || $filterDate != null || $filterDateEnd != null) {
+      if ($filter != null) {
+      $events = Event::where('company_id', auth()->user()->company_id)->where('name', 'LIKE', "%$filter%")->orderBy('state', 'asc')->paginate();
+      }
       if ($filterState != null) {
-        $events = Event::where('state', $filterState)->paginate();
-      } else {
-        if ($filterDate != null) {
-          $events = Event::where('initdate', $filterDate)->paginate();
-        } else {
-          if ($filterDateEnd != null) {
-            $events = Event::where('enddate', $filterDateEnd)->paginate();
-          } else {
-            $filter = $request->get('nameFiltrar');
-            $filterSector = $request->get('sector');
-            $filterFloor = $request->get('floor');
-            $filterType = $request->get('type');
-            $filterState = $request->get('state');
-            $filterStore = $request->get('store');
-            $i = 0;
-            $a = 0;
-            $version_playlist_details = null;
-            $screen_playlist_asignations = null;
-            $events = Event::all();
-            foreach ($events as $event) {
-              $screens2 = array();
-              $contents = Content::where('event_id', $event->id)->paginate();
-              foreach ($contents as $content) {
-                $version_playlist_details = VersionPlaylistDetail::where('content_id', $content->id)->get();
-                if ($version_playlist_details != null) {
-                  foreach ($version_playlist_details as $version_playlist_detail) {
-                    $screen_playlist_asignations = \DB::table('screen_playlist_asignation')->where('version_id', $version_playlist_detail->version_id)->get();
-                    if ($screen_playlist_asignations != null) {
-                      foreach ($screen_playlist_asignations as $screen_playlist_asignation) {
-                        if ($filterSector != null) {
-                          $screens = Screen::where([
-                            ['id', $screen_playlist_asignation->screen_id],
-                            ['sector', $filterSector],
-                          ])->first();
-                          if ($screens != null) {
-                            $eventsFinal[$i] = $event;
-                            $i++;
-                          }
-                        } else {
-                          if ($filterFloor != null) {
-                            $screens = Screen::where([
-                              ['id', $screen_playlist_asignation->screen_id],
-                              ['floor', $filterFloor],
-                            ])->first();
-                            if ($screens != null) {
-                              $eventsFinal[$i] = $event;
-                              $i++;
-                            }
-                          } else {
-                            if ($filterType != null) {
-                              $screens = Screen::where([
-                                ['id', $screen_playlist_asignation->screen_id],
-                                ['type', $filterType],
-                              ])->first();
-                              if ($screens != null) {
-                                $eventsFinal[$i] = $event;
-                                $i++;
-                              }
-                            } else {
-                              if ($filterStore != null) {
-                                $screens = Screen::where([
-                                  ['id', $screen_playlist_asignation->screen_id],
-                                ])->first();
-                                if ($screens != null) {
-                                  $computer = Computer::where('id', $screens->computer_id)->first();
-                                  if ($computer != null) {
-                                    $store = Store::where([
-                                      ['id', $computer->store_id],
-                                      ['id', $filterStore],
-                                    ])->first();
-                                    if ($store != null) {
-                                      $eventsFinal[$i] = $event;
-                                      $i++;
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        $events = Event::where('company_id',  auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
       }
-      $lists = Event::all();
-      $listsStore = Store::all();
-      if ($eventsFinal != null) {
-        return view(
-          'events.index',
-          ['events' => $eventsFinal],
-          compact('lists', 'listsStore')
-        );
-      } else {
-        if ($events != null) {
-          if ($filter != null) {
-            return view(
-              'events.index',
-              ['events' => $events],
-              compact('lists', 'listsStore')
-            );
-          } else {
-            return view(
-              'events.index',
-              ['events' => $events],
-              compact('lists', 'listsStore')
-            );
-          }
-        }
+      if ($filterDate != null) {
+        $events = Event::where('company_id',  auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
       }
+      if ($filterDateEnd != null) {
+        $events = Event::where('company_id',  auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
+      }
+    return view('events.index', compact('events', 'listsStore'))->with('company', $company);
+    }else {
+    Flash::error('Ingrese un valor para generar la busqueda');
+    return redirect(url()->previous());
     }
   }
+  // public function filter_by_name(Request $request)
+  // {
+  //   $eventsFinal = null;
+  //   $filter = $request->get('nameFiltrar');
+  //   $filterState = $request->get('state');
+  //   $filterDate = $request->get('initdate');
+  //   $filterDateEnd = $request->get('enddate');
+  //   $filterSector = $request->get('sector');
+  //   $filterFloor = $request->get('floor');
+  //   $filterType = $request->get('type');
+  //   if ($filter != null) {
+  //     $events = Event::where('name', 'LIKE', "%$filter%")->paginate();
+  //   } else {
+  //     if ($filterState != null) {
+  //       $events = Event::where('state', $filterState)->paginate();
+  //     } else {
+  //       if ($filterDate != null) {
+  //         $events = Event::where('initdate', $filterDate)->paginate();
+  //       } else {
+  //         if ($filterDateEnd != null) {
+  //           $events = Event::where('enddate', $filterDateEnd)->paginate();
+  //         } else {
+  //           $filter = $request->get('nameFiltrar');
+  //           $filterSector = $request->get('sector');
+  //           $filterFloor = $request->get('floor');
+  //           $filterType = $request->get('type');
+  //           $filterState = $request->get('state');
+  //           $filterStore = $request->get('store');
+  //           $i = 0;
+  //           $a = 0;
+  //           $version_playlist_details = null;
+  //           $screen_playlist_asignations = null;
+  //           $events = Event::all();
+  //           foreach ($events as $event) {
+  //             $screens2 = array();
+  //             $contents = Content::where('event_id', $event->id)->paginate();
+  //             foreach ($contents as $content) {
+  //               $version_playlist_details = VersionPlaylistDetail::where('content_id', $content->id)->get();
+  //               if ($version_playlist_details != null) {
+  //                 foreach ($version_playlist_details as $version_playlist_detail) {
+  //                   $screen_playlist_asignations = \DB::table('screen_playlist_asignation')->where('version_id', $version_playlist_detail->version_id)->get();
+  //                   if ($screen_playlist_asignations != null) {
+  //                     foreach ($screen_playlist_asignations as $screen_playlist_asignation) {
+  //                       if ($filterSector != null) {
+  //                         $screens = Screen::where([
+  //                           ['id', $screen_playlist_asignation->screen_id],
+  //                           ['sector', $filterSector],
+  //                         ])->first();
+  //                         if ($screens != null) {
+  //                           $eventsFinal[$i] = $event;
+  //                           $i++;
+  //                         }
+  //                       } else {
+  //                         if ($filterFloor != null) {
+  //                           $screens = Screen::where([
+  //                             ['id', $screen_playlist_asignation->screen_id],
+  //                             ['floor', $filterFloor],
+  //                           ])->first();
+  //                           if ($screens != null) {
+  //                             $eventsFinal[$i] = $event;
+  //                             $i++;
+  //                           }
+  //                         } else {
+  //                           if ($filterType != null) {
+  //                             $screens = Screen::where([
+  //                               ['id', $screen_playlist_asignation->screen_id],
+  //                               ['type', $filterType],
+  //                             ])->first();
+  //                             if ($screens != null) {
+  //                               $eventsFinal[$i] = $event;
+  //                               $i++;
+  //                             }
+  //                           } else {
+  //                             if ($filterStore != null) {
+  //                               $screens = Screen::where([
+  //                                 ['id', $screen_playlist_asignation->screen_id],
+  //                               ])->first();
+  //                               if ($screens != null) {
+  //                                 $computer = Computer::where('id', $screens->computer_id)->first();
+  //                                 if ($computer != null) {
+  //                                   $store = Store::where([
+  //                                     ['id', $computer->store_id],
+  //                                     ['id', $filterStore],
+  //                                   ])->first();
+  //                                   if ($store != null) {
+  //                                     $eventsFinal[$i] = $event;
+  //                                     $i++;
+  //                                   }
+  //                                 }
+  //                               }
+  //                             }
+  //                           }
+  //                         }
+  //                       }
+  //                     }
+  //                   }
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //     $lists = Event::all();
+  //     $listsStore = Store::all();
+  //     if ($eventsFinal != null) {
+  //       return view(
+  //         'events.index',
+  //         ['events' => $eventsFinal],
+  //         compact('lists', 'listsStore')
+  //       );
+  //     } else {
+  //       if ($events != null) {
+  //         if ($filter != null) {
+  //           return view(
+  //             'events.index',
+  //             ['events' => $events],
+  //             compact('lists', 'listsStore')
+  //           );
+  //         } else {
+  //           return view(
+  //             'events.index',
+  //             ['events' => $events],
+  //             compact('lists', 'listsStore')
+  //           );
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   //index cliente eventos
   public function filterScreen_by_name(Request $request, $id)

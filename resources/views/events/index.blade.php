@@ -19,15 +19,13 @@
 			Fecha Inicio:
 		</div>
 		<div class="col-md-3">
-			{!! Form::input('date', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio'])
-			!!}
+			{!! Form::input('date', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio']) !!}
 		</div>
 		<div class="col-md-1">
 			Fecha Termino:
 		</div>
 		<div class="col-md-4">
-			{!! Form::input('date', 'enddate', null,['class' => 'form-control','placeholder' => 'Fecha termino'])
-			!!}
+			{!! Form::input('date', 'enddate', null,['class' => 'form-control','placeholder' => 'Fecha termino']) !!}
 		</div>
 		<div class="col-md-3">
 			<select name="state" id="state" class="form-control">
@@ -73,7 +71,7 @@
 				<option null selected disabled>Sucursal</option>
 				@foreach ($listsStore as $list)
 				<option value="{{$list->id}}">{{$list->name}}</option>
-	@endforeach
+				@endforeach
 	</select>
 </div>
 </div> --}}
@@ -91,6 +89,7 @@
 </div>
 <br>
 <div class="row">
+@include('flash::message')
 	<div class="col-md-12">
 		@include('companies.events.table')
 	</div>
