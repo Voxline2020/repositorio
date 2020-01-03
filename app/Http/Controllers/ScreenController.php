@@ -164,5 +164,4 @@ class ScreenController extends AppBaseController
 		Flash::success('Estado actualizado');
 		return redirect(url()->previous($screen));
 	}
-
 }

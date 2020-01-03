@@ -38,4 +38,5 @@ class ClientController extends Controller
 		})->get();
 		return view('client.index',compact('screens','events','screensCount'));
 	}
+
 }

@@ -525,17 +525,21 @@ class EventController extends Controller
       $events = Event::where('company_id', auth()->user()->company_id)->where('name', 'LIKE', "%$filter%")->orderBy('state', 'asc')->paginate();
       }
       if ($filterState != null) {
-        $events = Event::where('company_id',  auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
+        $events = Event::where('company_id', auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
       }
       if ($filterDate != null) {
-        $events = Event::where('company_id',  auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
+        $events = Event::where('company_id', auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
       }
       if ($filterDateEnd != null) {
-        $events = Event::where('company_id',  auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
+        $events = Event::where('company_id', auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
       }
+    if(count($events)==0){
+      Flash::info('No se encontro ningun resultado.');
+      return redirect(url()->previous());
+    }
     return view('events.index', compact('events', 'listsStore'))->with('company', $company);
     }else {
-    Flash::error('Ingrese un valor para generar la busqueda');
+    Flash::error('Ingrese un valor para generar la busqueda.');
     return redirect(url()->previous());
     }
   }
