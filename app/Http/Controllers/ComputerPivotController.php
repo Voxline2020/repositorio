@@ -71,6 +71,7 @@ class ComputerPivotController extends AppBaseController
             if ($versionPlaylist->state == 1) {
 							$jsonResponse['computers'][$key]['screens'][$key2]['version'] = $versionPlaylist->version;
               foreach ($versionPlaylist->versionPlaylistDetails as $key3 => $vPlaylistDetail) {
+								$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['defOrder'] = $key3;
                 $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['name'] = $vPlaylistDetail->content->name;
                 $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['width'] = $vPlaylistDetail->content->width;
                 $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['height'] = $vPlaylistDetail->content->height;
