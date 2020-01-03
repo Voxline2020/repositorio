@@ -99,14 +99,20 @@ class PlaylistController extends AppBaseController
                 });
             });
         })->find($id);
-
+        $list = [];
+        foreach($playlist->versionPlaylists AS $version){
+            foreach($version->versionPlaylistDetails AS $detail){
+                array_push($list,$detail->content_id);
+            }
+        }
+        $contents = Content::find($list);
         if (empty($playlist)) {
             Flash::error('No se encontro el Playlist');
 
             return redirect(route('playlists.index'));
         }
 
-        return view('playlists.show')->with('playlist', $playlist);
+        return view('playlists.show')->with('playlist', $playlist)->with('contents', $contents);
     }
 
     /**

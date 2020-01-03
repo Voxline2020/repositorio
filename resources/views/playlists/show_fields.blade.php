@@ -3,21 +3,23 @@
 	<table class="table">
 		<thead>
 			<tr>
+				<th>ID</th>
 				<th>Nombre</th>
 				<th>Resolucion</th>
 				<th>Tipo</th>
-				<th>Tamaño</th>
+				<th>Tamaño (mb)</th>
 			</tr>
 		</thead>
 		<tbody>
 			@foreach($playlist->versionPlaylists AS $version)
 			@endforeach
-			@foreach($version->versionPlaylistDetails AS $detail)
+			@foreach($contents AS $content)
 			<tr>
-				<td>{!! $detail->content->name !!}</td>
-				<td>{!! $detail->content->height !!}x{!! $detail->content->width !!}</td>
-				<td>{!! $detail->content->filetype !!}</td>
-				<td>{!! $detail->content->size !!}</td>
+				<td>{!! $content->id !!}</td>
+				<td>{!! $content->name !!}</td>
+				<td>{!! $content->height !!}x{!! $content->width !!}</td>
+				<td>{!! $content->filetype !!}</td>
+				<td>{!! $content->SizeMB !!}</td>
 			</tr>
 			@endforeach
 		</tbody>
