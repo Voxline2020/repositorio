@@ -145,8 +145,7 @@ class ContentController extends Controller
       return Storage::disk('videos')->download($content->location, $content->name . '.' . $content->filetype);
     } else {
       return response()->json([
-        'name' => 'Abigail',
-        'state' => 'CA',
+        'error' => 'Not found',
       ]);
     }
   }
