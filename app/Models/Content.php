@@ -120,6 +120,11 @@ class Content extends Model
     return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
   }
 
+	public function versionPlaylistDetailsWithTrashed()
+	{
+		return $this->hasMany(\App\Models\VersionPlaylistDetail::class)->withTrashed();
+	}
+
 	public function getResolutionAttribute()
 	{
 		return $this->width.'x'.$this->height;

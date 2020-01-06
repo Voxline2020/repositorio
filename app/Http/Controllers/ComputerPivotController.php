@@ -6,6 +6,10 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateComputerRequest;
 use App\Http\Requests\UpdateComputerRequest;
 use App\Models\ComputerPivot;
+use App\Models\Content;
+use Carbon\Carbon;
+
+
 use App\Models\Store;
 use App\Repositories\ComputerPivotRepository;
 use Illuminate\Http\Request;
@@ -55,7 +59,7 @@ class ComputerPivotController extends AppBaseController
 
   public function getInfo($code, $pass)
   {
-    $pivot = ComputerPivot::with(['onpivots','onpivots.computer','onpivots.computer.screens'])->where('code', $code)->where('pass', $pass)->first();
+    $pivot = ComputerPivot::with(['onpivots','onpivots.computer','onpivots.computer.screens', 'onpivots.computer.screens', 'onpivots.computer.screens.playlist', 'onpivots.computer.screens.playlist.versionPlaylists', 'onpivots.computer.screens.playlist.versionPlaylists.versionPlaylistDetails','onpivots.computer.screens.playlist.versionPlaylists.versionPlaylistDetails.contentWithTrashed'])->where('code', $code)->where('pass', $pass)->first();
     if (isset($pivot)) {
       $jsonResponse = [];
       $jsonResponse['code'] = $pivot->code;
@@ -70,18 +74,22 @@ class ComputerPivotController extends AppBaseController
           foreach ($screen->playlist->versionPlaylists as $versionPlaylist); {
             if ($versionPlaylist->state == 1) {
 							$jsonResponse['computers'][$key]['screens'][$key2]['version'] = $versionPlaylist->version;
-              foreach ($versionPlaylist->versionPlaylistDetails as $key3 => $vPlaylistDetail) {
+							$vPlaylistDetails = $versionPlaylist->versionPlaylistDetails;
+              foreach ($vPlaylistDetails as $key3 => $vPlaylistDetail) {
 								$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['defOrder'] = $key3;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['name'] = empty( $vPlaylistDetail->content->name)? "" : $vPlaylistDetail->content->name;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['width'] = empty( $vPlaylistDetail->content->width) ? "" : $vPlaylistDetail->content->width;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['height'] = empty($vPlaylistDetail->content->height) ? "" : $vPlaylistDetail->content->height;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['download'] = route('contents.download', $vPlaylistDetail->content->id);
+								$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['originalID'] = $vPlaylistDetail->contentWithTrashed->id;
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['name'] = $vPlaylistDetail->contentWithTrashed->name;
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['width'] = $vPlaylistDetail->contentWithTrashed->width;
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['height'] = $vPlaylistDetail->contentWithTrashed->height;
+								$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['deleted'] = empty($vPlaylistDetail->contentWithTrashed->deleted_at) ? null : Carbon::parse($vPlaylistDetail->contentWithTrashed->deleted_at)->format('d/m/Y H:i');
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['download'] = route('contents.download', $vPlaylistDetail->contentWithTrashed->id);
               }
             }
           }
         }
       }
-      return response()->json($jsonResponse);
+			//return dump($jsonResponse);
+       return response()->json($jsonResponse);
     }
 		else {
       return abort(404);
