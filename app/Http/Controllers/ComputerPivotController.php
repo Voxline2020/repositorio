@@ -73,8 +73,8 @@ class ComputerPivotController extends AppBaseController
               foreach ($versionPlaylist->versionPlaylistDetails as $key3 => $vPlaylistDetail) {
 								$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['defOrder'] = $key3;
                 $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['name'] = empty( $vPlaylistDetail->content->name)? "" : $vPlaylistDetail->content->name;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['width'] = $vPlaylistDetail->content->width;
-                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['height'] = $vPlaylistDetail->content->height;
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['width'] = empty( $vPlaylistDetail->content->width) ? "" : $vPlaylistDetail->content->width;
+                $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['height'] = empty($vPlaylistDetail->content->height) ? "" : $vPlaylistDetail->content->height;
                 $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$key3]['download'] = route('contents.download', $vPlaylistDetail->content->id);
               }
             }
