@@ -40,7 +40,7 @@ class ComputerController extends AppBaseController
 		$computer = Computer::whereHas('store', function ($query) {
 			$query->where('company_id', Auth::user()->company_id);
 		})->paginate();
-		};
+		}
 		return view('computers.index', compact('companies', 'stores', 'lists','types'))
 			->with('computers', $computer);
 	}
@@ -49,7 +49,7 @@ class ComputerController extends AppBaseController
 	{
 		$computer = Computer::where('store_id', $id)->paginate();
 		return view(
-			'computer.index',
+			'computers.index',
 			['computers' => $computer]
 		);
 	}
@@ -170,7 +170,14 @@ class ComputerController extends AppBaseController
 		$stores = Store::all();
 		$companies = Company::all();
 		$filter= $request->get('codeFiltrar');
-		$computer = Computer::where('code','LIKE',"%$filter%")->paginate();
+		// $computer = Computer::where('code','LIKE',"%$filter%")->paginate();
+		if(Auth::user()->company_id == null){
+			$computer = Computer::whereHas('store', function ($query) {})->where('code','LIKE',"%$filter%")->paginate();
+		}else{
+		$computer = Computer::whereHas('store', function ($query) {
+			$query->where('company_id', Auth::user()->company_id);
+		})->where('code','LIKE',"%$filter%")->paginate();
+		}
 		return view('computers.index', compact('companies', 'stores', 'lists','types'))->with('computers', $computer);
 	}
 	//filtrar computadores dependiendo de la compañia y sucursal.
@@ -180,7 +187,7 @@ class ComputerController extends AppBaseController
 		$lists = Company::all();
 		$stores = Store::all();
 		$companies = Company::all();
-		$computer = Computer::where('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
+		$computer = Computer::orWhere('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
 		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))->with('computers', $computer);
 	}
 }

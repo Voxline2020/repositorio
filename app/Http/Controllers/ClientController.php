@@ -7,6 +7,8 @@ use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Screen;
+use App\Models\Playlist;
+use App\Models\Content;
 use App\Models\Company;
 use App\Models\Computer;
 use App\Models\Store;
@@ -37,6 +39,32 @@ class ClientController extends Controller
 			});
 		})->get();
 		return view('client.index',compact('screens','events','screensCount'));
+	}
+	public function show($id)
+	{
+		//filtramos la pantalla que queremoos ver con el id
+		$screen = Screen::whereHas('computer', function ($query) {
+			$query->whereHas('store', function ($query) {
+				$query->where('company_id', Auth::user()->company_id);
+			});
+		})->find($id);
+		//ahora buscamos la playlist asignada a esa pantalla 
+		$playlist = Playlist::wherehas('versionPlaylists', function ($query) {
+            $query->whereHas('versionPlaylistDetails', function ($query) {
+                $query->whereHas('content', function ($query) {
+                });
+            });
+		})->find($screen->playlist_id);
+		//ahora hacemos una lista de los contenidos de esa playlist
+        $list = [];
+        foreach($playlist->versionPlaylists AS $version){
+            foreach($version->versionPlaylistDetails AS $detail){
+                array_push($list,$detail->content_id);
+            }
+		}
+		//aca traemos toda la info de los contenidos extraidos en la lista.
+        $contents = Content::find($list);
+		return view('client.screen.show')->with('screen',$screen)->with('playlist', $playlist)->with('contents', $contents);
 	}
 	public function filter_by_name(Request $request)
 	{
@@ -80,7 +108,5 @@ class ClientController extends Controller
 			Flash::error('Ingrese un valor para generar la busqueda.');
     		return redirect(url()->previous());
 		}
-		// dd($request->state);
-		
 	}
 }
