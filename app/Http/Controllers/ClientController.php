@@ -38,5 +38,49 @@ class ClientController extends Controller
 		})->get();
 		return view('client.index',compact('screens','events','screensCount'));
 	}
-
+	public function filter_by_name(Request $request)
+	{
+		$name = $request->nameFiltrar;
+		$state = $request->state;
+		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
+		$screensCount = Screen::whereHas('computer', function ($query) {
+			$query->whereHas('store', function ($query) {
+				$query->where('company_id', Auth::user()->company_id);
+			});
+		})->get();
+		if($name != null || $state != null){
+			
+			if($name != null){
+				$screens = Screen::whereHas('computer', function ($query) {
+					$query->whereHas('store', function ($query) {
+						$query->where('company_id', Auth::user()->company_id);
+					});
+				})->where('name','LIKE',"%$name%")->orderBy('state', 'asc')->paginate();
+			}
+			if($state != null){
+				$screens = Screen::whereHas('computer', function ($query) {
+					$query->whereHas('store', function ($query) {
+						$query->where('company_id', Auth::user()->company_id);
+					});
+				})->where('state', $state )->orderBy('state', 'asc')->paginate();
+			}
+			if(count($screens)==0){
+				Flash::info('No se encontro ningun resultado.');
+				return redirect(url()->previous());
+			}
+			if($name != null && $state != null){
+				$screens = Screen::whereHas('computer', function ($query) {
+					$query->whereHas('store', function ($query) {
+						$query->where('company_id', Auth::user()->company_id);
+					});
+				})->where('name','LIKE',"%$name%")->where('state', $state )->orderBy('state', 'asc')->paginate();
+			}
+			return view('client.index',compact('screens','events','screensCount'));
+		}else{
+			Flash::error('Ingrese un valor para generar la busqueda.');
+    		return redirect(url()->previous());
+		}
+		// dd($request->state);
+		
+	}
 }

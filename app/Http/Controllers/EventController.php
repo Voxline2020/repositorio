@@ -533,11 +533,11 @@ class EventController extends Controller
       if ($filterDateEnd != null) {
         $events = Event::where('company_id', auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
       }
-    if(count($events)==0){
-      Flash::info('No se encontro ningun resultado.');
-      return redirect(url()->previous());
-    }
-    return view('events.index', compact('events', 'listsStore'))->with('company', $company);
+      if(count($events)==0){
+        Flash::info('No se encontro ningun resultado.');
+        return redirect(url()->previous());
+      }
+      return view('events.index', compact('events', 'listsStore'))->with('company', $company);
     }else {
     Flash::error('Ingrese un valor para generar la busqueda.');
     return redirect(url()->previous());
