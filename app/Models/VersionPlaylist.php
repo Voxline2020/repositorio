@@ -49,6 +49,7 @@ class VersionPlaylist extends Model
 			return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
 	}
 
+
 	public function getStateStringAttribute()
 	{
 		if($this->state == 0){

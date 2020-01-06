@@ -48,9 +48,16 @@ class VersionPlaylistDetail extends Model
 			return $this->belongsTo(\App\Models\Content::class);
 	}
 
+	public function contentWithTrashed()
+	{
+			return $this->belongsTo(\App\Models\Content::class, 'content_id')->withTrashed();
+	}
+
+
 	public function versionPlaylist()
 	{
 			return $this->belongsTo(\App\Models\VersionPlaylist::class, 'version_playlist_id');
 	}
+
 
 }
