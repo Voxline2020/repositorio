@@ -29,7 +29,7 @@ class ClientController extends Controller
 	public function index(Request $request)
 	{
 		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
-		$screens = Screen::whereHas('computer', function ($query) {
+		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
 			});
@@ -64,7 +64,7 @@ class ClientController extends Controller
 			array_push($list,$detail->id);
 		}
 		//aca traemos toda la info de los contenidos extraidos en la lista.
-		$details = VersionPlaylistDetail::orderBy('orderContent','ASC')->find($list);
+		$details = VersionPlaylistDetail::with(['content'])->orderBy('orderContent','ASC')->find($list);
 																														
 		return view('client.screen.show')->with('screen',$screen)->with('playlist', $playlist)->with('details',$details);
 	}
@@ -111,8 +111,50 @@ class ClientController extends Controller
     		return redirect(url()->previous());
 		}
 	}
-	public function changePosition(Request $request)
+	public function changeUp($id , Request $request)
 	{
-
+		//llamado objeto 1
+		$obj1 = VersionPlaylistDetail::find($id);
+		//llamado id objeto 2
+		$callId = VersionPlaylistDetail::all()->where('version_playlist_id',$obj1->version_playlist_id)->where('orderContent',$request->order-1);
+		foreach($callId as $obj){
+		}
+		$id2 = $obj->id;
+		//llamado objeto 2
+		$obj2 = VersionPlaylistDetail::find($id2);
+		//intercambio de orden
+		$obj1->orderContent = $request->order-1;
+		$obj2->orderContent = $request->order;
+		if (empty($request)) {
+			Flash::error('Error');
+			return redirect(url()->previous());
+		}
+		//guardar cambios
+		$obj1->save();
+		$obj2->save();
+		return redirect(url()->previous($obj1));
+	}
+	public function changeDown($id , Request $request)
+	{
+		//llamado objeto 1
+		$obj1 = VersionPlaylistDetail::find($id);
+		//llamado id objeto 2
+		$callId = VersionPlaylistDetail::all()->where('version_playlist_id',$obj1->version_playlist_id)->where('orderContent',$request->order+1);
+		foreach($callId as $obj){
+		}
+		$id2 = $obj->id;
+		//llamado objeto 2
+		$obj2 = VersionPlaylistDetail::find($id2);
+		//intercambio de orden
+		$obj1->orderContent = $request->order+1;
+		$obj2->orderContent = $request->order;
+		if (empty($request)) {
+			Flash::error('Error');
+			return redirect(url()->previous());
+		}
+		//guardar cambios
+		$obj1->save();
+		$obj2->save();
+		return redirect(url()->previous($obj1));
 	}
 }

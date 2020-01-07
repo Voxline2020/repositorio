@@ -69,10 +69,5 @@ class Screen extends Model
 		return $this->belongsTo(\App\Models\Playlist::class);
 	}
 
-	public function stores()
-	{
-		return $this->belongsTo(\App\Models\Store::class);
-	}
-
 
 }
