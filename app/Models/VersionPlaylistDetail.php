@@ -17,7 +17,8 @@ class VersionPlaylistDetail extends Model
 
   public $fillable = [
     'content_id',
-		'version_playlist_id'
+		'version_playlist_id',
+			'orderContent'
   ];
 
 
@@ -30,6 +31,7 @@ class VersionPlaylistDetail extends Model
 	protected $casts = [
 		'content_id' => 'integer',
 		'version_playlist_id' => 'integer',
+		'orderContent' => 'integer'
 	];
 
 
@@ -40,7 +42,8 @@ class VersionPlaylistDetail extends Model
    */
   public static $rules = [
 		'content_id' => 'required',
-		'version_playlist_id' => 'required'
+		'version_playlist_id' => 'required',
+		'orderContent' => 'required'
   ];
 
 	public function content()

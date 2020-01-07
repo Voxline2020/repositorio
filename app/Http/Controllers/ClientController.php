@@ -56,15 +56,21 @@ class ClientController extends Controller
             });
 		})->find($screen->playlist_id);
 		//ahora hacemos una lista de los contenidos de esa playlist
-        $list = [];
-        foreach($playlist->versionPlaylists AS $version){
-            foreach($version->versionPlaylistDetails AS $detail){
-                array_push($list,$detail->content_id);
-            }
-		}
+		// $list = [];
+		// $order = [];
+        // foreach($playlist->versionPlaylists AS $version){
+		// 	array_push($order,$version->id);
+		// }
+		// foreach($version->versionPlaylistDetails AS $detail){
+		// 	array_push($list,$detail->content_id);
+		// 	if($detail->content != null){
+		// 		// array_push($order,$detail->id);
+		// 	}
+		// }
 		//aca traemos toda la info de los contenidos extraidos en la lista.
-        $contents = Content::find($list);
-		return view('client.screen.show')->with('screen',$screen)->with('playlist', $playlist)->with('contents', $contents);
+		// $contents = Content::find($list);
+		// dd($order);																																
+		return view('client.screen.show')->with('screen',$screen)->with('playlist', $playlist);
 	}
 	public function filter_by_name(Request $request)
 	{
@@ -108,5 +114,9 @@ class ClientController extends Controller
 			Flash::error('Ingrese un valor para generar la busqueda.');
     		return redirect(url()->previous());
 		}
+	}
+	public function changePosition(Request $request)
+	{
+
 	}
 }

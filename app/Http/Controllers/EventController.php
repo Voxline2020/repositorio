@@ -354,6 +354,7 @@ class EventController extends Controller
             $oldPlaylistDetail = VersionPlaylistDetail::create([
               'version_playlist_id' => $newVPlaylist->id,
               'content_id' => $vPlaylistDetail->content_id,
+              'orderContent' => $vPlaylistDetail->orderContent,
             ]);
           }
 
@@ -361,6 +362,7 @@ class EventController extends Controller
           $newPlaylistDetail = VersionPlaylistDetail::create([
             'version_playlist_id' => $newVPlaylist->id,
             'content_id' => $content->id,
+            'orderContent' => $vPlaylistDetail->orderContent+1,
           ]);
 
           //se desactiva la version anterior
@@ -382,6 +384,7 @@ class EventController extends Controller
           $newPlaylistDetail = VersionPlaylistDetail::create([
             'version_playlist_id' => $newVPlaylistActive->id,
             'content_id' => $content->id,
+            'orderContent' => $content->id,
           ]);
         }
       } else {

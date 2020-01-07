@@ -3,9 +3,9 @@
 	<table class="table">
 		<thead>
 			<tr>
+				<th>Orden</th>
 				<th>ID</th>
 				<th>Nombre</th>
-				<th>Resolucion</th>
 				<th>Tipo</th>
 				<th>Tamaño (mb)</th>
 			</tr>
@@ -13,14 +13,17 @@
 		<tbody>
 			@foreach($playlist->versionPlaylists AS $version)
 			@endforeach
-			@foreach($contents AS $content)
-			<tr>
-				<td>{!! $content->id !!}</td>
-				<td>{!! $content->name !!}</td>
-				<td>{!! $content->height !!}x{!! $content->width !!}</td>
-				<td>{!! $content->filetype !!}</td>
-				<td>{!! $content->SizeMB !!}</td>
-			</tr>
+			{{$version->id}}
+			@foreach($version->versionPlaylistDetails AS $detail)
+				@if($detail->content != null)
+				<tr>
+					<td>{!! $detail->orderContent !!}</td>
+					<td>{!! $detail->content->id !!}</td>
+					<td>{!! $detail->content->name !!}</td>
+					<td>{!! $detail->content->filetype !!}</td>
+					<td>{!! $detail->content->SizeMB !!}</td>
+				</tr>
+				@endif
 			@endforeach
 		</tbody>
 	</table>
