@@ -11,10 +11,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($playlist->versionPlaylists AS $version)
-			@endforeach
-			{{$version->id}}
-			@foreach($version->versionPlaylistDetails AS $detail)
+			@foreach($details AS $detail)
 				@if($detail->content != null)
 				<tr>
 					<td>{!! $detail->orderContent !!}</td>
