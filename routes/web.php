@@ -168,6 +168,7 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
 	Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
 	Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
+	Route::put('screen/clone','ClientController@clone')->name('clients.clone');
 	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
 	Route::get('/events', "EventController@index")->name('clients.events.index');

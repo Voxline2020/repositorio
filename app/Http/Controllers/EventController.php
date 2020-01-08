@@ -358,7 +358,7 @@ class EventController extends Controller
             ]);
           }
 
-          //se agrega contenido neuvo
+          //se agrega contenido nuevo
           $newPlaylistDetail = VersionPlaylistDetail::create([
             'version_playlist_id' => $newVPlaylist->id,
             'content_id' => $content->id,
@@ -480,7 +480,7 @@ class EventController extends Controller
     if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
       $screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
     }
-    
+
     return view('client.events.show', compact('screens', 'event'));
   }
 

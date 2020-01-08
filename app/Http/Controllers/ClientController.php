@@ -210,4 +210,16 @@ class ClientController extends Controller
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous($objIni,$listobjs));
 	}
+	public function clone(Request $request)
+	{
+		$countObjs = VersionPlaylistDetail::all()->where('version_playlist_id',$request->version_playlist_id);
+		$element = VersionPlaylistDetail::create([
+			'version_playlist_id' => $request->version_playlist_id,
+			'content_id' => $request->content_id,
+			'orderContent' => $countObjs->count()+1,
+		]);
+		Flash::success('Se ha clonado el elemento correctamente.');
+		return redirect(url()->previous());
+
+	}
 }

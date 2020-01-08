@@ -8,7 +8,7 @@
 				<th>ID</th>
 				<th>Nombre</th>
 				<th>Tipo</th>
-				<th>Cambiar Posición</th>
+				<th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -18,7 +18,7 @@
 					<td>{!! $detail->orderContent !!}</td>
 					<td>{!! $detail->content->id !!}</td>
 					<td>{!! $detail->content->name !!}</td>
-					<td>{!! $detail->content->filetype !!}</td>
+					<td>{!! $detail->version_playlist_id !!}</td>
 					<td>
 						<div class='btn-group'>
 							@if ($detail->orderContent == 1)
@@ -40,6 +40,11 @@
 								<button class="disabled btn btn-info"><i class="fas fa-arrow-down"></i></button>
 							@endif
 							<button href="#" class="btn btn-info"><i class="fas fa-exchange-alt" data-toggle="modal" data-target="#changejump" data-order={{$detail->orderContent}} data-id={{$detail->id}}></i></button>
+							{!! Form::model($screen, ['route' => ['clients.clone'], 'method' => 'put']) !!}
+							{!! Form::hidden('version_playlist_id', $detail->version_playlist_id) !!}
+							{!! Form::hidden('content_id', $detail->content_id) !!}
+							{!! Form::button('<i class="fas fa-clone"></i>', ['type' => 'submit','class' => 'btn btn-info']) !!}
+							{!! Form::close() !!}
 						</div>
 					</td>
 				</tr>
