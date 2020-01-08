@@ -49,7 +49,7 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->find($id);
-		//ahora buscamos la playlist asignada a esa pantalla 
+		//ahora buscamos la playlist asignada a esa pantalla
 		$playlist = Playlist::wherehas('versionPlaylists', function ($query) {
             $query->whereHas('versionPlaylistDetails', function ($query) {
                 $query->whereHas('content', function ($query) {
@@ -65,7 +65,7 @@ class ClientController extends Controller
 		}
 		//aca traemos toda la info de los contenidos extraidos en la lista.
 		$details = VersionPlaylistDetail::with(['content'])->orderBy('orderContent','ASC')->find($list);
-																														
+
 		return view('client.screen.show')->with('screen',$screen)->with('playlist', $playlist)->with('details',$details);
 	}
 	public function filter_by_name(Request $request)
@@ -79,7 +79,7 @@ class ClientController extends Controller
 			});
 		})->get();
 		if($name != null || $state != null){
-			
+
 			if($name != null){
 				$screens = Screen::whereHas('computer', function ($query) {
 					$query->whereHas('store', function ($query) {
@@ -156,5 +156,58 @@ class ClientController extends Controller
 		$obj1->save();
 		$obj2->save();
 		return redirect(url()->previous($obj1));
+	}
+	public function changeJump(Request $request)
+	{
+		//extraer id de objeto inicial
+		$id = $request->id;
+		//si la nueva posicion viene vacia
+		if ($request->neworder == null) {
+			Flash::error('Debe ingresar una nueva posicion.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion y la posicion actual son iguales
+		if ($request->neworder == $request->order) {
+			Flash::error('La nueva posicion no puede ser igual a la actual.');
+			return redirect(url()->previous());
+		}
+		//llamado de objeto inicial
+		$objIni = VersionPlaylistDetail::find($id);
+		//si la nueva posicion excede el rango de elementos
+		$countObjs = VersionPlaylistDetail::all()->where('version_playlist_id',$objIni->version_playlist_id);
+		if ($countObjs->count() < $request->neworder) {
+			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion es menor de 1
+		if ($request->neworder < 1) {
+			Flash::error('La nueva posicion no puede ser menor que el primer elemento.');
+			return redirect(url()->previous());
+		}
+		//llamado coleccion de objs intermedios
+		if($request->order < $request->neworder){
+			$listobjs = VersionPlaylistDetail::all()->where('version_playlist_id',$objIni->version_playlist_id)
+			->where('orderContent','<=',$request->neworder)->where('orderContent','>',$request->order);
+		}else if($request->order > $request->neworder){
+			$listobjs = VersionPlaylistDetail::all()->where('version_playlist_id',$objIni->version_playlist_id)
+			->where('orderContent','>=',$request->neworder)->where('orderContent','<',$request->order);
+		}
+		//intercambio de orden y guardado
+		$order = $request->order;
+		$neworder = $request->neworder;
+		$objIni->orderContent = $neworder;
+		foreach($listobjs as $objs){
+			if($order < $neworder){
+				$objs->orderContent = $order;
+				$order = $order+1;
+			}else if($order > $neworder){
+				$neworder = $neworder+1;
+				$objs->orderContent = $neworder;
+			}
+			$objs->save();
+		}
+		$objIni->save();
+		Flash::success('Cambio de orden realizado.');
+		return redirect(url()->previous($objIni,$listobjs));
 	}
 }
