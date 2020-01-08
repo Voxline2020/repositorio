@@ -48,6 +48,16 @@
 			});
 		});
 	</script>
+	<script>
+		$('#changejump').on('show.bs.modal', function (event) {
+			var button = $(event.relatedTarget)
+			var id = button.data('id')
+			var order = button.data('order')
+			var modal = $(this)
+			modal.find('input[name="id"]').val(id)
+			modal.find('input[name="order"]').val(order)
+		})
+	</script>
 	@yield('script')
 </body>
 
