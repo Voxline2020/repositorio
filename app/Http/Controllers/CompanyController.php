@@ -121,6 +121,11 @@ class CompanyController extends AppBaseController
   }
   public function storeEvent(Company $company, Request $request)
   {
+		$name = Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+		if($name->count() != 0){
+			Flash::error('El evento "'.$request->name.'" ya existe.');
+			return redirect(route('companies.events.index', $company));
+		}
 		if ($request->initdate <= $request->enddate) {
 			//Format Init Date
 			$request->merge([
@@ -131,11 +136,18 @@ class CompanyController extends AppBaseController
 				]);
 			$input = $request->all();
 			Event::create($input);
+			$id = [];
+			$callevent =  Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+			foreach($callevent as $e){
+				array_push($id,$e->id);
+			}
+			$event = Event::find($id);
 			Flash::success('Evento agregado exitosamente');
-			return redirect(route('companies.events.index', $company));
+			return redirect(route('events.show', [ $event[0]->id]));
+			// return redirect(route('companies.events.index', $company));
 		}
     Flash::error('Error al agregar el evento.');
-    return redirect(route('companies.events.index', $company));
+		return redirect(route('companies.events.index', $company));
   }
   public function editEvent($id)
   {

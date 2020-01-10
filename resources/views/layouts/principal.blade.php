@@ -24,7 +24,7 @@
 <body>
 	<div id="app">
 		@auth
-			@include('layouts.roles._navbar')
+		@include('layouts.roles._navbar')
 		@endauth
 		<div class="container py-4 px-5" style="background-color: white ">
 			@yield('content')
@@ -40,7 +40,6 @@
 
 	<!-- Languaje -->
 	<script>
-
 		$(function () {
 			$('.js-select2').select2({
 				tags: false,
@@ -57,6 +56,56 @@
 			modal.find('input[name="id"]').val(id)
 			modal.find('input[name="order"]').val(order)
 		})
+	</script>
+	<script type="text/javascript">
+		$("#btnAssign").click(function(){
+			//validacion chbx
+			if (! $("input[type=checkbox]").is(":checked") ) {
+         alert("Por favor seleccione una pantalla para realizar asignación.");
+         return false;
+			}
+			//llenar tabla con los datos seleccionados
+			llenarTabla();
+		});
+		function llenarTabla(){
+			var array = lista();
+			array.forEach(e => {
+				document.getElementById("tableSelected").insertRow(-1).innerHTML = '<td>'+e.name+'</td><td>'+e.store_name+'</td><td>'+e.type+'</td><td>'+e.resolution+'</td>';
+			});
+		}
+		function lista(){
+      var lista = [];
+      $("input[type=checkbox").each(function (index) {
+        if($(this).is(':checked')){
+					var idVal = $(this).val();
+					var fila = $('#' + idVal);
+
+					var obj = {};
+					fila.find('td').each (function() {
+						var td = this;
+						fillFila(td, idVal, lista, obj)
+					});
+					lista.push(obj);
+        }
+      });
+    	return lista;
+    }
+		function fillFila(td, id, lista, obj){
+			var td =td;
+			var tdName = $(td).data('name');
+			if(tdName != undefined){
+				obj[tdName] = td.innerHTML;
+			}
+		}
+		function limpiarTabla(){
+			var count = document.getElementById("tableSelected").rows.length;
+			for (var i = 1; i < count; i++) {
+				document.getElementById("tableSelected").deleteRow(-1);
+			}
+		}
+		$("#confirmAssignation").on("hidden.bs.modal", function () {
+			limpiarTabla();
+		});
 	</script>
 	@yield('script')
 </body>

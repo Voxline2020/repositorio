@@ -14,7 +14,7 @@
 			</h5>
 			<div class="row p-0 m-0">
 				<div class="col-lg-12 py-1 px-1">
-					<a href="{{ route('screens.show', [$screen]) }}" class="btn btn-success w-100">Ver Detalle</a>
+					<a href="{{ route('clients.show', [$screen]) }}" class="btn btn-success w-100">Ver Detalle </a>
 				</div>
 			</div>
 		</div>

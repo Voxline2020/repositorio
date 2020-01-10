@@ -293,7 +293,7 @@ class EventController extends Controller
   public function indexAssign(Event $event, Content $content, Request $request)
   {
 
-    $screens = Screen::whereHas('computer', function ($query) {
+    $screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
 			});
@@ -308,7 +308,8 @@ class EventController extends Controller
 
   public function storeAssign(Event $event, Content $content, Request $request)
   {
-    $screensId = $request->input('screensChbx');
+
+		$screensId = $request->input('screensChbx');
 
     foreach ($screensId as $screenId) {
       $screen = Screen::find($screenId);
