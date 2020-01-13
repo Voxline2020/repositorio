@@ -16,6 +16,7 @@
 					<th>Nombre del contenido</th>
 					<th>Tamaño (mb)</th>
 					<th>Resolucion</th>
+					<th>Duración</th>
 					<th colspan="1">Asignar Pantalla</th>
 				</tr>
 			</thead>
@@ -31,6 +32,8 @@
 					<td>{!! $content->name !!}</td>
 					<td>{!! $content->SizeMB !!}</td>
 					<td>{!! $content->Resolution !!}</td>
+					<td>{!! $content->durationMod !!}</td>
+
 					<td>
 						{!! Form::open(['route' => ['contents.destroy', $content->id], 'method' => 'delete', 'id'=>'form']) !!}
 						<!--

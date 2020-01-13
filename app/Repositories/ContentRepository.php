@@ -21,7 +21,8 @@ class ContentRepository extends BaseRepository
         'location',
         'user_id',
         'size',
-        'width',
+				'width',
+				'duration',
         'height',
         'event_id'
     ];

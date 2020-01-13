@@ -210,7 +210,8 @@ class EventController extends Controller
           'size' => $size,
           'width' => $width,
           'height' => $height,
-          'name' => $name,
+					'name' => $name,
+					'duration' => $duration,
         ]);
 
         // $file->move($path, $original_name . '.mp4');
