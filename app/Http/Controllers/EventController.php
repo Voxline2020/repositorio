@@ -149,6 +149,23 @@ class EventController extends Controller
     }
   }
 
+	// Format to AA::BB:CC
+	public function formatDuration($duration){
+
+			// The base case is A:BB
+			if(strlen($duration) == 4){
+					return "00:0" . $duration;
+			}
+			// If AA:BB
+			else if(strlen($duration) == 5){
+					return "00:" . $duration;
+			}   // If A:BB:CC
+			else if(strlen($duration) == 7){
+					return "0" . $duration;
+			}
+	}
+
+
   public function fileStore(Request $request)
   {
     $files = $request->file('file');
@@ -172,6 +189,7 @@ class EventController extends Controller
         $size = $file->getSize();
         $width = $fileX['video']['resolution_x'];
         $height = $fileX['video']['resolution_y'];
+				$duration = EventController::formatDuration($fileX['playtime_string']);
 
         //Nombre archivo
         $name = Str::slug($event->slug . '_' . $width . 'x' . $height);
@@ -206,6 +224,7 @@ class EventController extends Controller
 
     return redirect()->route('events.index');
   }
+
 
   /**
    * Display the specified Event.
@@ -439,7 +458,7 @@ class EventController extends Controller
 
   public function indexClient()
   {
-    $content = Content::all()->where('event_id', $event->id);
+    $content = Content::all()->where('event_id', 1);
     $lists = Event::all();
 
     if (empty($event)) {
