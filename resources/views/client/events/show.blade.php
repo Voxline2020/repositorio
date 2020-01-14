@@ -4,10 +4,14 @@
 <div class="container">
 	@include('flash::message')
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-6">
 			<h2 class=font-weight-bold>{{$event->name}} &#x1F4C6;</h2>
 		</div>
 		<div class="col-md-3">
+			<a  type="button" class="btn btn-warning w-100" href="{!! route('events.show', [ $event->id]) !!}">Editar</a>
+		</div>
+		<div class="col-md-3">
+
 			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
 		</div>
 	</div>

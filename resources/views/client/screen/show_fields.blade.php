@@ -5,9 +5,9 @@
 		<thead>
 			<tr>
 				<th>Orden</th>
-				<th>ID</th>
 				<th>Nombre</th>
-				<th>Tipo</th>
+				<th>Resolución</th>
+				<th>Duración</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
@@ -16,9 +16,9 @@
 				@if($detail->content != null)
 				<tr>
 					<td>{!! $detail->orderContent !!}</td>
-					<td>{!! $detail->content->id !!}</td>
 					<td>{!! $detail->content->name !!}</td>
-					<td>{!! $detail->version_playlist_id !!}</td>
+					<td>{!! $detail->content->resolution !!}</td>
+					<td>{!! $detail->content->DurationMod !!}</td>
 					<td>
 						<div class='btn-group'>
 							@if ($detail->orderContent == 1)

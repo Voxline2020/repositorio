@@ -20,7 +20,8 @@
 							$query->where('company_id', Auth::user()->company_id);
 						});
 					})->get();
-					$eventalert = App\Models\Event::where('company_id', Auth::user()->company_id);
+					$eventalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
+					$eventcontentalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
 					$alert1 = $screensalert->where('state', 0)->count();
 					$alert2 = $eventalert->where('state', 0)->count();
 					$alerts = $alert1;
@@ -39,6 +40,16 @@
 						</a>
 						@endif
 					@endforeach
+					{{-- Contenido de Eventos sin asignar --}}
+					{{-- @foreach($eventalert as $event)
+						@foreach($event->contents as $content)
+							<div class="dropdown-divider"></div>
+							<a href="#" class="dropdown-item">
+								<i class="fas fa-calendar-week mr-2"></i> Evento "{!! $event->name !!}" Inactivo
+								<!--span class="float-right text-muted text-sm"> 3 mins</span-->
+							</a>
+						@endforeach
+					@endforeach --}}
 					{{-- Eventos inactivos --}}
 					{{-- @foreach($eventalert as $event)
 						@if($event->state==0)

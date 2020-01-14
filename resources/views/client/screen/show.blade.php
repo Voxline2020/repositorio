@@ -16,7 +16,7 @@
         </div>
         <div class="col-md-3">
             <p><b>Tipo:</b> {!! $screen->type !!}</p>
-        </div>
+				</div>
         <div class="col-md-3">
             {!! Form::model($screen, ['route' => ['screens.changeStatus', $screen->id], 'method' => 'put']) !!}
                 @if($screen->state==0)
@@ -28,7 +28,10 @@
                     <b>Estado: </b>{!! Form::submit('Activo', ['class' => 'btn btn-success']) !!}
                 @endif
             {!! Form::close() !!}
-        </div>
+				</div>
+				<div class="col-md-3">
+					<p><b>Resolución:</b> {!! $screen->width !!}x{!! $screen->height !!}</p>
+			</div>
     </div>
     <div class="content">
         <div class="box box-primary">
@@ -37,7 +40,7 @@
                     @include('client.screen.show_fields')
                     <a href="{{ URL::previous() }}" class="btn btn-info">Atras</a>
                 </div>
-                
+
             </div>
         </div>
     </div>

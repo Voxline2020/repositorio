@@ -28,7 +28,11 @@
 				</tr>
 				@endif
 				@foreach($event->contents as $content)
-				<tr>
+				@if($content->versionPlaylistDetails->count() != 0)
+					<tr>
+				@else
+					<tr style="background-color:#F8FBA7">
+				@endif
 					<td>{!! $content->name !!}</td>
 					<td>{!! $content->SizeMB !!}</td>
 					<td>{!! $content->Resolution !!}</td>
