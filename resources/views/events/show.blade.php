@@ -2,11 +2,16 @@
 
 @section('content')
 <div class="row">
-	<div class="col-md-9">
+	<div class="col-md-8">
 		<h2> Evento {{ $event->name }} </h2>
 	</div>
 	<div class="btn-group">
-		<div class="col-md-6">
+		<div class="col-md-4">
+			<a class="btn btn-warning" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false" aria-controls="collapseExample">
+			Editar
+			</a>
+			</div>
+		<div class="col-md-4">
 		<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false" aria-controls="collapseExample">
 		Agregar
 		</a>
@@ -21,6 +26,7 @@
 <div class="row my-lg-4 my-md-4 my-sm-1">
 	@include('events._show_fields')
 </div>
+{{-- collapse agregar contenido --}}
 <div class="collapse" id="AgregarContenido">
 <div class="col-md-12">
 	<table class="table table-hover">
@@ -35,9 +41,91 @@
 	</table>
 </div>
 </div>
+{{-- Fin collapse agregar contenido --}}
+
+{{-- Collapse editar --}}
+<div class="collapse" id="Editar">
+	<div class="col-md-12">
+		<h2>Editar evento</h2>
+		{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch']) !!}
+		<div class="form-group col-sm-3">
+			{!! Form::label('name', 'Nombre del evento:') !!}
+			{!! Form::text('name', $event->name, ['class' => 'form-control', 'required']) !!}
+		</div>
+		<div class="form-group col-sm-3">
+			{!! Form::label('initdate', 'Fecha de inicio:') !!}
+			<div class="input-group date" id="initdate" data-target-input="nearest">
+			<input type="text" name="initdate" class="form-control datetimepicker-input" data-target="#initdate" required/>
+				<div class="input-group-append" data-target="#initdate" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group col-sm-3">
+			{!! Form::label('enddate', 'Fecha de termino:') !!}
+			<div class="input-group date" id="enddate" data-target-input="nearest">
+				<input type="text" name="enddate" class="form-control datetimepicker-input" data-target="#enddate" required/>
+				<div class="input-group-append" data-target="#enddate" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+		<!-- Submit Field -->
+		<div class="form-group col-sm-12">
+			{!! Form::hidden('company_id', $event->company_id) !!}
+			{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
+		</div>
+		{!! Form::close() !!}
+	</div>
+</div>
+{{-- Fin collapse editar --}}
 @endsection
 @section('script')
 <script>
+	$(function () {
+			$('#initdate').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es"
+
+			});
+			$('#enddate').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es",
+				useCurrent: false,
+			});
+
+		$("#initdate").on("change.datetimepicker", function (e) {
+				$('#enddate').datetimepicker('minDate', e.date);
+		});
+		$("#enddate").on("change.datetimepicker", function (e) {
+				$('#initdate').datetimepicker('maxDate', e.date);
+		});
+	});
 	Dropzone.options.myDropzone = {
 		acceptedFiles: '.mp4',
 		autoDiscover: false,
