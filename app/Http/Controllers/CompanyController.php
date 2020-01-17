@@ -77,7 +77,8 @@ class CompanyController extends AppBaseController
     }
     $company = $this->companyRepository->update($request->all(), $id);
     Flash::success('compañia editada');
-    return redirect(route('companies.index'));
+		return redirect(route('companies.index'));
+		dd($request);
   }
   //eliminar compañias
   public function destroy($id)
@@ -167,7 +168,8 @@ class CompanyController extends AppBaseController
     }
     $company = $this->companyRepository->update($request->all(), $id);
     Flash::success('compañia editada');
-    return redirect(route('companies.index'));
+		return redirect(route('companies.index'));
+		dd($request);
   }
   public function destroyEvent($id)
   {

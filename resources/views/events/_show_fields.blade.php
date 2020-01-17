@@ -33,12 +33,12 @@
 				@else
 					<tr style="background-color:#F8FBA7">
 				@endif
-					<td>{!! $content->name !!}</td>
-					<td>{!! $content->SizeMB !!}</td>
-					<td>{!! $content->Resolution !!}</td>
-					<td>{!! $content->durationMod !!}</td>
+					<td class="text-nowrap">{!! $content->name !!}</td>
+					<td class="text-nowrap">{!! $content->SizeMB !!}</td>
+					<td class="text-nowrap">{!! $content->Resolution !!}</td>
+					<td class="text-nowrap">{!! $content->durationMod !!}</td>
 
-					<td>
+					<td class="text-nowrap">
 						{!! Form::open(['route' => ['contents.destroy', $content->id], 'method' => 'delete', 'id'=>'form']) !!}
 						<!--
 									<div class='btn-group'>

@@ -17,6 +17,7 @@ use App\Models\VersionPlaylist;
 use App\Models\VersionPlaylistDetail;
 use App\Repositories\ContentRepository;
 use App\Repositories\EventRepository;
+use Carbon\Carbon;
 use Auth;
 use Flash;
 use Illuminate\Http\Request;
@@ -275,16 +276,20 @@ class EventController extends Controller
    */
   public function update($id, UpdateEventRequest $request)
   {
-    $event = $this->eventRepository->find($id);
+		$event = $this->eventRepository->find($id);
+		$request->merge([
+				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+				]);
 
     if (empty($event)) {
       Flash::error('Evento no encontrado');
-
       return redirect(route('events.index'));
-    }
+		}
     $event = $this->eventRepository->update($request->all(), $id);
     Flash::success('Evento editado exitosamente');
-    return redirect(route('events.index'));
+		// return redirect(route('events.show',['id' => $id]));
+		return redirect()->route('events.show', [$id]);
   }
 
   /**

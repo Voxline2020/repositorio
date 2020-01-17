@@ -5,16 +5,21 @@
 	<div class="col-md-8">
 		<h2> Evento {{ $event->name }} </h2>
 	</div>
+	<div class="col-md-8">
+		@include('flash::message')
+	</div>
 	<div class="btn-group">
 		<div class="col-md-4">
-			<a class="btn btn-warning" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false" aria-controls="collapseExample">
-			Editar
+			<a class="btn btn-warning" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false"
+				aria-controls="collapseExample">
+				Editar
 			</a>
-			</div>
+		</div>
 		<div class="col-md-4">
-		<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false" aria-controls="collapseExample">
-		Agregar
-		</a>
+			<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false"
+				aria-controls="collapseExample">
+				Agregar
+			</a>
 		</div>
 		<div class="col-md-3">
 			<a href="{!! route('companies.events.index', $event->company) !!}" class="btn btn-info">Atras</a>
@@ -28,26 +33,28 @@
 </div>
 {{-- collapse agregar contenido --}}
 <div class="collapse" id="AgregarContenido">
-<div class="col-md-12">
-	<table class="table table-hover">
-		<thead class="thead-dark">
-			<div class="panel-body text-right">
-				{!! Form::open(['route'=> ['events.fileStore'], 'method' => 'POST', 'files'=>'true', 'id' =>
-				'my-dropzone' , 'class' => 'dropzone my-2'] ) !!}
-				<button type="submit" class="btn btn-success" id="submit">Guardar Contenido</button>
-				{!! Form::close() !!}
-			</div>
-		</thead>
-	</table>
-</div>
+	<div class="col-md-12">
+		<table class="table table-hover">
+			<thead class="thead-dark">
+				<div class="panel-body text-right">
+					{!! Form::open(['route'=> ['events.fileStore'], 'method' => 'POST', 'files'=>'true', 'id' =>
+					'my-dropzone' , 'class' => 'dropzone my-2'] ) !!}
+					<button type="submit" class="btn btn-success" id="submit">Guardar Contenido</button>
+					{!! Form::close() !!}
+				</div>
+			</thead>
+		</table>
+	</div>
 </div>
 {{-- Fin collapse agregar contenido --}}
 
 {{-- Collapse editar --}}
 <div class="collapse" id="Editar">
+	{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch', 'id' => 'editform']) !!}
+
 	<div class="col-md-12">
+		<hr>
 		<h2>Editar evento</h2>
-		{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch']) !!}
 		<div class="form-group col-sm-3">
 			{!! Form::label('name', 'Nombre del evento:') !!}
 			{!! Form::text('name', $event->name, ['class' => 'form-control', 'required']) !!}
@@ -55,7 +62,8 @@
 		<div class="form-group col-sm-3">
 			{!! Form::label('initdate', 'Fecha de inicio:') !!}
 			<div class="input-group date" id="initdate" data-target-input="nearest">
-			<input type="text" name="initdate" class="form-control datetimepicker-input" data-target="#initdate" required/>
+				<input type="text" name="initdate" class="form-control datetimepicker-input" data-target="#initdate"
+					value="{!! \Carbon\Carbon::parse($event->initdate)->format('d-m-Y H:i') !!}" required />
 				<div class="input-group-append" data-target="#initdate" data-toggle="datetimepicker">
 					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
@@ -64,21 +72,22 @@
 		<div class="form-group col-sm-3">
 			{!! Form::label('enddate', 'Fecha de termino:') !!}
 			<div class="input-group date" id="enddate" data-target-input="nearest">
-				<input type="text" name="enddate" class="form-control datetimepicker-input" data-target="#enddate" required/>
+				<input type="text" name="enddate" class="form-control datetimepicker-input" data-target="#enddate"
+					value="{!! \Carbon\Carbon::parse($event->enddate)->format('d-m-Y H:i') !!}" required />
 				<div class="input-group-append" data-target="#enddate" data-toggle="datetimepicker">
 					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
 				</div>
 			</div>
 		</div>
 	</div>
-		<!-- Submit Field -->
-		<div class="form-group col-sm-12">
-			{!! Form::hidden('company_id', $event->company_id) !!}
-			{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-		</div>
-		{!! Form::close() !!}
+	<!-- Submit Field -->
+	<div class="form-group col-sm-12">
+		{!! Form::hidden('company_id', $event->company_id) !!}
+		{!! Form::submit('Guardar', ['class' => 'btn btn-primary','id' => 'editformButton']) !!}
 	</div>
+	{!! Form::close() !!}
 </div>
+
 {{-- Fin collapse editar --}}
 @endsection
 @section('script')
@@ -98,8 +107,7 @@
 				},
 				focusOnShow: true,
 				allowInputToggle: true,
-				locale: "es"
-
+				locale: "es",
 			});
 			$('#enddate').datetimepicker({
 				icons: {
