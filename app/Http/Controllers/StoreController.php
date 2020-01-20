@@ -20,6 +20,7 @@ class StoreController extends AppBaseController
 
 	public function __construct(StoreRepository $storeRepo)
 	{
+		$this->middleware('admin');
 		$this->storeRepository = $storeRepo;
 	}
 	//Mostrar sucursales

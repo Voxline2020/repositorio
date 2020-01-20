@@ -24,6 +24,7 @@ class ComputerController extends AppBaseController
 
 	public function __construct(ComputerRepository $computerRepo)
 	{
+		$this->middleware('admin');
 		$this->computerRepository = $computerRepo;
 	}
 	//mostrar computadores

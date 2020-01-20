@@ -2,27 +2,27 @@
 
 @section('content')
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-9">
 		<h2> Evento {{ $event->name }} </h2>
 	</div>
-	<div class="col-md-8">
+	<div class="col-md-9">
 		@include('flash::message')
 	</div>
 	<div class="btn-group">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<a class="btn btn-warning" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false"
 				aria-controls="collapseExample">
-				Editar
-			</a>
-		</div>
-		<div class="col-md-4">
-			<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false"
-				aria-controls="collapseExample">
-				Agregar
+				<i class="fas fa-edit"></i>
 			</a>
 		</div>
 		<div class="col-md-3">
-			<a href="{!! route('companies.events.index', $event->company) !!}" class="btn btn-info">Atras</a>
+			<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false"
+				aria-controls="collapseExample">
+				<img src="http://cdn.onlinewebfonts.com/svg/img_520505.png" width="20" height="20">
+			</a>
+		</div>
+		<div class="col-md-3">
+			<a href="{!! route('companies.events.index', $event->company) !!}" class="btn btn-info"><i class="fas fa-undo"></i></a>
 		</div>
 	</div>
 

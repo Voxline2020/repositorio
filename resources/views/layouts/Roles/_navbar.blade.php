@@ -9,7 +9,7 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarColor01">
 		<ul class="navbar-nav ml-auto">
-			@if(Auth::user()->hasRole('Supervisor'))
+			@if(!Auth::user()->hasRole('Administrador'))
 			<!--Alertas -->
 			<li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -23,8 +23,15 @@
 					$eventalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
 					$eventcontentalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
 					$alert1 = $screensalert->where('state', 0)->count();
-					$alert2 = $eventalert->where('state', 0)->count();
-					$alerts = $alert1;
+					$alert2 = 0;
+					foreach($eventalert as $event){
+						foreach($event->contents AS $content){
+							if($content->versionPlaylistDetails->count() == 0){
+								$alert2=$alert2+1;
+							}
+						}
+					}
+					$alerts = $alert1+$alert2;
 					@endphp
 					@if($alerts>0) <span class="badge badge-danger navbar-badge">{{ $alerts }}</span>@endif
 				</a>
@@ -41,15 +48,17 @@
 						@endif
 					@endforeach
 					{{-- Contenido de Eventos sin asignar --}}
-					{{-- @foreach($eventalert as $event)
-						@foreach($event->contents as $content)
-							<div class="dropdown-divider"></div>
-							<a href="#" class="dropdown-item">
-								<i class="fas fa-calendar-week mr-2"></i> Evento "{!! $event->name !!}" Inactivo
-								<!--span class="float-right text-muted text-sm"> 3 mins</span-->
-							</a>
+					@foreach($eventalert as $event)
+						@foreach($event->contents AS $content)
+							@if($content->versionPlaylistDetails->count() == 0)
+								<div class="dropdown-divider"></div>
+								<a href="{{route('events.assignations',[$event->id, $content->id]) }}" class="dropdown-item">
+									<i class="fas fa-calendar-week mr-2"></i> Contenido "{!! $content->name !!}" no esta asignado
+									<!--span class="float-right text-muted text-sm"> 3 mins</span-->
+								</a>
+							@endif
 						@endforeach
-					@endforeach --}}
+					@endforeach
 					{{-- Eventos inactivos --}}
 					{{-- @foreach($eventalert as $event)
 						@if($event->state==0)

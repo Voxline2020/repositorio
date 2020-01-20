@@ -30,6 +30,7 @@ class ScreenController extends AppBaseController
 
 	public function __construct(ScreenRepository $screenRepo)
 	{
+		$this->middleware('auth');
 		$this->screenRepository = $screenRepo;
 	}
 	//mostrar pantallas
@@ -154,7 +155,7 @@ class ScreenController extends AppBaseController
 	}
 	public function changeStatus($id, Request $request)
 	{
-		$screen = $this->screenRepository->find($id);	
+		$screen = $this->screenRepository->find($id);
 		$screen->state = $request['state'];
 		if (empty($request)) {
 			Flash::error('Error');

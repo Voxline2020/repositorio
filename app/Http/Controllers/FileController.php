@@ -17,6 +17,7 @@ class FileController extends Controller
 
   public function __construct(ContentRepository $contentRepo)
   {
+		$this->middleware('auth');
     $this->contentRepository = $contentRepo;
   }
 

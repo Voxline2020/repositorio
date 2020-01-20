@@ -22,6 +22,7 @@ class PlaylistController extends AppBaseController
 
     public function __construct(PlaylistRepository $playlistRepo)
     {
+			$this->middleware('admin');
         $this->playlistRepository = $playlistRepo;
     }
 
@@ -38,7 +39,7 @@ class PlaylistController extends AppBaseController
                     });
                 })->paginate();
 				$version= VersionPlaylist::where('state','1')->first();
-                $version_details= VersionPlaylistDetail::where('version_playlist_id',$version->id)->get();   
+                $version_details= VersionPlaylistDetail::where('version_playlist_id',$version->id)->get();
 				$url=array();
 				$i=0;
 				foreach($version_details as $version_detail){

@@ -38,8 +38,6 @@ Route::group(['prefix' => 'computers'], function () {
 
 	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
-
-
 Route::group(['prefix' => 'pivot'], function () {
 	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
@@ -188,8 +186,7 @@ Route::get('pdf/{id}','ReportController@generate')->name('pdf.generate');
 //SECTION Generar PDF de ??
 Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent');
 
-//SECTION Video Descargar
-Route::get('video/{id}/d','DownloadContent@download')->name('download.content');
+
 
 //SECTION Events Old
 Route::resource('eventsOld', 'EventControllerOld');

@@ -23,11 +23,17 @@ class ClientController extends Controller
 
 	public function __construct(EventRepository $eventRepo)
 	{
+		$this->middleware('auth');
 		$this->eventRepository = $eventRepo;
 	}
 	//mostrar compañias
 	public function index(Request $request)
 	{
+		if (Auth::user()->hasRole('Administrador')){
+			$events = $this->eventRepository->all();
+			$screens = Screen::with(['computer','computer.store'])->orderBy('state', 'asc')->paginate();
+			$screensCount = Screen::with(['computer','computer.store'])->get();
+		}else{
 		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
 		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
@@ -39,16 +45,28 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->get();
+		}
+		$error = $request->session()->get('error');
+		if(!empty($error)){
+			Flash::error($error);
+		}
 		return view('client.index',compact('screens','events','screensCount'));
 	}
 	public function show($id)
 	{
 		//filtramos la pantalla que queremoos ver con el id
-		$screen = Screen::whereHas('computer', function ($query) {
-			$query->whereHas('store', function ($query) {
-				$query->where('company_id', Auth::user()->company_id);
-			});
-		})->find($id);
+		if (Auth::user()->hasRole('Administrador')){
+			$screen = Screen::whereHas('computer', function ($query) {
+				$query->whereHas('store', function ($query) {
+				});
+			})->find($id);
+		}else {
+			$screen = Screen::whereHas('computer', function ($query) {
+				$query->whereHas('store', function ($query) {
+					$query->where('company_id', Auth::user()->company_id);
+				});
+			})->find($id);
+		}
 		//ahora buscamos la playlist asignada a esa pantalla
 		$playlist = Playlist::wherehas('versionPlaylists', function ($query) {
             $query->whereHas('versionPlaylistDetails', function ($query) {
