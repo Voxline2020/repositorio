@@ -41,7 +41,7 @@
 			<div class="col-md-3">
 				<button type="submit" class="btn btn-primary w-100">Buscar</button>
 			</div>
-			
+
 		</div>
 		{!! Form::close() !!}
 		</div>

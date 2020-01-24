@@ -30,18 +30,20 @@
             {!! Form::close() !!}
 				</div>
 				<div class="col-md-3">
-					<p><b>Resolución:</b> {!! $screen->width !!}x{!! $screen->height !!}</p>
+					<p><b>Resolución: </b> {!! $screen->width !!}x{!! $screen->height !!}</p>
 			</div>
+			<div class="col-md-3">
+				<p><b>Version: </b>@if($screen->version==null) N/A @else{!! $screen->version !!}@endif</p>
+		</div>
     </div>
     <div class="content">
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
                     @include('client.screen.show_fields')
-                    <a href="{{ URL::previous() }}" class="btn btn-info">Atras</a>
                 </div>
-
             </div>
         </div>
     </div>
 @endsection
+

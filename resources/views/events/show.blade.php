@@ -22,7 +22,7 @@
 			</a>
 		</div>
 		<div class="col-md-3">
-			<a href="{!! route('companies.events.index', $event->company) !!}" class="btn btn-info"><i class="fas fa-undo"></i></a>
+			<a href="{!! route('events.index') !!}" class="btn btn-info"><i class="fas fa-undo"></i></a>
 		</div>
 	</div>
 

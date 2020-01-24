@@ -47,66 +47,17 @@
 			});
 		});
 	</script>
-	<script>
-		$('#changejump').on('show.bs.modal', function (event) {
-			var button = $(event.relatedTarget)
-			var id = button.data('id')
-			var order = button.data('order')
-			var modal = $(this)
-			modal.find('input[name="id"]').val(id)
-			modal.find('input[name="order"]').val(order)
-		})
-	</script>
-	<script type="text/javascript">
-		$("#btnAssign").click(function(){
-			//validacion chbx
-			if (! $("input[type=checkbox]").is(":checked") ) {
-         alert("Por favor seleccione una pantalla para realizar asignación.");
-         return false;
-			}
-			//llenar tabla con los datos seleccionados
-			llenarTabla();
-		});
-		function llenarTabla(){
-			var array = lista();
-			array.forEach(e => {
-				document.getElementById("tableSelected").insertRow(-1).innerHTML = '<td>'+e.name+'</td><td>'+e.store_name+'</td><td>'+e.type+'</td><td>'+e.resolution+'</td>';
-			});
-		}
-		function lista(){
-      var lista = [];
-      $("input[type=checkbox").each(function (index) {
-        if($(this).is(':checked')){
-					var idVal = $(this).val();
-					var fila = $('#' + idVal);
 
-					var obj = {};
-					fila.find('td').each (function() {
-						var td = this;
-						fillFila(td, idVal, lista, obj)
-					});
-					lista.push(obj);
-        }
-      });
-    	return lista;
-    }
-		function fillFila(td, id, lista, obj){
-			var td =td;
-			var tdName = $(td).data('name');
-			if(tdName != undefined){
-				obj[tdName] = td.innerHTML;
-			}
-		}
-		function limpiarTabla(){
-			var count = document.getElementById("tableSelected").rows.length;
-			for (var i = 1; i < count; i++) {
-				document.getElementById("tableSelected").deleteRow(-1);
-			}
-		}
-		$("#confirmAssignation").on("hidden.bs.modal", function () {
-			limpiarTabla();
-		});
-	</script>
+<script>
+	$('#changeOrder').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var id = button.data('id')
+		var screen = button.data('screen')
+		var modal = $(this)
+		modal.find('input[name="id"]').val(id)
+		modal.find('input[name="screen"]').val(screen)
+	})
+</script>
 	@yield('script')
 </body>
 

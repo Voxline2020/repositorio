@@ -22,11 +22,11 @@ use Carbon\Carbon as Carbon;
  * @property boolean state
  * @property string slug
  */
-class Event extends Model
+class EventAssignation extends Model
 {
     use SoftDeletes;
 
-    public $table = 'events';
+    public $table = 'event_assignations';
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -36,12 +36,11 @@ class Event extends Model
 
 
     public $fillable = [
-        'name',
-        'initdate',
-        'enddate',
-        'state',
-        'slug',
-				'company_id'
+        'content_id',
+        'screen_id',
+        'order',
+        'user_id',
+        'state'
     ];
 
     /**
@@ -50,20 +49,19 @@ class Event extends Model
      * @var array
      */
     protected $casts = [
-        'name' => 'string',
-        'initdate' => 'dateTime-local',
-        'enddate' => 'dateTime-local',
-        'state' => 'integer',
-        'slug' => 'string',
-			'company_id' =>'integer'
+        'content_id' => 'int',
+        'screen_id' => 'int',
+        'order' => 'int',
+        'user_id' => 'int',
+        'state' => 'int'
 		];
 
 		protected $attributes = [
-        'name' => "",
-        'initdate' => "",
-        'enddate' => "",
-        'state' => "",
-        'slug' => ""
+				'content_id' => "",
+        'screen_id' => "",
+        'order' => "",
+        'user_id' => "",
+        'state' => ""
 
 	];
 
@@ -73,9 +71,9 @@ class Event extends Model
    * @var array
    */
   public static $rules = [
-		'name' => 'required',
-		'initdate'=> 'required',
-		'enddate'=> 'required'
+		'content_id' => 'required',
+		'screen_id'=> 'required',
+		'user_id'=> 'required'
 
   ];
 
@@ -83,38 +81,13 @@ class Event extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function contents()
+    public function content()
     {
-        return $this->hasMany(\App\Models\Content::class);
-    }
-
-
-
-	public function company()
-	{
-		return $this->belongsTo(\App\Models\Company::class, 'company_id');
-	}
-
-	public function getInitDateFAttribute()
-	{
-		$initDate = Carbon::create($this->initdate, 'America/Santiago')->format('d/m/Y H:i');
-		return $initDate;
-		# code...
-	}
-
-
-	public function getEndDateFAttribute()
-	{
-		$endDate = Carbon::create($this->enddate, 'America/Santiago')->format('d/m/Y H:i');
-		return $endDate;
-
-	}
-	public function getStateStringAttribute()
-	{
-		if($this->state == 0){
-			return "Inactivo";
+        return $this->belongsTo(\App\Models\Content::class);
 		}
-		return "Activo";
-	}
+		public function screen()
+    {
+        return $this->belongsTo(\App\Models\Screen::class);
+    }
 
 }

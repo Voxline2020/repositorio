@@ -96,8 +96,12 @@ class Content extends Model
    **/
   public function event()
   {
-    return $this->belongsTo(\App\Models\Event::class, 'event_id');
-  }
+    return $this->belongsTo(\App\Models\Event::class);
+	}
+	public function eventAssignations()
+  {
+    return $this->hasMany(\App\Models\EventAssignation::class);
+	}
 
   /**
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -118,15 +122,7 @@ class Content extends Model
   /**
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    **/
-  public function versionPlaylistDetails()
-  {
-    return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
-  }
 
-	public function versionPlaylistDetailsWithTrashed()
-	{
-		return $this->hasMany(\App\Models\VersionPlaylistDetail::class)->withTrashed();
-	}
 
 	public function getResolutionAttribute()
 	{

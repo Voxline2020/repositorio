@@ -89,7 +89,7 @@
 		<h2>Pantallas</h2>
 	</div>
 	<div class="col-md-12">
-		@include('client.events._screenFields')
+		{{-- @include('client.events._screenFields') --}}
 	</div>
 </div>
 @endsection

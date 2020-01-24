@@ -16,10 +16,14 @@
 	<div class="col-md-3">
 		<h4><span class="badge badge-light">Tamaño: {!! $content->SizeMB !!}</span></h4>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-3">
 		<h4><span class="badge badge-light">Medidas: {!! $content->Resolution !!}</span></h4>
 	</div>
+	<div class="col-md-3">
+	<a href="{{ url()->previous() }}" class="btn btn-info w-100">Atras</a>
+	</div>
 </div>
+
 <br>
 {{ Form::open(['route' =>['screens.filter_by_name', $content->id], 'method' => 'GET']) }}
 

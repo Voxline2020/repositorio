@@ -43,10 +43,17 @@ class ActivateEvents extends Command
 			$InactiveEvents = Event::where('state',0)
 			->whereDate('initdate', '<=', $today)
 			->whereDate('enddate', '>=', $today)
-			->get()->withTrashed();
-			foreach($InactiveEvents AS $Inactives){
-				$Inactives->state = 1;
-				$Inactives->save();
+			->get();
+
+			foreach($InactiveEvents AS $Inactive){
+				$Inactive->state = 1;
+				$Inactive->save();
+				foreach ($Inactive->contents as $content) {
+					foreach ($content->eventAssignations as $assignation) {
+						$assignation->state = 1;
+						$assgiantion->save();
+					}
+				}
 			}
 
     }

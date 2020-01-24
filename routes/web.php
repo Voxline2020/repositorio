@@ -56,8 +56,9 @@ Route::group(['prefix' => 'users'], function () {
 	Route::delete('{user}/company/unassign','UserController@assignCompany')->name('users.companies.unassign');
 });
 
-//SECTION Playlists
-Route::resource('playlists', 'PlaylistController');
+// //SECTION Playlists
+// Route::resource('playlists', 'PlaylistController');
+
 
 //SECTION Events
 Route::resource('events', 'EventController');
@@ -163,10 +164,13 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
 	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 	Route::get('screen/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
-	Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
-	Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
-	Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
-	Route::put('screen/clone','ClientController@clone')->name('clients.clone');
+	// Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
+	// Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
+	// Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
+	// Route::put('screen/clone','ClientController@clone')->name('clients.clone');
+	Route::put('screen/assign/{id}','ScreenController@eventAssign')->name('screens.eventAssign');
+	Route::put('screen/clone','ScreenController@cloneEvent')->name('screens.cloneEvent');
+	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
 	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
 	Route::get('/events', "EventController@index")->name('clients.events.index');
@@ -186,10 +190,3 @@ Route::get('pdf/{id}','ReportController@generate')->name('pdf.generate');
 //SECTION Generar PDF de ??
 Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent');
 
-
-
-//SECTION Events Old
-Route::resource('eventsOld', 'EventControllerOld');
-Route::get('contents/editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
-Route::get('eventOld/filter_by_name', ['uses' => 'EventControllerOld@filter_by_name', 'as' => 'eventsOld.filter_by_name' ]);
-Route::get('eventsOld/{id}/AssignContent', "EventController@indexAssignContent")->name('eventsOld.indexAssignContent');

@@ -20,20 +20,12 @@
 							$query->where('company_id', Auth::user()->company_id);
 						});
 					})->get();
-					$eventalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
-					$eventcontentalert = App\Models\Event::where('company_id', Auth::user()->company_id)->get();
 					$alert1 = $screensalert->where('state', 0)->count();
-					$alert2 = 0;
-					foreach($eventalert as $event){
-						foreach($event->contents AS $content){
-							if($content->versionPlaylistDetails->count() == 0){
-								$alert2=$alert2+1;
-							}
-						}
-					}
-					$alerts = $alert1+$alert2;
+					$alerts = $alert1;
 					@endphp
-					@if($alerts>0) <span class="badge badge-danger navbar-badge">{{ $alerts }}</span>@endif
+					@if($alerts>0)
+					<span class="badge badge-danger navbar-badge">{{ $alerts }}</span>
+					@endif
 				</a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 					<span style="text-align: center" class="dropdown-item dropdown-header"><i class="fas fa-exclamation-circle"></i> @if($alerts>0){{ $alerts }} @else Sin @endif Alerta(s)</span>
@@ -47,28 +39,7 @@
 						</a>
 						@endif
 					@endforeach
-					{{-- Contenido de Eventos sin asignar --}}
-					@foreach($eventalert as $event)
-						@foreach($event->contents AS $content)
-							@if($content->versionPlaylistDetails->count() == 0)
-								<div class="dropdown-divider"></div>
-								<a href="{{route('events.assignations',[$event->id, $content->id]) }}" class="dropdown-item">
-									<i class="fas fa-calendar-week mr-2"></i> Contenido "{!! $content->name !!}" no esta asignado
-									<!--span class="float-right text-muted text-sm"> 3 mins</span-->
-								</a>
-							@endif
-						@endforeach
-					@endforeach
-					{{-- Eventos inactivos --}}
-					{{-- @foreach($eventalert as $event)
-						@if($event->state==0)
-						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item">
-							<i class="fas fa-calendar-week mr-2"></i> Evento "{!! $event->name !!}" Inactivo
-							<!--span class="float-right text-muted text-sm"> 3 mins</span-->
-						</a>
-						@endif
-					@endforeach --}}
+					{{-- Fin Pantallas inactivas --}}
           <div class="dropdown-divider"></div>
           <a style="text-align: center" href="" id="ver_todo" class="dropdown-item dropdown-footer">Ver todo</a>
         	</div>

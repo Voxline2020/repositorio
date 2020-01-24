@@ -21,7 +21,8 @@ class Screen extends Model
 		'width',
 		'computer_id',
 		'playlist_id',
-		'state'
+		'state',
+		'version'
   ];
 
 
@@ -62,6 +63,11 @@ class Screen extends Model
 	public function screenPlaylistAsignations()
 	{
 			return $this->hasMany(\App\Models\ScreenPlaylistAsignation::class);
+	}
+
+	public function eventAssignations()
+  {
+    return $this->hasMany(\App\Models\EventAssignation::class);
 	}
 
 	public function playlist()

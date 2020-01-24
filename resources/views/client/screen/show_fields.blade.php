@@ -1,73 +1,135 @@
-@include('flash::message')
+<div class="col-md-12">
+	@include('flash::message')
+</div>
+<div class="col-md-9">
+	@php $mytime = Carbon\Carbon::now()@endphp
+	<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
+</div>
+<div class="col-md-2">
+	<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">Añadir
+		Evento</a>
+</div>
+<div class="col-md-1.5">
+	<a href="{{ route('clients.index') }}" type="button" class="btn btn-primary w-100">Volver</a>
+</div>
+<br>
+<br>
 <div class="table-responsive">
-	<h3>Contenidos:</h3>
-	<table class="table">
-		<thead>
+	<table class="table table-hover">
+		<thead class="thead-dark">
 			<tr>
 				<th>Orden</th>
-				<th>Nombre</th>
-				<th>Resolución</th>
-				<th>Duración</th>
+				<th>Nombre Evento</th>
+				<th>Fecha Inicio</th>
+				<th>Fecha Termino</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($details AS $detail)
-				@if($detail->content != null)
+			@if($eventAssigns->count()!=0)
+			@foreach($eventAssigns AS $assign)
+			<tr>
+				<td>{{$assign->order}}</td>
+				<td>{{$assign->content->event->name}}</td>
+				<td>{!! \Carbon\Carbon::parse($assign->content->event->initdate)->format('d-m-Y H:i') !!}</td>
+				<td>{!! \Carbon\Carbon::parse($assign->content->event->enddate)->format('d-m-Y H:i') !!}</td>
+				<td>
+					<div class='btn-group'>
+						<a href="{!! route('events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+								class="fas fa-eye"></i></a>
+						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
+						data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
+						{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+						{!! Form::hidden('content_id',$assign->content->id) !!}
+						{!! Form::hidden('screen_id',$screen->id) !!}
+						{!! Form::hidden('order',$assign->order) !!}
+						{!! Form::hidden('user_id',$assign->user_id) !!}
+						{!! Form::hidden('state',$assign->state) !!}
+						<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
+						{!! Form::close() !!}
+					</div>
+				</td>
+			</tr>
+			@endforeach
+			@else
+			<tr>
+				<td>Aun no hay eventos asignados.</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			@endif
+		</tbody>
+	</table>
+	{{$eventAssigns->links()}}
+	<div class="col-md-9">
+		<h3>Eventos Proximos:</h3>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead class="thead-dark">
 				<tr>
-					<td>{!! $detail->orderContent !!}</td>
-					<td>{!! $detail->content->name !!}</td>
-					<td>{!! $detail->content->resolution !!}</td>
-					<td>{!! $detail->content->DurationMod !!}</td>
+					<th>Orden</th>
+					<th>Nombre Evento</th>
+					<th>Fecha Inicio</th>
+					<th>Fecha Termino</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if($eventInactives->count()!=0)
+				@foreach($eventInactives AS $inactive)
+				<tr>
+					<td>{{$inactive->order}}</td>
+					<td>{{$inactive->content->event->name}}</td>
+					<td>{!! \Carbon\Carbon::parse($inactive->content->event->initdate)->format('d-m-Y H:i') !!}</td>
+					<td>{!! \Carbon\Carbon::parse($inactive->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 					<td>
 						<div class='btn-group'>
-							@if ($detail->orderContent == 1)
-								<button class="disabled btn btn-info"><i class="fas fa-arrow-up"></i></button>
-							@endif
-							@if ($detail->orderContent != 1)
-								{!! Form::model($screen, ['route' => ['clients.changeUp', $detail->id], 'method' => 'put']) !!}
-								{!! Form::hidden('order', $detail->orderContent) !!}
-								{!! Form::button('<i class="fas fa-arrow-up"></i>', ['type' => 'submit','class' => 'btn btn-info']) !!}
-								{!! Form::close() !!}
-							@endif
-							@if ($details->count() != $detail->orderContent)
-								{!! Form::model($screen, ['route' => ['clients.changeDown', $detail->id], 'method' => 'put']) !!}
-								{!! Form::hidden('order', $detail->orderContent) !!}
-								{!! Form::button('<i class="fas fa-arrow-down"></i>', ['type' => 'submit','class' => 'btn btn-info']) !!}
-								{!! Form::close() !!}
-							@endif
-							@if ($details->count() == $detail->orderContent)
-								<button class="disabled btn btn-info"><i class="fas fa-arrow-down"></i></button>
-							@endif
-							<button href="#" class="btn btn-info"><i class="fas fa-exchange-alt" data-toggle="modal" data-target="#changejump" data-order={{$detail->orderContent}} data-id={{$detail->id}}></i></button>
-							{!! Form::model($screen, ['route' => ['clients.clone'], 'method' => 'put']) !!}
-							{!! Form::hidden('version_playlist_id', $detail->version_playlist_id) !!}
-							{!! Form::hidden('content_id', $detail->content_id) !!}
-							{!! Form::button('<i class="fas fa-clone"></i>', ['type' => 'submit','class' => 'btn btn-info']) !!}
+							<a href="{!! route('events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+									class="fas fa-eye"></i></a>
+							{!! Form::model($screen,['route' => ['screens.changeOrder'], 'method' => 'put']) !!}
+							<a type="submit" href="#" class="btn btn-info"><i class="fas fa-sync-alt"></i></a>
+							{!! Form::close() !!}
+							{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+							<a type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></a>
 							{!! Form::close() !!}
 						</div>
 					</td>
 				</tr>
+				@endforeach
+				@else
+				<tr>
+					<td>No hay eventos proximos.</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
 				@endif
-			@endforeach
-		</tbody>
-	</table>
-	<!-- Modal -->
-	<div class="modal fade" id="changejump" tabindex="-1" role="dialog" aria-labelledby="changejump" aria-hidden="true">
+			</tbody>
+		</table>
+		{{$eventInactives->links()}}
+	</div>
+</div>
+	<!-- Modal changeOrder -->
+	<div class="modal fade" id="changeOrder" tabindex="-1" role="dialog" aria-labelledby="changeOrderLabel"
+		aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="changejumpLabel">Cambiar posición</h5>
+					<h5 class="modal-title" id="changeOrderLabel">Cambiar posición</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				{!! Form::model($screen, ['route' => ['clients.changeJump'], 'method' => 'put']) !!}
+				{!! Form::model($eventAssigns, ['route' => ['screens.changeOrder'], 'method' => 'put']) !!}
 				<div class="modal-body">
 					{!! Form::hidden('id') !!}
-					{!! Form::hidden('order') !!}
-					{!! Form::label('neworder','Nueva Posicion') !!}
-					{!! Form::number('neworder','value') !!}
+					{!! Form::hidden('screen') !!}
+					{!! Form::label('neworder','Nuevo Nº Orden') !!}
+					{!! Form::number('neworder','') !!}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -78,4 +140,53 @@
 		</div>
 	</div>
 	<!-- FIN Modal -->
-</div>
+	<!-- Modal AssignEvent-->
+	<div class="modal fade" id="assignEvent" tabindex="-1" role="dialog" aria-labelledby="assignEventLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="assignEventLabel">Asignar Evento a Pantalla: "{{$screen->name}}"</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					{!! Form::model($screen, ['route' => ['screens.eventAssign', $screen->id], 'method' => 'post']) !!}
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>Nombre Evento</th>
+									<th>Fecha Inicio</th>
+									<th>Fecha Termino</th>
+									<th>Seleción</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($events as $event)
+								<tr>
+									<td>{{$event->name}}</td>
+									<td>{{$event->initdate}}</td>
+									<td>{{$event->enddate}}</td>
+									<td><input type="radio" name="event_id" id="{!! $event->id !!}" value="{!! $event->id !!}" required>
+									</td>
+								</tr>
+								@endforeach
+								{!! Form::hidden('user_id', Auth::user()->id) !!}
+								{!! Form::hidden('order', 999) !!}
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						{!! Form::submit('Asignar', ['class' => 'btn btn-primary']) !!}
+						{{-- <button type="button" class="btn btn-primary">Asignar</button> --}}
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- FIN Modal AssignEvent-->
+

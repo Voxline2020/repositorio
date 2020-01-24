@@ -23,7 +23,7 @@ class CompanyController extends AppBaseController
 
   public function __construct(CompanyRepository $companyRepo)
   {
-		$this->middleware('admin');
+		$this->middleware('admin')->except(['createEvent','storeEvent','editEvent','destroyEvent','updateEvent','showEvent','indexEvent']);
     $this->companyRepository = $companyRepo;
   }
   //mostrar compañias
@@ -126,16 +126,19 @@ class CompanyController extends AppBaseController
 		$name = Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
 		if($name->count() != 0){
 			Flash::error('El evento "'.$request->name.'" ya existe.');
-			return redirect(route('companies.events.index', $company));
+			return redirect(route('companies.events.create', $company));
 		}
-		if ($request->initdate <= $request->enddate) {
-			//Format Init Date
-			$request->merge([
-				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
-				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
-				'state'=>'0',
-				'slug'=>Str::slug($request['name'])
-				]);
+		//Format Init Date
+		$request->merge([
+		"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+		"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+		'state'=>'0',
+		'slug'=>Str::slug($request['name'])
+		]);
+		if($request->initdate > $request->enddate){
+			Flash::error('La fecha de termino no puede ser inferior a la fecha de inicio.');
+			return redirect(route('companies.events.create', $company));
+		}else{
 			$input = $request->all();
 			Event::create($input);
 			$id = [];
@@ -145,11 +148,18 @@ class CompanyController extends AppBaseController
 			}
 			$event = Event::find($id);
 			Flash::success('Evento agregado exitosamente');
-			return redirect(route('events.show', [ $event[0]->id]));
-			// return redirect(route('companies.events.index', $company));
+			if (Auth::user()->hasRole('Administrador')){
+				return redirect(route('companies.events.index', $company));
+			}else{
+				return redirect(route('events.show', [ $event[0]->id]));
+			}
 		}
     Flash::error('Error al agregar el evento.');
-		return redirect(route('companies.events.index', $company));
+		if (Auth::user()->hasRole('Administrador')){
+			return redirect(route('companies.events.index', $company));
+		}else{
+			return redirect(route('events.show', [ $event[0]->id]));
+		}
   }
   public function editEvent($id)
   {

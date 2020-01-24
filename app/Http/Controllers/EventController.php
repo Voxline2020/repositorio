@@ -9,12 +9,8 @@ use App\Models\Computer;
 use App\Models\Content;
 use App\Models\Event;
 use App\Models\Company;
-use App\Models\Playlist;
 use App\Models\Screen;
-use App\Models\ScreenPlaylistAsignation;
 use App\Models\Store;
-use App\Models\VersionPlaylist;
-use App\Models\VersionPlaylistDetail;
 use App\Repositories\ContentRepository;
 use App\Repositories\EventRepository;
 use Carbon\Carbon;
@@ -47,7 +43,7 @@ class EventController extends Controller
   {
     $company = Company::where('id',  auth()->user()->company_id)->first();
     // $events = $this->eventRepository->all();
-    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate();
+    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate(5);
     // $lists = Event::where('company_id', $id);
     $listsStore = Store::all();
     return view('events.index', compact('events', 'listsStore'))->with('company', $company);
@@ -479,7 +475,7 @@ class EventController extends Controller
 
   public function showClient(Event $event, Request $request)
   {
-    $screens_id = [];
+    //$screens_id = [];
     // foreach ($event->contents as $key => $content) {
     //   foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
     //     if ($versionPlaylistDetail->versionPlaylist->state == 1) {
@@ -491,24 +487,24 @@ class EventController extends Controller
     //       }
     //     }
     //   }
-    foreach ($event->contents AS $content) {
-      $screens = Screen::whereHas('playlist', function ($query) use ($content) {
-        $query->whereHas('versionPlaylists', function ($query) use ($content){
-          $query->whereHas('versionPlaylistDetails', function ($query) use ($content){
-            $query->where('content_id', $content->id);
-          });
-        });
-      })->get();
-      foreach($screens AS $screen){
-        array_push($screens_id, $screen->id);
-      }
-    }
-    $screens = Screen::find(array_unique($screens_id));
-    if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
-      $screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
-    }
+    // foreach ($event->contents AS $content) {
+    //   $screens = Screen::whereHas('playlist', function ($query) use ($content) {
+    //     $query->whereHas('versionPlaylists', function ($query) use ($content){
+    //       $query->whereHas('versionPlaylistDetails', function ($query) use ($content){
+    //         $query->where('content_id', $content->id);
+    //       });
+    //     });
+    //   })->get();
+    //   foreach($screens AS $screen){
+    //     array_push($screens_id, $screen->id);
+    //   }
+    // }
+    // $screens = Screen::find(array_unique($screens_id));
+    // if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
+    //   $screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
+    // }
 
-    return view('client.events.show', compact('screens', 'event'));
+    return view('client.events.show', compact('event'));
   }
 
   public function ScreenShow($id)

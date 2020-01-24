@@ -42,10 +42,16 @@ class DesactivateEvents extends Command
 			$today = date('Y-m-d H:i:s');
 			$ActiveEvents = Event::where('state',1)
 			->whereDate('enddate', '<=', $today)
-			->get()->withTrashed();
-			foreach($ActiveEvents AS $Actives){
-				$Actives->state = 0;
-				$Actives->save();
+			->get();
+			foreach($ActiveEvents AS $Active){
+				$Active->state = 0;
+				$Active->save();
+				foreach ($Active->contents as $content) {
+					foreach ($Active->eventAssignations as $assignation) {
+						$assignation->state = 0;
+						$assgiantion->save();
+					}
+				}
 			}
     }
 }

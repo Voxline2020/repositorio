@@ -28,11 +28,7 @@
 				</tr>
 				@endif
 				@foreach($event->contents as $content)
-				@if($content->versionPlaylistDetails->count() != 0)
-					<tr>
-				@else
-					<tr style="background-color:#F8FBA7">
-				@endif
+				<tr>
 					<td class="text-nowrap">{!! $content->name !!}</td>
 					<td class="text-nowrap">{!! $content->SizeMB !!}</td>
 					<td class="text-nowrap">{!! $content->Resolution !!}</td>
@@ -40,20 +36,8 @@
 
 					<td class="text-nowrap">
 						{!! Form::open(['route' => ['contents.destroy', $content->id], 'method' => 'delete', 'id'=>'form']) !!}
-						<!--
-									<div class='btn-group'>
-										<a href="{!! route('contents.edit', [$content->id]) !!}" class='btn btn-warning btn-xs'><i
-												class="fas fa-edit"></i></a>
-										{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger
-										btn-xs', 'onclick' => "return confirm('Estas seguro?')"]) !!} -->
-						{{-- <a href="{{route('screens.AssignContent',$content->id) }}" class='btn btn-primary btn-xs'><i
-							class="fas fa-desktop"></i></a> --}}
-						@if ($content->versionPlaylistDetails->count() > 0)
-							<a href="{{route('events.assignations.show',[$event, $content]) }}" class='btn btn-warning btn-xs'><i class="fas fa-eye"></i></a>
-						@else
-							<a href="{{route('events.assignations',[$event, $content]) }}" class='btn btn-primary btn-xs'><i class="fas fa-desktop"></i></a>
-						@endif
-						<a href="{{route('contents.download',$content) }}" class='btn btn-success btn-xs'><i
+						<div class='btn-group'>
+							<a href="{{route('contents.download',$content) }}" class='btn btn-success btn-xs'><i
 								class="fa fa-download"></i></a>
 						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 						'onclick' => "return confirm('¿Seguro quiere borrar este contenido?')"]) !!}
