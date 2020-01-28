@@ -16,12 +16,13 @@
 			<h4 class=font-weight-bold> Bienvenido {{ Auth::user()->name }} </h4>
 			@php $mytime = Carbon\Carbon::now()@endphp
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
-			<br><br>
+			<hr>
 			<h4>Eventos actuales &#x1F4C6;</h4>
 			@include('client.tableActivo')
-			<br><br>
+			<hr>
 			<h4>Eventos proximos &#x1F4C6;</h4>
 			@include('client.tableInactivo')
+			<hr>
 		</div>
 
 		<div class="col-sm-12">
@@ -41,9 +42,9 @@
 			<div class="col-md-3">
 				<button type="submit" class="btn btn-primary w-100">Buscar</button>
 			</div>
-
 		</div>
 		{!! Form::close() !!}
+		<hr>
 		</div>
 		<div class="col-sm-12">
 				<h4 > Estado reproductores </h4>

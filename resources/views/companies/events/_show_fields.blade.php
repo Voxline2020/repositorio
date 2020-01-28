@@ -11,7 +11,7 @@
 @if($event->contents->count()==0)
 <div class="col-md-12">
 	<table class="table table-hover">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<div class="panel-body text-right">
 				{!! Form::open(['route'=> ['events.fileStore',$event], 'method' => 'POST', 'files'=>'true', 'id' =>
 				'my-dropzone' , 'class' => 'dropzone my-2'] ) !!}
@@ -25,7 +25,7 @@
 @else
 <div class="col-md-12">
 	<table class="table table-hover">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<tr>
 				<th>Nombre del contenido</th>
 				<th>Tamaño</th>

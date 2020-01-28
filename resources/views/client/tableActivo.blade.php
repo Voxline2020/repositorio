@@ -1,6 +1,6 @@
 <div class="table-responsive" style="height:150px;overflow-y:scroll">
 	<table class="table table-hover">
-		<thead>
+		<thead class="table-dark">
 			<tr>
 				<th>Nombre</th>
 				<th>Fecha Inicio</th>

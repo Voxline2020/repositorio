@@ -4,16 +4,16 @@
 <div class="container">
 	@include('flash::message')
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-6">
 			<h2 class=font-weight-bold>{{$event->name}} &#x1F4C6;</h2>
 		</div>
-		<div class="col-md-1.5">
+		<div class="col-md-2">
 			<a  type="button" class="btn btn-secondary w-100" href="{!! route('clients.events.show', [ $event->id]) !!}">Limpiar</a>
 		</div>
 		<div class="col-md-2">
 			<a  type="button" class="btn btn-warning w-100" href="{!! route('events.show', [ $event->id]) !!}">Editar</a>
 		</div>
-		<div class="col-md-1.5">
+		<div class="col-md-2">
 			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
 		</div>
 	</div>
@@ -31,7 +31,7 @@
 		</div>
 	</div>
 </div>
-<br>
+<hr>
 {{ Form::open(['route' =>['clients.filter_screen'], 'method' => 'GET']) }}
 @php
 $totalscreen = App\Models\Screen::all();
@@ -100,10 +100,10 @@ $types=array_unique($listtypes);
 		<button type="submit" class="btn btn-primary w-100">Buscar </button>
 	</div>
 </div>
-<br>
 {!! Form::close() !!}
+<hr>
 <div class="row">
-	<div class="col-md-9">
+	<div class="col-md-12">
 		<h2>Pantallas</h2>
 	</div>
 	<div class="col-md-12">

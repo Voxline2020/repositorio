@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="row">
-	<div class="col-md-9">
-		<h2> Evento {{ $event->name }} </h2>
+	<div class="col-md-12">
+		@include('flash::message')
 	</div>
 	<div class="col-md-9">
-		@include('flash::message')
+		<h2> Evento {{ $event->name }} </h2>
 	</div>
 	<div class="btn-group">
 		<div class="col-md-3">
@@ -34,6 +34,8 @@
 {{-- collapse agregar contenido --}}
 <div class="collapse" id="AgregarContenido">
 	<div class="col-md-12">
+		<hr>
+		<h3>Agregar Contenido:</h3>
 		<table class="table table-hover">
 			<thead class="thead-dark">
 				<div class="panel-body text-right">
@@ -51,8 +53,40 @@
 {{-- Collapse editar --}}
 <div class="collapse" id="Editar">
 	{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch', 'id' => 'editform']) !!}
-
-	<div class="col-md-12">
+	<hr>
+	<h2>Editar evento</h2>
+	<div class="row">
+		<div class="col-md-4">
+			{!! Form::label('name', 'Nombre del evento:') !!}
+			{!! Form::text('name', $event->name, ['class' => 'form-control', 'required']) !!}
+		</div>
+		<div class="col-md-4">
+			{!! Form::label('initdate', 'Fecha de inicio:') !!}
+			<div class="input-group date" id="initdate" data-target-input="nearest">
+				<input type="text" name="initdate" class="form-control datetimepicker-input" data-target="#initdate"
+					value="{!! \Carbon\Carbon::parse($event->initdate)->format('d-m-Y H:i') !!}" required />
+				<div class="input-group-append" data-target="#initdate" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			{!! Form::label('enddate', 'Fecha de termino:') !!}
+			<div class="input-group date" id="enddate" data-target-input="nearest">
+				<input type="text" name="enddate" class="form-control datetimepicker-input" data-target="#enddate"
+					value="{!! \Carbon\Carbon::parse($event->enddate)->format('d-m-Y H:i') !!}" required />
+				<div class="input-group-append" data-target="#enddate" data-toggle="datetimepicker">
+					<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<br>
+			{!! Form::hidden('company_id', $event->company_id) !!}
+			{!! Form::submit('Guardar', ['class' => 'btn btn-primary','id' => 'editformButton']) !!}
+		</div>
+	</div>
+	{{-- <div class="col-md-12">
 		<hr>
 		<h2>Editar evento</h2>
 		<div class="form-group col-sm-3">
@@ -79,12 +113,9 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --}}
 	<!-- Submit Field -->
-	<div class="form-group col-sm-12">
-		{!! Form::hidden('company_id', $event->company_id) !!}
-		{!! Form::submit('Guardar', ['class' => 'btn btn-primary','id' => 'editformButton']) !!}
-	</div>
+
 	{!! Form::close() !!}
 </div>
 

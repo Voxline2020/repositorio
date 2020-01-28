@@ -40,9 +40,11 @@
 						@endif
 					@endforeach
 					{{-- Fin Pantallas inactivas --}}
-          <div class="dropdown-divider"></div>
+					{{-- Footer (ver todo) --}}
+          {{-- <div class="dropdown-divider"></div>
           <a style="text-align: center" href="" id="ver_todo" class="dropdown-item dropdown-footer">Ver todo</a>
-        	</div>
+					</div> --}}
+					{{-- Fin Footer --}}
       </li>
 			<!--/Fin Alertas -->
 			@endif

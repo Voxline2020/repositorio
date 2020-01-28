@@ -1,6 +1,6 @@
 <div class="table-responsive">
 	<table class="table table-hover" id="screens-table">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<tr>
 				<th>Pantallas</th>
 				<th>Estado</th>

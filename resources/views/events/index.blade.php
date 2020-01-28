@@ -3,15 +3,20 @@
 @section('content')
 
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-6">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
 		</div>
-		
-		<div class="col-md-3">
+		<div class="col-md-2">
+			<a  type="button" class="btn btn-secondary w-100" href="{!! route('clients.events.index') !!}">Limpiar</a>
+		</div>
+		<div class="col-md-2">
 			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company->id) !!}">Nuevo Evento</a>
 		</div>
+		<div class="col-md-2">
+			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
+		</div>
 	</div>
-	<br>
+	<hr>
 	{{ Form::open(['route' =>['events.filter_by_name'], 'method' => 'GET']) }}
 	<div class="row">
 
@@ -37,17 +42,14 @@
 	</div>
 <div class="row">
 	<br>
-	<div class="col-md-12">
+	<div class="col-md-9">
 		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'buscar evento']) !!}
 	</div>
-</div>
-<br>
-<div class="row">
 	<div class="col-md-3">
-		<button type="submit" class="btn btn-info w-100">Filtrar</button>
+		<button type="submit" class="btn btn-primary w-100">Buscar</button>
 	</div>
 </div>
-<br>
+<hr>
 <div class="row">
 @include('flash::message')
 	<div class="col-md-12">

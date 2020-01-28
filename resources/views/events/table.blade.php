@@ -1,6 +1,6 @@
 <div class="table-responsive">
 	<table class="table table-hover" id="events-table">>
-		<thead>
+		<thead class="thead-dark">
 			<tr>
 				<th>Nombre</th>
 				<th>Estado</th>
