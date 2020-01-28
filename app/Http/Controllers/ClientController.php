@@ -81,16 +81,15 @@ class ClientController extends Controller
 		//eventos asignados activos
 		$eventAssigns = EventAssignation::whereHas('content', function ($query) {
 			$query->whereHas('event', function ($query) {
-				$query->orderBy('initdate','DESC');
+				 $query->where('enddate','>=',\Carbon\Carbon::now());
 			});
-		})->where('screen_id',$id)->where('state',1)->orderBy('order','ASC')->paginate();
+		})->where('screen_id',$id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
 		//eventos asignados inactivos
 		$eventInactives = EventAssignation::whereHas('content', function ($query) {
 			$query->whereHas('event', function ($query) {
+				$query->where('enddate','>=',\Carbon\Carbon::now());
 			});
-		})->where('screen_id',$id)->where('state',0)->orderBy('order','ASC')->paginate();
-
-
+		})->where('screen_id',$id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
 
 		return view('client.screen.show')->with('screen',$screen)->with('events', $events)->with('eventAssigns', $eventAssigns)->with('eventInactives', $eventInactives);
 	}
@@ -136,6 +135,99 @@ class ClientController extends Controller
 			Flash::error('Ingrese un valor para generar la busqueda.');
     		return redirect(url()->previous());
 		}
+	}
+	public function filter_screen(Request $request)
+	{
+		$event_id = $request->event_id;
+		$name = $request->nameFiltrar;
+		$state = $request->state;
+		$sector = $request->sector;
+		$floor = $request->floor;
+		$type = $request->type;
+		if($name==null && $state==null && $sector==null && $floor==null && $type==null){
+			Flash::error('Debe ingresar almenos un filtro para la busqueda.');
+			return redirect(url()->previous());
+		}
+		//obtenemos los contenidos del evento
+		$event = Event::find($event_id);
+		$contentsList = [];
+    foreach ($event->contents AS $content) {
+			array_push($contentsList, $content->id);
+		};
+		//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+		$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+		//extraemos las pantallas de los contenidos asignados
+		$list = [];
+		foreach ($eventAssigns AS $asign) {
+			array_push($list, $asign->screen_id);
+		};
+		// $screens= screen::find($list);
+		//filtros
+		$screens=null;
+		if($name != null){
+			$screens= screen::where('name','LIKE',"%$name%")->orderBy('state', 'asc')->find($list);
+		}
+		if($state != null){
+			$screens = Screen::whereHas('computer', function ($query) {
+				$query->whereHas('store', function ($query) {
+					$query->where('company_id', Auth::user()->company_id);
+				});
+			})->where('state', $state )->find($list);
+		}
+		if($sector != null){
+			$screens= screen::where('sector','LIKE',"%$sector%")->orderBy('state', 'asc')->find($list);
+		}
+		if($floor != null){
+			$screens= screen::where('floor','LIKE',"%$floor%")->orderBy('state', 'asc')->find($list);
+		}
+		if($type != null){
+			$screens= screen::where('type','LIKE',"%$type%")->orderBy('state', 'asc')->find($list);
+		}
+		// dd($screens->count());
+		if($screens->count()==0){
+			Flash::info('No se ha encontrado ningun resultado.');
+			return redirect(url()->previous());
+		}
+		return view('client.events.show')->with('screens',$screens)->with('event',$event);
+
+
+
+
+		// return view('client.events.show');
+
+
+													// if($name != null || $state != null){
+
+													// 	if($name != null){
+													// 		$screens = Screen::whereHas('computer', function ($query) {
+													// 			$query->whereHas('store', function ($query) {
+													// 				$query->where('company_id', Auth::user()->company_id);
+													// 			});
+													// 		})->where('name','LIKE',"%$name%")->orderBy('state', 'asc')->paginate();
+													// 	}
+													// 	if($state != null){
+													// 		$screens = Screen::whereHas('computer', function ($query) {
+													// 			$query->whereHas('store', function ($query) {
+													// 				$query->where('company_id', Auth::user()->company_id);
+													// 			});
+													// 		})->where('state', $state )->orderBy('state', 'asc')->paginate();
+													// 	}
+													// 	if(count($screens)==0){
+													// 		// Flash::info('No se encontro ningun resultado.');
+													// 		// // return redirect(url()->previous());
+													// 	}
+													// 	if($name != null && $state != null){
+													// 		$screens = Screen::whereHas('computer', function ($query) {
+													// 			$query->whereHas('store', function ($query) {
+													// 				$query->where('company_id', Auth::user()->company_id);
+													// 			});
+													// 		})->where('name','LIKE',"%$name%")->where('state', $state )->orderBy('state', 'asc')->paginate();
+													// 	}
+													// 	return view('client.events.show',compact('screens','events','screensCount'));
+													// }else{
+													// 	// Flash::error('Ingrese un valor para generar la busqueda.');
+													// 	// 	return redirect(url()->previous());
+													// }
 	}
 	// public function changeUp($id , Request $request)
 	// {

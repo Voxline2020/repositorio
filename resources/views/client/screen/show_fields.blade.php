@@ -87,13 +87,17 @@
 					<td>{!! \Carbon\Carbon::parse($inactive->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 					<td>
 						<div class='btn-group'>
-							<a href="{!! route('events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+							<a href="{!! route('events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
 									class="fas fa-eye"></i></a>
-							{!! Form::model($screen,['route' => ['screens.changeOrder'], 'method' => 'put']) !!}
-							<a type="submit" href="#" class="btn btn-info"><i class="fas fa-sync-alt"></i></a>
-							{!! Form::close() !!}
+							<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
+							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
 							{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
-							<a type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></a>
+							{!! Form::hidden('content_id',$inactive->content->id) !!}
+							{!! Form::hidden('screen_id',$screen->id) !!}
+							{!! Form::hidden('order',$inactive->order) !!}
+							{!! Form::hidden('user_id',$inactive->user_id) !!}
+							{!! Form::hidden('state',$inactive->state) !!}
+							<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 							{!! Form::close() !!}
 						</div>
 					</td>
@@ -139,7 +143,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- FIN Modal -->
+	<!-- FIN Modal changeOrder -->
 	<!-- Modal AssignEvent-->
 	<div class="modal fade" id="assignEvent" tabindex="-1" role="dialog" aria-labelledby="assignEventLabel"
 		aria-hidden="true">

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Computer;
 use App\Models\Content;
 use App\Models\Event;
+use App\Models\EventAssignation;
 use App\Models\Company;
 use App\Models\Screen;
 use App\Models\Store;
@@ -48,72 +49,6 @@ class EventController extends Controller
     $listsStore = Store::all();
     return view('events.index', compact('events', 'listsStore'))->with('company', $company);
 
-    // $filter = $request->get('nameFiltrar');
-    // $filterSector = $request->get('sector');
-    // $filterFloor = $request->get('floor');
-    // $filterType = $request->get('type');
-    // $filterState = $request->get('state');
-    // $i = 0;
-    // $version_playlist_details = null;
-    // $screen_playlist_asignations = null;
-    // $event = Event::where('id', $id)->first();
-    // $screens2 = array();
-    // $contents = Content::where('event_id', $id)->paginate();
-    // foreach ($contents as $content) {
-    //   $version_playlist_details =  VersionPlaylistDetail::where('content_id', $content->id)->get();
-    //   if ($version_playlist_details != null) {
-    //     foreach ($version_playlist_details as $version_playlist_detail) {
-    //       $screen_playlist_asignations = \DB::table('screen_playlist_asignation')->where('version_id', $version_playlist_detail->version_id)->get();
-    //       if ($screen_playlist_asignations != null) {
-    //         foreach ($screen_playlist_asignations as $screen_playlist_asignation) {
-    //           if ($filter != null) {
-    //             $screens = Screen::where([
-    //               ['id', $screen_playlist_asignation->screen_id],
-    //               ['name', 'LIKE', "%$filter%"]
-    //             ])->first();
-    //           } else {
-    //             if ($filterSector != null) {
-    //               $screens = Screen::where([
-    //                 ['id', $screen_playlist_asignation->screen_id],
-    //                 ['sector', $filterSector]
-    //               ])->first();
-    //             } else {
-    //               if ($filterFloor != null) {
-    //                 $screens = Screen::where([
-    //                   ['id', $screen_playlist_asignation->screen_id],
-    //                   ['floor', $filterFloor]
-    //                 ])->first();
-    //               } else {
-    //                 if ($filterType != null) {
-    //                   $screens = Screen::where([
-    //                     ['id', $screen_playlist_asignation->screen_id],
-    //                     ['type', $filterType]
-    //                   ])->first();
-    //                 } else {
-    //                   if ($filterState != null) {
-    //                     $screens = Screen::where([
-    //                       ['id', $screen_playlist_asignation->screen_id],
-    //                       ['state', $filterState]
-    //                     ])->first();
-    //                   } else {
-    //                     $screens = Screen::where([
-    //                       ['id', $screen_playlist_asignation->screen_id]
-    //                     ])->first();
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //           }
-    //           if ($screens != null) {
-    //             $screens2[$i] = $screens;
-    //             $i++;
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // return view('events.ScreenShow', compact('screens2', 'event'));
   }
 
   /**
@@ -475,36 +410,20 @@ class EventController extends Controller
 
   public function showClient(Event $event, Request $request)
   {
-    //$screens_id = [];
-    // foreach ($event->contents as $key => $content) {
-    //   foreach ($content->versionPlaylistDetails as $versionPlaylistDetail) {
-    //     if ($versionPlaylistDetail->versionPlaylist->state == 1) {
-    //       foreach ($versionPlaylistDetail->versionPlaylist->screenPlaylistAsignations as $screenPlaylistAsignation) {
-    //         if ($screenPlaylistAsignation->active == 1) {
-    //           $screen = $screenPlaylistAsignation->screen;
-    //           array_push($screens_id, $screen->id);
-    //         }
-    //       }
-    //     }
-    //   }
-    // foreach ($event->contents AS $content) {
-    //   $screens = Screen::whereHas('playlist', function ($query) use ($content) {
-    //     $query->whereHas('versionPlaylists', function ($query) use ($content){
-    //       $query->whereHas('versionPlaylistDetails', function ($query) use ($content){
-    //         $query->where('content_id', $content->id);
-    //       });
-    //     });
-    //   })->get();
-    //   foreach($screens AS $screen){
-    //     array_push($screens_id, $screen->id);
-    //   }
-    // }
-    // $screens = Screen::find(array_unique($screens_id));
-    // if (isset($request['sectorFilter']) && !empty($request['sectorFilter'])) {
-    //   $screens = $screens->where('sector', ' like', '%' . $request['sectorFilter'] . '%');
-    // }
-
-    return view('client.events.show', compact('event'));
+		//obtenemos los contenidos del evento
+		$contentsList = [];
+    foreach ($event->contents AS $content) {
+			array_push($contentsList, $content->id);
+		};
+		//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+		$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+		//extraemos las pantallas de los contenidos asignados
+		$list = [];
+		foreach ($eventAssigns AS $asign) {
+			array_push($list, $asign->screen_id);
+		};
+		$screens= screen::find($list);
+    return view('client.events.show', compact('event'))->with('screens',$screens);
   }
 
   public function ScreenShow($id)

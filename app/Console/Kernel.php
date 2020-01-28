@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
 				//
 				'App\Console\Commands\ActivateEvents',
 				'App\Console\Commands\DesactivateEvents',
+				'App\Console\Commands\ChangeAssigns',
     ];
 
     /**
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
 			$schedule->command('activate:events')->everyMinute();
 			$schedule->command('desactivate:events')->everyMinute();
+			$schedule->command('change:assigns')->everyMinute();
     }
 
     /**

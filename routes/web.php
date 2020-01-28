@@ -173,6 +173,7 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
 	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
+	Route::get('filter_screen','ClientController@filter_screen')->name('clients.filter_screen');
 	Route::get('/events', "EventController@index")->name('clients.events.index');
 	Route::get('/events/{event}/', "EventController@showClient")->name('clients.events.show');
 

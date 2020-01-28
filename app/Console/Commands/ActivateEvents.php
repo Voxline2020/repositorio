@@ -38,23 +38,14 @@ class ActivateEvents extends Command
      */
     public function handle()
     {
-			//
-			$today = date('Y-m-d H:i:s');
+			$today=date('Y-m-d H:i:s');
 			$InactiveEvents = Event::where('state',0)
 			->whereDate('initdate', '<=', $today)
 			->whereDate('enddate', '>=', $today)
 			->get();
-
 			foreach($InactiveEvents AS $Inactive){
 				$Inactive->state = 1;
 				$Inactive->save();
-				foreach ($Inactive->contents as $content) {
-					foreach ($content->eventAssignations as $assignation) {
-						$assignation->state = 1;
-						$assgiantion->save();
-					}
-				}
 			}
-
     }
 }
