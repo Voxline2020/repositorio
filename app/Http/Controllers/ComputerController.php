@@ -42,7 +42,7 @@ class ComputerController extends AppBaseController
 			$query->where('company_id', Auth::user()->company_id);
 		})->paginate();
 		}
-		return view('computers.index', compact('companies', 'stores', 'lists','types'))
+		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))
 			->with('computers', $computer);
 	}
 	//mostrar computadores con id en especifico
@@ -133,17 +133,17 @@ class ComputerController extends AppBaseController
 				$jsonResponse['screens']['name'] = $screen->name;
 				$jsonResponse['screens']['width'] = $screen->width;
 				$jsonResponse['screens']['height'] = $screen->height;
-				foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
-					if($versionPlaylist->state == 1){
-						$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
-						foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
-							$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
-							$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
-							$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
-							$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
-						}
-					}
-				}
+				// foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
+				// 	if($versionPlaylist->state == 1){
+				// 		$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
+				// 		foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
+				// 			$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
+				// 			$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
+				// 			$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
+				// 			$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
+				// 		}
+				// 	}
+				// }
 			}
 			return response()->json($jsonResponse);
 		}
@@ -182,13 +182,24 @@ class ComputerController extends AppBaseController
 		return view('computers.index', compact('companies', 'stores', 'lists','types'))->with('computers', $computer);
 	}
 	//filtrar computadores dependiendo de la compañia y sucursal.
-	public function filter_by_company_store(Request $request)
+	public function filter_computers(Request $request)
 	{
 		$types= AccessType::all();
 		$lists = Company::all();
 		$stores = Store::all();
 		$companies = Company::all();
-		$computer = Computer::orWhere('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
+
+		$company = $request->company;
+		$store = $request->store;
+		$type = $request->type;
+		$code = $request->codeFiltrar;
+		if($company!=null){
+		// 	$computer = Computer::whereHas('store', function ($query) {
+		// 	$query->where('company_id', Auth::user()->company_id);
+		// })->where('code','LIKE',"%$filter%")->paginate();
+		}
+		$computer = Computer::Where('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
+
 		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))->with('computers', $computer);
 	}
 }

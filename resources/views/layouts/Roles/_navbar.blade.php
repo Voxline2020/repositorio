@@ -52,9 +52,6 @@
 				<a class="nav-link" href="{{route('dash') }}">Inicio</a>
 			</li>
 			@if (Auth::user()->hasRole('Administrador'))
-				<li class="nav-item {{ Route::is('playlist.index') ? 'active': null }}">
-					<a class="nav-link" href="{{ route('playlists.index') }}">Playlists</a>
-				</li>
 				{{-- <li class="nav-item {{ Route::is('events.index') ? 'active': null }}">
 					<a class="nav-link" href="{{ route('eventsOld.index') }}">Eventos</a>
 				</li> --}}

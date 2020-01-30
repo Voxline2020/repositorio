@@ -7,6 +7,7 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\Store;
+use App\Models\Computer;
 use Auth;
 use App\Repositories\CompanyRepository;
 use Flash;
@@ -29,9 +30,10 @@ class CompanyController extends AppBaseController
   //mostrar compañias
   public function index(Request $request)
   {
-    $companies = $this->companyRepository->all();
+		$computers = Computer::all();
+    $companies = Company::paginate();
     return view('companies.index')
-      ->with('companies', $companies);
+      ->with('companies', $companies)->with('computers', $computers);
   }
   //mostrar compañias con id en especifico
   public function show($id)

@@ -31,8 +31,8 @@ Route::group(['prefix' => 'contents'], function () {
 //SECTION Computers
 Route::resource('computers', 'ComputerController');
 Route::group(['prefix' => 'computers'], function () {
-	Route::get('filter_by_company_store','ComputerController@filter_by_company_store')->name('computers.filter_by_company_store');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
-	Route::get('filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
+	Route::get('filter/filter_computers','ComputerController@filter_computers')->name('computers.filter_computers');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
+	// Route::get('filter/filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
@@ -75,6 +75,10 @@ Route::group(['prefix' => 'events'], function () {
 });
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
+Route::resource('pivots', 'ComputerPivotController');
+Route::group(['prefix' => 'pivots'], function () {
+	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
+});
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');

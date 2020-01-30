@@ -9,7 +9,7 @@ class AccessType extends Model
 {
 	use Notifiable;
 
-	public $table = 'access_type';
+	public $table = 'access_types';
 
 
   public $fillable = [
@@ -45,5 +45,9 @@ class AccessType extends Model
 
   /**
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
-   **/
+	 **/
+	 public function Computers()
+  {
+		return $this->hasMany(\App\Models\Computer::class, 'id','type_id');
+	}
 }
