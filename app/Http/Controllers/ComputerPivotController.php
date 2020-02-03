@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateComputerRequest;
 use App\Http\Requests\UpdateComputerRequest;
+use App\Models\ComputerOnPivot;
 use App\Models\ComputerPivot;
+use App\Models\Computer;
 use App\Models\Content;
-use Carbon\Carbon;
 use App\Models\Store;
+use App\Models\Company;
 use App\Repositories\ComputerPivotRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\FormRequest;
+use Carbon\Carbon;
+use Flash;
 use Response;
 
 class ComputerPivotController extends AppBaseController
@@ -25,37 +30,66 @@ class ComputerPivotController extends AppBaseController
   }
   public function index(Request $request)
   {
-		dd($request);
-		// $pivots = ComputerPivot::paginate();
-		// return view('pivots.index')->with('pivots',$pivots);
+		$pivots = ComputerPivot::paginate();
+		return view('pivots.index')->with('pivots',$pivots);
   }
   public function show($id)
   {
-
+		$pivot = ComputerPivot::find($id);
+		$onpivots = ComputerOnPivot::where('computer_pivot_id',$id)->paginate();
+		return view('pivots.show')->with('pivot',$pivot)->with('onpivots',$onpivots);
   }
 
   public function create()
   {
-
+		$pivots = ComputerPivot::all();
+		$companies = Company::all();
+		$stores = store::all();
+		return view('pivots.create')->with('pivots',$pivots)->with('companies',$companies)->with('stores',$stores);
   }
 
-  public function store(CreateComputerRequest $request)
+  public function store(Request $request)
   {
-
+		$input = $request->all();
+		$pivot = $this->computerPivotRepository->create($input);
+		Flash::success('Computador pivote agregado con exito.');
+		return redirect(route('pivots.index'));
   }
 
-  public function edit($id, $store_id)
+  public function edit($id)
   {
 
+		$companies = Company::all();
+		$stores = store::all();
+		$pivot = ComputerPivot::find($id);
+		if (empty($pivot)) {
+			Flash::error('Computador pivote no encontrado');
+			return redirect(route('pivots.index'));
+		}
+		return view('pivots.edit')->with('pivot',$pivot)->with('companies',$companies)->with('stores',$stores);
   }
 
-  public function update($id, UpdateComputerRequest $request)
+  public function update($id, Request $request)
   {
-
+		$pivot = $this->computerPivotRepository->find($id);
+		if (empty($pivot)) {
+			Flash::error('Computador pivote no encontrado');
+			return redirect(route('pivots.index'));
+		}
+		$pivot = $this->computerPivotRepository->update($request->all(), $id);
+		Flash::success('Computador pivote editado');
+		return redirect(route('pivots.index'));
   }
   public function destroy($id)
   {
-
+		$pivot = $this->computerPivotRepository->find($id);
+		if (empty($pivot)) {
+			Flash::error('Computador pivote no encontrado');
+			return redirect(route('pivots.index'));
+		}
+		$this->computerPivotRepository->delete($id);
+		Flash::success('Computador pivote borrado');
+		return redirect(route('pivots.index'));
   }
 
   public function getInfo($code, $pass)

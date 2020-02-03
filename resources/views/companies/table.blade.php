@@ -66,7 +66,7 @@
 						<a href="#" class="btn btn-danger w-100"><i class="fas fa-fire"></i></a>
 						<a href="{{ route('companies.events.index', [$company]) }}" class="btn btn-warning w-100"><i class="fas fa-calendar"></i></a>
 						<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100"><i class="fas fa-desktop"></i></a>
-						<a href="{{ route('pivots.index', [$company->id]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
+						<a href="{{ route('pivots.index', [$company]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
 					</div>
 				</td>
 			</tr>

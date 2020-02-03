@@ -53,7 +53,14 @@ class ComputerPivot extends Model
    * @var array
    */
   public static $rules = [
-		'name' => 'required'
+		'name' => 'required',
+		'code'=>'required',
+		'pass'=>'required',
+		'ip'=>'required',
+		'location'=>'required',
+		'teamviewer_code'=>'required',
+		'teamviewer_pass'=>'required',
+		'company_id'=>'required'
   ];
 
   /**
@@ -67,5 +74,8 @@ class ComputerPivot extends Model
   {
     return $this->hasMany(\App\Models\ComputerOnPivot::class);
 	}
-
+	public function company()
+  {
+    return $this->belongsTo(\App\Models\Company::class,'company_id','id');
+	}
 }

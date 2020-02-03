@@ -8,7 +8,7 @@
 		<button type="button" class="btn btn-secondary w-100" onclick="location.href='/computers'">Limpiar </button>
 	</div>
 	<div class="col-md-3 text-right">
-		<a class="btn btn-success w-100" href="{!! route('computers.create') !!}">Nuevo Pivote</a>
+		<a class="btn btn-success w-100" href="{!! route('pivots.create') !!}">Nuevo Pivote</a>
 	</div>
 </div>
 <hr>
@@ -64,19 +64,3 @@
 </div>
 @endsection
 
-{{-- @section('script')
-<script>
-$("#company").change(function(event){
-	var stores = {!! $stores !!}
-	var selected = $('#company').val();
-	$('#store').empty();
-	$("#store").append("<option null selected disabled>Tienda/Sucursal</option>");
-	for(i=0; i<stores.length; i++){
-		if(stores[i].company_id==selected){
-			$("#store").append("<option value='"+stores[i].id+"'>"+stores[i].name+"</option>");
-		}
-	}
-});
-$("#company").val();
-</script>
-@endsection --}}

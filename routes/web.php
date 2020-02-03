@@ -42,6 +42,16 @@ Route::group(['prefix' => 'pivot'], function () {
 	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
 
+//SECTION Pivots
+Route::resource('pivots', 'ComputerPivotController');
+Route::group(['prefix' => 'pivots'], function () {
+	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
+	Route::get('/create', 'ComputerPivotController@create')->name('pivots.create');
+	Route::post('/', 'ComputerPivotController@store')->name('pivots.store');
+	Route::get('/{pivot}/edit', 'ComputerPivotController@edit')->name('pivots.edit');
+	Route::put('/{pivot}', 'ComputerPivotController@update')->name('pivots.update');
+});
+
 //SECTION Users
 Route::resource('users', 'UserController');
 Route::group(['prefix' => 'users'], function () {
@@ -75,10 +85,6 @@ Route::group(['prefix' => 'events'], function () {
 });
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
-Route::resource('pivots', 'ComputerPivotController');
-Route::group(['prefix' => 'pivots'], function () {
-	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
-});
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');
