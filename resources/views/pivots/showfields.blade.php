@@ -16,13 +16,13 @@
 				<td>{!! $onpivot->computer->location !!}</td>
 				<td>{!! $onpivot->computer->type->name !!}</td>
 				<td>
-					{{-- {!! Form::open(['route' => ['computers.destroy', $onpivot->id], 'method' => 'delete']) !!} --}}
+					{!! Form::open(['route' => ['pivots.destroyOnpivot', $onpivot->id], 'method' => 'delete']) !!}
 					<div class='btn-group'>
-						<a href="{{route('screens.show',[$onpivot->computer->id]) }}" class='btn btn-primary btn-xs'><i class="fas fa-eye"></i></a>
-						<a href="" class='btn btn-danger btn-xs'><i class="fas fa-trash"></i></a>
-						{{-- {!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('desea eliminar?')"]) !!} --}}
+						{{-- <a href="{{route('screens.show',[$onpivot->computer->id]) }}" class='btn btn-primary btn-xs'><i class="fas fa-eye"></i></a> --}}
+						{{-- <a href="#" class='btn btn-danger btn-xs'><i class="fas fa-trash"></i></a> --}}
+						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('desea eliminar?')"]) !!}
 					</div>
-					{{-- {!! Form::close() !!} --}}
+					{!! Form::close() !!}
 				</td>
 			</tr>
 			@endforeach

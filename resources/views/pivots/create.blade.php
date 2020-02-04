@@ -11,6 +11,9 @@
 				Nuevo Pivote
 			</h2>
 		</div>
+		<div class="col-md-12">
+			@include('flash::message')
+		</div>
 		<div class="col-sm-12">
 				{!! Form::open(['route' => 'pivots.store']) !!}
 				<div class="row">

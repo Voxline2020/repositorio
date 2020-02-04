@@ -17,6 +17,9 @@
 				<div class="col-lg-6 py-1 px-1">
 							<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100">Computadores</a>
 					</div>
+					<div class="col-lg-6 py-1 px-1">
+						<a href="{{ route('pivots.index', [$company]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
+					</div>
 			</div>
 		</div>
 	</div>

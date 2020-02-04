@@ -34,7 +34,7 @@ class ComputerOnPivot extends Model
   ];
 
 	protected $attributes = [
-			'name' => ""
+
 	];
 
   /**
@@ -43,7 +43,7 @@ class ComputerOnPivot extends Model
    * @var array
    */
   public static $rules = [
-		'name' => 'required'
+
   ];
 
 

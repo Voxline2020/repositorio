@@ -28,7 +28,7 @@
 					<div class='btn-group'>
 						<a href="{{route('pivots.show',[$pivot->id]) }}" class='btn btn-primary btn-xs'><i class="fas fa-eye"></i></a>
 						<a href="{{route('pivots.edit',[$pivot->id]) }}" class='btn btn-warning btn-xs'><i class="fas fa-edit"></i></a>
-						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('desea eliminar?')"]) !!}
+						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('¿seguro que desea eliminar este elemento?')"]) !!}
 					</div>
 					{!! Form::close() !!}
 

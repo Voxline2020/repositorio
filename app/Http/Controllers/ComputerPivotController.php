@@ -21,12 +21,12 @@ use Response;
 class ComputerPivotController extends AppBaseController
 {
   /** @var  StoreRepository */
-  private $computerPivotRepository;
+	private $computerPivotRepository;
 
   public function __construct(ComputerPivotRepository $computerPivotRepo)
   {
 		$this->middleware('auth')->except('getInfo');
-    $this->computerPivotRepository = $computerPivotRepo;
+		$this->computerPivotRepository = $computerPivotRepo;
   }
   public function index(Request $request)
   {
@@ -37,7 +37,10 @@ class ComputerPivotController extends AppBaseController
   {
 		$pivot = ComputerPivot::find($id);
 		$onpivots = ComputerOnPivot::where('computer_pivot_id',$id)->paginate();
-		return view('pivots.show')->with('pivot',$pivot)->with('onpivots',$onpivots);
+		$computers = Computer::whereHas('store', function ($query) use ($pivot) {
+			$query->where('company_id', $pivot->company_id);
+		})->paginate();
+		return view('pivots.show')->with('pivot',$pivot)->with('onpivots',$onpivots)->with('computers',$computers);
   }
 
   public function create()
@@ -50,6 +53,11 @@ class ComputerPivotController extends AppBaseController
 
   public function store(Request $request)
   {
+		$validate = ComputerPivot::where('name',$request->name)->where('company_id',$request->company_id);
+		if ($validate->count()!=0){
+			Flash::error('Ese nombre de pivote ya existe.');
+			return redirect(route('pivots.create'));
+		}
 		$input = $request->all();
 		$pivot = $this->computerPivotRepository->create($input);
 		Flash::success('Computador pivote agregado con exito.');
@@ -90,8 +98,26 @@ class ComputerPivotController extends AppBaseController
 		$this->computerPivotRepository->delete($id);
 		Flash::success('Computador pivote borrado');
 		return redirect(route('pivots.index'));
-  }
-
+	}
+	public function storeOnpivot($id,Request $request)
+  {
+		// dd($request);
+		$input = $request->all();
+		ComputerOnPivot::create($input);
+		Flash::success('Computador agregado con exito.');
+		return redirect()->route('pivots.show', [$id]);
+	}
+	public function destroyOnpivot($id)
+  {
+		$onpivot = ComputerOnPivot::find($id);
+		if (empty($onpivot)) {
+			Flash::error('Computador no encontrado');
+			return redirect()->route('pivots.show', [$onpivot->computer_pivot_id]);
+		}
+		$onpivot->delete();
+		Flash::success('Asignacion eliminada.');
+		return redirect()->route('pivots.show', [$onpivot->computer_pivot_id]);
+	}
   public function getInfo($code, $pass)
   {
     $pivot = ComputerPivot::with(['onpivots','onpivots.computer','onpivots.computer.screens', 'onpivots.computer.screens'])->where('code', $code)->where('pass', $pass)->first();
@@ -106,6 +132,7 @@ class ComputerPivotController extends AppBaseController
           $jsonResponse['computers'][$key]['screens'][$key2]['width'] = $screen->width;
           $jsonResponse['computers'][$key]['screens'][$key2]['height'] = $screen->height;
 					$jsonResponse['computers'][$key]['screens'][$key2]['state'] = $screen->state;
+					$jsonResponse['computers'][$key]['screens'][$key2]['version'] = $screen->version;
           // foreach ($screen->playlist->versionPlaylists as $versionPlaylist); {
           //   if ($versionPlaylist->state == 1) {
 					// 		$jsonResponse['computers'][$key]['screens'][$key2]['version'] = $versionPlaylist->version;

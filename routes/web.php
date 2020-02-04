@@ -50,6 +50,9 @@ Route::group(['prefix' => 'pivots'], function () {
 	Route::post('/', 'ComputerPivotController@store')->name('pivots.store');
 	Route::get('/{pivot}/edit', 'ComputerPivotController@edit')->name('pivots.edit');
 	Route::put('/{pivot}', 'ComputerPivotController@update')->name('pivots.update');
+	Route::delete('/{pivot}', 'ComputerPivotController@destroy')->name('pivots.destroy');
+	Route::post('/{pivot}', 'ComputerPivotController@storeOnpivot')->name('pivots.storeOnpivot');
+	Route::delete('/{pivot}/onpivot', 'ComputerPivotController@destroyOnpivot')->name('pivots.destroyOnpivot');
 });
 
 //SECTION Users
