@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-	@include('flash::message')
 	<div class="row">
 		<div class="col-md-9">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
@@ -11,7 +10,7 @@
 			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company) !!}">Nuevo Evento</a>
 		</div>
 	</div>
-	<br>
+	<hr>
 	{{ Form::open(['route' =>['events.filter_by_name'], 'method' => 'GET']) }}
 	<div class="row">
 
@@ -46,8 +45,12 @@
 		<button type="submit" class="btn btn-primary w-100">Buscar</button>
 	</div>
 </div>
-<br>
-<br>
+<hr>
+<div class="row">
+	<div class="col-md-12">
+		@include('flash::message')
+	</div>
+</div>
 <div class="row">
 	<div class="col-md-12">
 		@include('companies.events.table')

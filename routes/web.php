@@ -42,18 +42,19 @@ Route::group(['prefix' => 'pivot'], function () {
 	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
 
-//SECTION Pivots
-Route::resource('pivots', 'ComputerPivotController');
-Route::group(['prefix' => 'pivots'], function () {
-	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
-	Route::get('/create', 'ComputerPivotController@create')->name('pivots.create');
-	Route::post('/', 'ComputerPivotController@store')->name('pivots.store');
-	Route::get('/{pivot}/edit', 'ComputerPivotController@edit')->name('pivots.edit');
-	Route::put('/{pivot}', 'ComputerPivotController@update')->name('pivots.update');
-	Route::delete('/{pivot}', 'ComputerPivotController@destroy')->name('pivots.destroy');
-	Route::post('/{pivot}', 'ComputerPivotController@storeOnpivot')->name('pivots.storeOnpivot');
-	Route::delete('/{pivot}/onpivot', 'ComputerPivotController@destroyOnpivot')->name('pivots.destroyOnpivot');
-});
+// SECTION Pivots
+// Route::resource('pivots', 'ComputerPivotController');
+// Route::group(['prefix' => 'pivots'], function () {
+// 	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
+// 	Route::get('/create', 'ComputerPivotController@create')->name('pivots.create');
+// 	Route::post('/', 'ComputerPivotController@store')->name('pivots.store');
+// 	Route::get('/{pivot}/edit', 'ComputerPivotController@edit')->name('pivots.edit');
+// 	Route::put('/{pivot}', 'ComputerPivotController@update')->name('pivots.update');
+// 	Route::delete('/{pivot}', 'ComputerPivotController@destroy')->name('pivots.destroy');
+// 	Route::post('/{pivot}', 'ComputerPivotController@storeOnpivot')->name('pivots.storeOnpivot');
+// 	Route::delete('/{pivot}/onpivot', 'ComputerPivotController@destroyOnpivot')->name('pivots.destroyOnpivot');
+// 	Route::get('filter/filter_by', 'ComputerPivotController@filter_by')->name('pivots.filter_by');
+// });
 
 //SECTION Users
 Route::resource('users', 'UserController');
@@ -102,17 +103,19 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
 	});
-
-	//BASE
-	// Route::group(['prefix' => '{company}/stores'], function () {
-	// 	Route::get('/', 'CompanyController@indexStore')->name('companies.stores.index');
-	// 	Route::get('/create', 'CompanyController@createStore')->name('companies.stores.create');
-	// 	Route::post('/', 'CompanyController@storeStore')->name('companies.stores.store');
-	// 	Route::get('/{store}/edit', 'CompanyController@editStore')->name('companies.stores.edit');
-	// 	Route::put('/{store}', 'CompanyController@updateStore')->name('companies.stores.update');
-	// 	Route::get('/{store}', 'CompanyController@showStore')->name('companies.stores.show');
-	// 	Route::delete('/{store}', 'CompanyController@destroyStore')->name('companies.stores.destroy');
-	// });
+	//pivots
+	Route::group(['prefix' => '{company}/pivots'], function () {
+		Route::get('/', 'CompanyController@indexPivot')->name('companies.pivots.index');
+		Route::get('/create', 'CompanyController@createPivot')->name('companies.pivots.create');
+		Route::post('/', 'CompanyController@storePivot')->name('companies.storePivot');
+		Route::get('/{pivot}', 'CompanyController@showPivot')->name('companies.pivots.show');
+		Route::get('/{pivot}/edit', 'CompanyController@editPivot')->name('companies.pivots.edit');
+		Route::put('/{pivot}', 'CompanyController@updatePivot')->name('companies.pivots.update');
+		Route::delete('/{pivot}', 'CompanyController@destroyPivot')->name('companies.pivots.destroy');
+		Route::post('/{pivot}', 'CompanyController@storeOnpivot')->name('companies.storeOnpivot');
+		Route::delete('/{pivot}/onpivot', 'CompanyController@destroyOnpivot')->name('companies.destroyOnpivot');
+		Route::get('filter/filter_by', 'CompanyController@filter_by')->name('companies.pivots.filter_by');
+	});
 
 	//Stores
 	Route::group(['prefix' => '{company}/stores'], function () {
@@ -124,6 +127,7 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::put('/{store}', 'CompanyController@updateStore')->name('companies.stores.update');
 		Route::get('/{store}', 'CompanyController@showStore')->name('companies.stores.show');
 		Route::delete('/{store}', 'CompanyController@destroyStore')->name('companies.stores.destroy');
+		Route::get('/filter/filterStore', 'CompanyController@filterStore')->name('companies.filterStore');
 
 		Route::group(['prefix' => '{store}/computers'], function () {
 			// Route::get('/', 'CompanyController@indexStoreComputer')->name('companies.stores.computers.index');

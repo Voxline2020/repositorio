@@ -30,8 +30,11 @@ class ComputerPivotController extends AppBaseController
   }
   public function index(Request $request)
   {
+		$companies = Company::all();
+		$stores = Store::all();
 		$pivots = ComputerPivot::paginate();
-		return view('pivots.index')->with('pivots',$pivots);
+		return view('pivots.index')->with('pivots',$pivots)->with('companies',$companies)
+		->with('stores',$stores);
   }
   public function show($id)
   {
@@ -101,7 +104,11 @@ class ComputerPivotController extends AppBaseController
 	}
 	public function storeOnpivot($id,Request $request)
   {
-		// dd($request);
+		$validate = ComputerOnPivot::where('computer_id',$request->computer_id)->where('computer_pivot_id',$request->computer_pivot_id);
+		if($validate->count()!=0){
+			Flash::error('Computador ya asignado en este pivote.');
+			return redirect()->route('pivots.show', [$id]);
+		}
 		$input = $request->all();
 		ComputerOnPivot::create($input);
 		Flash::success('Computador agregado con exito.');
@@ -117,6 +124,33 @@ class ComputerPivotController extends AppBaseController
 		$onpivot->delete();
 		Flash::success('Asignacion eliminada.');
 		return redirect()->route('pivots.show', [$onpivot->computer_pivot_id]);
+	}
+	public function filter_by(Request $request)
+	{
+		$companies = Company::all();
+		$stores = Store::all();
+		$pivots = ComputerPivot::paginate();
+		if($request->nameFiltrar==null&&$request->codeFiltrar==null&&$request->company==null&&$request->store==null){
+			Flash::error('Debes ingresar almenos un filtro para la busqueda.');
+			return redirect(route('pivots.index'));
+		}
+		if($request->company!=null){
+			$pivots = ComputerPivot::where('company_id',$request->company)->paginate();
+		}
+		if($request->store!=null){
+			$pivots = ComputerPivot::where('location',$request->store)->paginate();
+		}
+		if($request->codeFiltrar!=null){
+			$pivots = ComputerPivot::where('code','like',"%$request->codeFiltrar%")->paginate();
+		}
+		if($request->nameFiltrar!=null){
+			$pivots = ComputerPivot::where('name','like',"%$request->nameFiltrar%")->paginate();
+		}
+		// dd($request);
+		if($pivots->count()==0){
+			Flash::error('No se encontro ningun resultado.');
+		}
+		return view('pivots.index')->with('pivots',$pivots)->with('companies',$companies)->with('stores',$stores);
 	}
   public function getInfo($code, $pass)
   {

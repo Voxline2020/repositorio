@@ -51,7 +51,9 @@
 </div>
 <hr>
 <div class="row">
-@include('flash::message')
+	<div class="col-md-12">
+		@include('flash::message')
+	</div>
 	<div class="col-md-12">
 		@include('companies.events.table')
 	</div>

@@ -24,7 +24,7 @@
 			<tbody>
 				@if($event->contents->count() == 0)
 				<tr>
-					<td>Aun no hay contenido.</td>
+					<td>No hay contenido.</td>
 				</tr>
 				@endif
 				@foreach($event->contents as $content)

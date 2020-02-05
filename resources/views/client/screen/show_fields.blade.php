@@ -53,7 +53,7 @@
 			@endforeach
 			@else
 			<tr>
-				<td>Aun no hay eventos asignados.</td>
+				<td>No hay eventos asignados.</td>
 				<td></td>
 				<td></td>
 				<td></td>

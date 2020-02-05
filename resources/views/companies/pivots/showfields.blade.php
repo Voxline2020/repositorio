@@ -16,11 +16,11 @@
 				<td>{!! $onpivot->computer->location !!}</td>
 				<td>{!! $onpivot->computer->type->name !!}</td>
 				<td>
-					{!! Form::open(['route' => ['pivots.destroyOnpivot', $onpivot->id], 'method' => 'delete']) !!}
+					{!! Form::open(['route' => ['companies.destroyOnpivot',$onpivot->id,'company'=>$pivot->company_id], 'method' => 'delete']) !!}
 					<div class='btn-group'>
 						{{-- <a href="{{route('screens.show',[$onpivot->computer->id]) }}" class='btn btn-primary btn-xs'><i class="fas fa-eye"></i></a> --}}
 						{{-- <a href="#" class='btn btn-danger btn-xs'><i class="fas fa-trash"></i></a> --}}
-						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('desea eliminar?')"]) !!}
+						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => "return confirm('¿Seguro que desea eliminar?')"]) !!}
 					</div>
 					{!! Form::close() !!}
 				</td>
