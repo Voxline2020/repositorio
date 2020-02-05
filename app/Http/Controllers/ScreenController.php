@@ -13,8 +13,11 @@ use App\Models\Store;
 use App\Models\Screen;
 use App\Models\Computer;
 use App\Models\Content;
+use App\Models\Event;
+use App\Models\EventAssignation;
 use App\Models\VersionPlaylistDetail;
 use App\Models\ScreenPlaylistAsignation;
+use Carbon\Carbon;
 use Flash;
 use Response;
 
@@ -30,14 +33,17 @@ class ScreenController extends AppBaseController
 
 	public function __construct(ScreenRepository $screenRepo)
 	{
+		$this->middleware('admin')->except(['AssignContent','ScreenPlaylistAsign','changeStatus','filter_by_name','eventAssign','changeOrder','cloneEvent']);
 		$this->screenRepository = $screenRepo;
 	}
 	//mostrar pantallas
 	public function index(Request $request)
 	{
+		$computers = Computer::all();
 		$screens = $this->screenRepository->all();
 		return view('screen.index')
-			->with('screens', $screens);
+			->with('screens', $screens)
+			->with('computers', $computers);
 	}
 	//mostrar pantallas con id en especifico
 	public function show($id)
@@ -150,5 +156,87 @@ class ScreenController extends AppBaseController
 			compact('content')
 		);
 	}
-
+	public function changeStatus(Request $request, $id)
+	{
+		$screen = $this->screenRepository->find($id);
+		$screen->state = $request['state'];
+		if (empty($request)) {
+			Flash::error('Error');
+			return redirect(url()->previous());
+		}
+		$screen->save();
+		Flash::success('Estado actualizado');
+		return redirect(url()->previous($screen));
+	}
+	public function eventAssign($id, Request $request)
+	{
+		// $request->merge(['slug' => Str::slug($request['name'])]);
+		$screen=Screen::find($id);
+		$event = Event::find($request->event_id);
+		$contents = Content::where('event_id',$request->event_id)
+		->where('width',$screen->width)
+		->where('height',$screen->height)
+		->get();
+		if($contents->count()!=1){
+			foreach($contents AS $content){
+				$request->merge([
+				"screen_id"=> $id,
+				"state"=>$event->state,
+				"content_id"=>$content->id,
+				]);
+				$input = $request->all();
+				EventAssignation::create($input);
+			}
+		}else{
+			$request->merge([
+				"screen_id"=> $id,
+				"state"=>$event->state,
+				"content_id"=>$contents[0]->id,
+				]);
+				$input = $request->all();
+				EventAssignation::create($input);
+		}
+		Flash::success('Evento asignado exitosamente');
+		return redirect(url()->previous($screen));
+	}
+	public function changeOrder(Request $request)
+	{
+		// validaciones
+		if($request->neworder==null){
+			Flash::error('Debes ingresar un nuevo Nº de orden.');
+			return redirect(url()->previous());
+		}
+		if($request->screen==null){
+			Flash::error('No se ha podido realizar la operación.');
+			return redirect(url()->previous());
+		}
+		if($request->id==null){
+			Flash::error('No se ha podido realizar la operación.');
+			return redirect(url()->previous());
+		}
+		//traemos la asignacion
+		$assign=EventAssignation::find($request->id);
+		//traemos la pantalla
+		$screen=Screen::find($request->screen);
+		//asignamos los nuevos valores y guradamos
+		$assign->order = $request->neworder;
+		$screen->version = $screen->version+1;
+		$assign->save();
+		$screen->save();
+		Flash::success('Se ha cambiado el Nº de orden correctamente.');
+		return redirect(url()->previous());
+	}
+	public function cloneEvent(Request $request)
+	{
+		// extraemos los datos del elemento original
+		$input = $request->all();
+		//cambiamos version en pantalla
+		$screen=Screen::find($request->screen_id);
+		$screen->version = $screen->version+1;
+		$screen->save();
+		//creamos el nuevo elemento clonado
+		EventAssignation::create($input);
+		Flash::success('Se ha clonado el elemento correctamente.');
+		return redirect(url()->previous());
+	}
 }

@@ -8,7 +8,7 @@
         </div>
         <div class="col-sm-12">
           <h1>
-             Playlist
+             {{$playlist->name}}
           </h1>
         </div>
         <div class="col-sm-12">

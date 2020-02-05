@@ -20,14 +20,17 @@ class StoreController extends AppBaseController
 
 	public function __construct(StoreRepository $storeRepo)
 	{
+		$this->middleware('admin');
 		$this->storeRepository = $storeRepo;
 	}
 	//Mostrar sucursales
 	public function index(Request $request)
 	{
+		$id = auth()->user()->company_id;
+    	$company = Company::where('id', $id)->first();
 		$stores = $this->storeRepository->all();
 		return view('store.index')
-			->with('stores', $stores);
+			->with('stores', $stores)->with('company', $company);
 	}
 	//Mostrar sucursales con id en especifico
 	public function show($id)

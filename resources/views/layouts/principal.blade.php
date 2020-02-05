@@ -7,7 +7,7 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-	<title>{{ config('app.name', 'Laravel') }}</title>
+	<title>{{ config('app.name', 'VxCMS') }}</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -24,7 +24,7 @@
 <body>
 	<div id="app">
 		@auth
-			@include('layouts.roles._navbar')
+		@include('layouts.roles._navbar')
 		@endauth
 		<div class="container py-4 px-5" style="background-color: white ">
 			@yield('content')
@@ -40,7 +40,6 @@
 
 	<!-- Languaje -->
 	<script>
-
 		$(function () {
 			$('.js-select2').select2({
 				tags: false,
@@ -48,6 +47,17 @@
 			});
 		});
 	</script>
+
+<script>
+	$('#changeOrder').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var id = button.data('id')
+		var screen = button.data('screen')
+		var modal = $(this)
+		modal.find('input[name="id"]').val(id)
+		modal.find('input[name="screen"]').val(screen)
+	})
+</script>
 	@yield('script')
 </body>
 

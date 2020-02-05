@@ -53,7 +53,7 @@ class Event extends Model
         'name' => 'string',
         'initdate' => 'dateTime-local',
         'enddate' => 'dateTime-local',
-        'state' => 'boolean',
+        'state' => 'integer',
         'slug' => 'string',
 			'company_id' =>'integer'
 		];

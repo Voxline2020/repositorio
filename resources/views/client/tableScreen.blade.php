@@ -1,12 +1,11 @@
 <div class="table-responsive">
 	<table class="table table-hover" id="screens-table">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<tr>
 				<th>Pantallas</th>
 				<th>Estado</th>
 				<th>Sucursal</th>
 				<th>Ultimo chequeo</th>
-				<th>Capturas</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
@@ -15,23 +14,18 @@
 			<tr>
 				<td>{!! $screen->name !!}</td>
 				@if($screen->state==0)
-				<td style="color:#FF0000;">Inactivo</td>
+				<td style="color:#FF0000">Inactivo</td>
 				@endif
 				@if($screen->state==1)
-				<td style="color:#01DF01;">Activo</td>
+				<td style="color:#01DF01">Activo</td>
 				@endif
-				<td>{{$screen->computer->store->name}}</td>
-				<td>09:30 15/10/2019</td>
 				<td>
-					<a href="#" class="btn btn-primary"><i
-					class="fas fa-camera"></i></a>
+					{{$screen->computer->store->name}}
 				</td>
+				<td>{{$screen->updated_at}}</td>
 				<td>
 					<div class='btn-group'>
-							<a href="#" class="btn btn-info"><i
-							class="fas fa-info-circle"></i></a>
-							{{-- <a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}" class="btn btn-info"><i
-									class="fas fa-info-circle"></i></a> --}}
+							<a href="{{ route('clients.show',[$screen->id]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a>
 					</div>
 				</td>
 			</tr>

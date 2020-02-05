@@ -1,6 +1,6 @@
 <div class="table-responsive">
-	<table class="table table-hover">
-		<thead>
+	<table class="table table-hover" id="events-table">>
+		<thead class="thead-dark">
 			<tr>
 				<th>Nombre</th>
 				<th>Estado</th>
@@ -40,4 +40,5 @@
 			@endforeach
 		</tbody>
 	</table>
+	{{ $events->links() }}
 </div>

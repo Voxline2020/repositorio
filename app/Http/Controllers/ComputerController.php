@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateComputerRequest;
 use App\Http\Requests\UpdateComputerRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\ComputerRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
@@ -23,6 +24,7 @@ class ComputerController extends AppBaseController
 
 	public function __construct(ComputerRepository $computerRepo)
 	{
+		$this->middleware('admin');
 		$this->computerRepository = $computerRepo;
 	}
 	//mostrar computadores
@@ -32,8 +34,15 @@ class ComputerController extends AppBaseController
 		$lists = Company::all();
 		$stores = Store::all();
 		$companies = Company::all();
-		$computer = $this->computerRepository->all();
-		return view('computers.index', compact('companies', 'stores', 'lists','types'))
+		// $computer = $this->computerRepository->all();
+		if(Auth::user()->company_id == null){
+			$computer = Computer::whereHas('store', function ($query) {})->paginate();
+		}else{
+		$computer = Computer::whereHas('store', function ($query) {
+			$query->where('company_id', Auth::user()->company_id);
+		})->paginate();
+		}
+		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))
 			->with('computers', $computer);
 	}
 	//mostrar computadores con id en especifico
@@ -41,21 +50,25 @@ class ComputerController extends AppBaseController
 	{
 		$computer = Computer::where('store_id', $id)->paginate();
 		return view(
-			'computer.index',
+			'computers.index',
 			['computers' => $computer]
 		);
 	}
-
-
-
 
 	//Creacion computadores
 	//Vista de creacion
 	public function create()
 	{
-		$types = AccessType::all();
+		// $types = AccessType::all();
+		// $stores = Store::all();
+		// return view('computer.create', compact('stores', 'types'));
+
+		$types= AccessType::all();
+		$lists = Company::all();
 		$stores = Store::all();
-		return view('computer.create', compact('stores', 'types'));
+		$companies = Company::all();
+		$computer = $this->computerRepository->all();
+		return view('computers.create', compact('companies', 'stores', 'lists','types'));
 	}
 
 	//Request de creacion (POST)
@@ -71,13 +84,16 @@ class ComputerController extends AppBaseController
 	public function edit($id, $store_id)
 	{
 		$types = AccessType::all();
+		$lists = Company::all();
 		$stores = Store::where('id', $store_id)->get();
+		$companies = Company::all();
 		$computer = $this->computerRepository->find($id);
+		// $computer = Computer::where('store_id', $id);
 		if (empty($computer)) {
 			Flash::error('Computador no encontrado');
 			return redirect(route('computers.index'));
 		}
-		return view('computer.edit', compact('stores', 'types'))->with('computer', $computer);
+		return view('computers.edit', compact('stores', 'types'))->with('computer', $computer);
 	}
 	//Request de editar (POST)
 	public function update($id, UpdateComputerRequest $request)
@@ -109,7 +125,7 @@ class ComputerController extends AppBaseController
 	{
 
 		if($key == "voxline55"){
-			// $computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
+			//$computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
 			$jsonResponse = [];
 			$jsonResponse['code'] = $computer->code;
 			foreach ($computer->screens as $screen) {
@@ -117,20 +133,18 @@ class ComputerController extends AppBaseController
 				$jsonResponse['screens']['name'] = $screen->name;
 				$jsonResponse['screens']['width'] = $screen->width;
 				$jsonResponse['screens']['height'] = $screen->height;
-				foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
-					if($versionPlaylist->state == 1){
-						$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
-						foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
-							$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
-							$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
-							$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
-							$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
-						}
-					}
-				}
+				// foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
+				// 	if($versionPlaylist->state == 1){
+				// 		$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
+				// 		foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
+				// 			$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
+				// 			$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
+				// 			$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
+				// 			$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
+				// 		}
+				// 	}
+				// }
 			}
-
-
 			return response()->json($jsonResponse);
 		}
 		else {
@@ -157,17 +171,35 @@ class ComputerController extends AppBaseController
 		$stores = Store::all();
 		$companies = Company::all();
 		$filter= $request->get('codeFiltrar');
-		$computer = Computer::where('code','LIKE',"%$filter%")->paginate();
+		// $computer = Computer::where('code','LIKE',"%$filter%")->paginate();
+		if(Auth::user()->company_id == null){
+			$computer = Computer::whereHas('store', function ($query) {})->where('code','LIKE',"%$filter%")->paginate();
+		}else{
+		$computer = Computer::whereHas('store', function ($query) {
+			$query->where('company_id', Auth::user()->company_id);
+		})->where('code','LIKE',"%$filter%")->paginate();
+		}
 		return view('computers.index', compact('companies', 'stores', 'lists','types'))->with('computers', $computer);
 	}
 	//filtrar computadores dependiendo de la compañia y sucursal.
-	public function filter_by_company_store(Request $request)
+	public function filter_computers(Request $request)
 	{
 		$types= AccessType::all();
 		$lists = Company::all();
 		$stores = Store::all();
 		$companies = Company::all();
-		$computer = Computer::where('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
+
+		$company = $request->company;
+		$store = $request->store;
+		$type = $request->type;
+		$code = $request->codeFiltrar;
+		if($company!=null){
+		// 	$computer = Computer::whereHas('store', function ($query) {
+		// 	$query->where('company_id', Auth::user()->company_id);
+		// })->where('code','LIKE',"%$filter%")->paginate();
+		}
+		$computer = Computer::Where('store_id', $request->get('store'))->orWhere('type_id', $request->get('type'))->paginate();
+
 		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))->with('computers', $computer);
 	}
 }

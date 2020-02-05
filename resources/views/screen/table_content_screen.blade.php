@@ -1,7 +1,7 @@
 
 <div class="table-contents">
 	<table class="table table-hover">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<tr>
 				<th>Pantalla</th>
 				<th>Ancho</th>

@@ -1,6 +1,6 @@
 <div class="table-responsive">
 	<table class="table table-hover" id="computers-table">
-		<thead class="thead-light">
+		<thead class="thead-dark">
 			<tr>
 				<th>Codigo</th>
 				<th>Ubicacion</th>
@@ -17,7 +17,7 @@
 				<td>
 					{!! Form::open(['route' => ['computers.destroy', $computer->id], 'method' => 'delete']) !!}
 					<div class='btn-group'>
-							
+
 							<a href="{{ route('computers.editTwoParam',[$computer->id, $computer->store_id]) }}" class='btn btn-warning btn-xs'><i
 								class="fas fa-edit"></i></a>
 
@@ -33,4 +33,5 @@
 			@endforeach
 		</tbody>
 	</table>
+	{{ $computers->links()}}
 </div>

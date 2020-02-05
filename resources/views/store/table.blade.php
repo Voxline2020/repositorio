@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table table-hover" id="companies-table">
-					<thead class="thead-light">
+					<thead class="thead-dark">
             <tr>
 								<th>Nombre</th>
 								<th>Direccion</th>

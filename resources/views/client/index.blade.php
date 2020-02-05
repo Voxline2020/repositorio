@@ -12,17 +12,39 @@
 			<h4>Estado Reproductores</h4>
 			<div id="chart_div" style="width:650; height:500"></div>
 		</div>
-
 		<div class="col-sm-12 col-md-6">
 			<h4 class=font-weight-bold> Bienvenido {{ Auth::user()->name }} </h4>
 			@php $mytime = Carbon\Carbon::now()@endphp
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
-			<br><br>
+			<hr>
 			<h4>Eventos actuales &#x1F4C6;</h4>
 			@include('client.tableActivo')
-			<br><br>
+			<hr>
 			<h4>Eventos proximos &#x1F4C6;</h4>
 			@include('client.tableInactivo')
+			<hr>
+		</div>
+
+		<div class="col-sm-12">
+			<hr>
+			{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
+			<div class="row">
+			<div class="col-md-5">
+			{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre Pantalla']) !!}
+			</div>
+			<div class="col-md-4">
+				<select name="state" id="state" class="form-control">
+					<option null selected disabled>Estado</option>
+					<option value="0">Inactivo</option>
+					<option value="1">Activo</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<button type="submit" class="btn btn-primary w-100">Buscar</button>
+			</div>
+		</div>
+		{!! Form::close() !!}
+		<hr>
 		</div>
 		<div class="col-sm-12">
 				<h4 > Estado reproductores </h4>
@@ -76,3 +98,4 @@
 	}
 
 </script>
+

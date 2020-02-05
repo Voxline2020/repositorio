@@ -32,7 +32,11 @@
 <div class="form-group col-sm-12">
 	{!! Form::hidden('company_id', $company->id) !!}
 	{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-	<a href="{!! route('companies.events.index',$company) !!}" class="btn btn-info">Cancelar</a>
+	@if(Auth::user()->hasRole('Administrador'))
+		<a href="{!! route('companies.events.index',$company) !!}" class="btn btn-info">Cancelar</a>
+	@else
+		<a href="{!! route('events.index') !!}" class="btn btn-info">Cancelar</a>
+	@endif
 </div>
 
 @section('script')

@@ -23,6 +23,7 @@ class UserController extends AppBaseController
 
   public function __construct(UserRepository $userRepo)
   {
+		$this->middleware('admin');
     $this->userRepository = $userRepo;
   }
 
@@ -36,9 +37,9 @@ class UserController extends AppBaseController
   public function index(Request $request)
   {
     $users = $this->userRepository->all();
-
+    $companies = Company::all();
     return view('users.index')
-      ->with('users', $users);
+      ->with('users', $users)->with('companies', $companies);
   }
 
   /**
@@ -241,6 +242,4 @@ class UserController extends AppBaseController
 
 		return redirect(route('users.show', $user));
 	}
-
-
 }

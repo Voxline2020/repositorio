@@ -7,6 +7,8 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
 use App\Models\Store;
+use App\Models\Computer;
+use Auth;
 use App\Repositories\CompanyRepository;
 use Flash;
 use Illuminate\Http\Request;
@@ -22,14 +24,16 @@ class CompanyController extends AppBaseController
 
   public function __construct(CompanyRepository $companyRepo)
   {
+		$this->middleware('admin')->except(['createEvent','storeEvent','editEvent','destroyEvent','updateEvent','showEvent','indexEvent']);
     $this->companyRepository = $companyRepo;
   }
   //mostrar compañias
   public function index(Request $request)
   {
-    $companies = $this->companyRepository->all();
+		$computers = Computer::all();
+    $companies = Company::paginate();
     return view('companies.index')
-      ->with('companies', $companies);
+      ->with('companies', $companies)->with('computers', $computers);
   }
   //mostrar compañias con id en especifico
   public function show($id)
@@ -76,7 +80,8 @@ class CompanyController extends AppBaseController
     }
     $company = $this->companyRepository->update($request->all(), $id);
     Flash::success('compañia editada');
-    return redirect(route('companies.index'));
+		return redirect(route('companies.index'));
+		dd($request);
   }
   //eliminar compañias
   public function destroy($id)
@@ -120,21 +125,43 @@ class CompanyController extends AppBaseController
   }
   public function storeEvent(Company $company, Request $request)
   {
-		if ($request->initdate <= $request->enddate) {
-			//Format Init Date
-			$request->merge([
-				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
-				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
-				'state'=>'0',
-				'slug'=>Str::slug($request['name'])
-				]);
+		$name = Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+		if($name->count() != 0){
+			Flash::error('El evento "'.$request->name.'" ya existe.');
+			return redirect(route('companies.events.create', $company));
+		}
+		//Format Init Date
+		$request->merge([
+		"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+		"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+		'state'=>'0',
+		'slug'=>Str::slug($request['name'])
+		]);
+		if($request->initdate > $request->enddate){
+			Flash::error('La fecha de termino no puede ser inferior a la fecha de inicio.');
+			return redirect(route('companies.events.create', $company));
+		}else{
 			$input = $request->all();
 			Event::create($input);
+			$id = [];
+			$callevent =  Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+			foreach($callevent as $e){
+				array_push($id,$e->id);
+			}
+			$event = Event::find($id);
 			Flash::success('Evento agregado exitosamente');
-			return redirect(route('companies.events.index', $company));
+			if (Auth::user()->hasRole('Administrador')){
+				return redirect(route('companies.events.index', $company));
+			}else{
+				return redirect(route('events.show', [ $event[0]->id]));
+			}
 		}
     Flash::error('Error al agregar el evento.');
-    return redirect(route('companies.events.index', $company));
+		if (Auth::user()->hasRole('Administrador')){
+			return redirect(route('companies.events.index', $company));
+		}else{
+			return redirect(route('events.show', [ $event[0]->id]));
+		}
   }
   public function editEvent($id)
   {
@@ -154,7 +181,8 @@ class CompanyController extends AppBaseController
     }
     $company = $this->companyRepository->update($request->all(), $id);
     Flash::success('compañia editada');
-    return redirect(route('companies.index'));
+		return redirect(route('companies.index'));
+		dd($request);
   }
   public function destroyEvent($id)
   {

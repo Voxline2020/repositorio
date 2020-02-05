@@ -9,6 +9,8 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use App\Models\VersionPlaylist;
 use App\Models\VersionPlaylistDetail;
+use App\Models\Playlist;
+use App\Models\Content;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
@@ -20,6 +22,7 @@ class PlaylistController extends AppBaseController
 
     public function __construct(PlaylistRepository $playlistRepo)
     {
+			$this->middleware('admin');
         $this->playlistRepository = $playlistRepo;
     }
 
@@ -31,9 +34,12 @@ class PlaylistController extends AppBaseController
      */
     public function index(Request $request)
     {
-				$playlists = $this->playlistRepository->all();
+                $playlists = Playlist::wherehas('versionPlaylists', function ($query) {
+                    $query->whereHas('versionPlaylistDetails', function ($query) {
+                    });
+                })->paginate();
 				$version= VersionPlaylist::where('state','1')->first();
-				$version_details= VersionPlaylistDetail::where('version_id',$version->id)->get();
+                $version_details= VersionPlaylistDetail::where('version_playlist_id',$version->id)->get();
 				$url=array();
 				$i=0;
 				foreach($version_details as $version_detail){
@@ -43,7 +49,7 @@ class PlaylistController extends AppBaseController
 				$json = json_encode($url,  JSON_PRETTY_PRINT);
 
 				$json_1=json_decode($json, true);
-				dd($url);
+                //  dd($version_details);
 
 
         return view('playlists.index')
@@ -87,15 +93,27 @@ class PlaylistController extends AppBaseController
      */
     public function show($id)
     {
-        $playlist = $this->playlistRepository->findWithoutFail($id);
-
+        // $playlist = $this->playlistRepository->find($id);
+        $playlist = Playlist::wherehas('versionPlaylists', function ($query) {
+            $query->whereHas('versionPlaylistDetails', function ($query) {
+                $query->whereHas('content', function ($query) {
+                });
+            });
+        })->find($id);
+        $list = [];
+        foreach($playlist->versionPlaylists AS $version){
+            foreach($version->versionPlaylistDetails AS $detail){
+                array_push($list,$detail->content_id);
+            }
+        }
+        $contents = Content::find($list);
         if (empty($playlist)) {
-            Flash::error('Playlist not found');
+            Flash::error('No se encontro el Playlist');
 
             return redirect(route('playlists.index'));
         }
 
-        return view('playlists.show')->with('playlist', $playlist);
+        return view('playlists.show')->with('playlist', $playlist)->with('contents', $contents);
     }
 
     /**
@@ -107,7 +125,7 @@ class PlaylistController extends AppBaseController
      */
     public function edit($id)
     {
-        $playlist = $this->playlistRepository->findWithoutFail($id);
+        $playlist = $this->playlistRepository->find($id);
 
         if (empty($playlist)) {
             Flash::error('Playlist not found');
@@ -128,7 +146,7 @@ class PlaylistController extends AppBaseController
      */
     public function update($id, UpdatePlaylistRequest $request)
     {
-        $playlist = $this->playlistRepository->findWithoutFail($id);
+        $playlist = $this->playlistRepository->find($id);
 
         if (empty($playlist)) {
             Flash::error('Playlist not found');
@@ -153,7 +171,7 @@ class PlaylistController extends AppBaseController
     public function destroy($id)
     {
 
-        $playlist = $this->playlistRepository->findWithoutFail($id);
+        $playlist = $this->playlistRepository->find($id);
 
         if (empty($playlist)) {
             Flash::error('Playlist not found');

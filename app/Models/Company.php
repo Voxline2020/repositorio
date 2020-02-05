@@ -60,4 +60,8 @@ class Company extends Model
 	{
 		return $this->hasMany(\App\Models\Event::class);
 	}
+	public function pivots()
+	{
+		return $this->hasMany(\App\Models\ComputerPivot::class);
+	}
 }

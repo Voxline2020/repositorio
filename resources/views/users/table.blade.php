@@ -6,6 +6,7 @@
 				<th>Email</th>
 				<th>Estado</th>
 				<th>Rol</th>
+				<th>Empresa</th>
 				<th colspan="3">Accion</th>
 			</tr>
 		</thead>
@@ -30,6 +31,26 @@
 					@else
 					<a href="{{route('users.roles.new',[$user->id]) }}" class='btn btn-secondary btn-xs'><i
 							class="fas fa-plus"></i> Rol</a>
+					@endif
+				</td>
+				<td>
+					@if ($user->company_id != null)
+					{!! Form::open(['route' => ['users.companies.unassign',$user->id],'method'=>'delete'] ) !!}
+						@foreach ($companies as $company)
+							@if($company->id == $user->company_id)
+							{!! Form::button($company->name.' <i class="fas fa-times-circle"></i>', ['type' => 'submit', 'name'=>'id',
+							'value'=>$user->company_id, 'class' => 'btn btn-danger', 'onclick' => "return confirm('Esta seguro de que desea
+							eliminar?')"]) !!}
+							{!! Form::close() !!}
+							@endif
+						@endforeach
+					@else
+						@if ($user->role == "Administrador")
+						<a href="#" class='btn btn-secondary disabled'><i class="fas fa-times"></i></a>
+						@else
+						<a href="{{route('users.companies.new',[$user->id]) }}" class='btn btn-secondary'>
+						<i class="fas fa-plus"></i></a>
+						@endif
 					@endif
 				</td>
 				<td>

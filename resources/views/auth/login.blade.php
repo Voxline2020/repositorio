@@ -36,7 +36,7 @@
 					<span class="login100-form-title p-b-55">
 						<img src="{{ asset('assets/logo.png') }}" width="200" height="auto" alt="" srcset="">
 					</span>
-
+					@include('flash::message')
 					@error('auth')
 					<div class="wrap-input100  text-center m-b-5">
 						<span class="error " style="" role="alert">

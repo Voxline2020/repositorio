@@ -1,6 +1,6 @@
 <div class="table-responsive" style="height:150px;overflow-y:scroll">
 	<table class="table table-hover">
-		<thead>
+		<thead class="table-dark">
 			<tr>
 
 				<th>Nombre</th>
@@ -17,8 +17,8 @@
 			@foreach($eventsInactive as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
-				<td>{!! $event->initdate!!}</td>
-				<td>{!! $event->enddate!!}</td>
+				<td>{!! \Carbon\Carbon::parse($event->initdate)->format('d-m-Y H:i')!!}</td>
+				<td>{!! \Carbon\Carbon::parse($event->enddate)->format('d-m-Y H:i')!!}</td>
 				<td>
 					<a href="{{route('clients.events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
 				</td>

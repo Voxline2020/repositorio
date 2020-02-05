@@ -11,9 +11,11 @@
 	<div class="col-md-9">
 		<h3 class="font-weight-normal">Sucursales</h3>
 	</div>
+	@if(Auth::user()->hasRole('Administrador'))
 	<div class="col-md-3">
 		<a class="btn btn-success w-100" href="{!! route('stores.createOneParam',$companies->id) !!}">Nueva sucursal</a>
 	</div>
+	@endif
 </div>
 {{ Form::open(['route' =>['stores.filter_by_name',$companies->id], 'method' => 'GET']) }}
 <div class="row">

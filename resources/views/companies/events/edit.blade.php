@@ -14,7 +14,7 @@
 		<div class="col-sm-12">
 			{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch']) !!}
 			<div class="row">
-				@include('events.fields')
+				@include('events._fields')
 			</div>
 			{!! Form::close() !!}
 		</div>

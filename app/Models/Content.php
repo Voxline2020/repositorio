@@ -22,7 +22,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer size
  * @property integer width
  * @property integer height
- * @property integer event_id
+ * @property string event_id
+ * @property string duration
  */
 class Content extends Model
 {
@@ -33,15 +34,14 @@ class Content extends Model
   const CREATED_AT = 'created_at';
   const UPDATED_AT = 'updated_at';
 
-  protected $dates = ['deleted_at'];
-
   public $fillable = [
     'name',
     'location',
     'user_id',
     'size',
     'width',
-    'height',
+		'height',
+		'duration',
     'event_id',
     'slug',
 		'filetype',
@@ -61,7 +61,8 @@ class Content extends Model
     'user_id' => 'integer',
     'size' => 'integer',
     'width' => 'integer',
-    'height' => 'integer',
+		'height' => 'integer',
+		'duration' => 'time',
     'event_id' => 'integer',
     'slug' => 'string',
   ];
@@ -95,8 +96,12 @@ class Content extends Model
    **/
   public function event()
   {
-    return $this->belongsTo(\App\Models\Event::class, 'event_id');
-  }
+    return $this->belongsTo(\App\Models\Event::class);
+	}
+	public function eventAssignations()
+  {
+    return $this->hasMany(\App\Models\EventAssignation::class);
+	}
 
   /**
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -117,10 +122,7 @@ class Content extends Model
   /**
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    **/
-  public function versionPlaylistDetails()
-  {
-    return $this->hasMany(\App\Models\VersionPlaylistDetail::class);
-  }
+
 
 	public function getResolutionAttribute()
 	{
@@ -131,7 +133,27 @@ class Content extends Model
 	{
 		return number_format($this->size/1000000, 3)." mb";
 	}
-
+	public function getDurationModAttribute()
+	{
+		$duration = $this->duration;
+		$extract [] = explode(':',$duration);
+		$parts = $extract[0];
+		$hour = $parts[0];
+		$min = $parts[1];
+		$seg = $parts[2];
+		if ($hour=='00' && $min=='00'){
+			$mod = $seg.' seg.';
+		}else if($hour=='00'){
+			$mod = $min.' min '.$seg.' seg.';
+		}else {
+			if($hour=='01'){
+				$mod=$hour.' hora '.$min.' min '.$seg.' seg.';
+			}else{
+				$mod=$hour.' horas '.$min.' min '.$seg.' seg.';
+			}
+		}
+		return $mod;
+	}
 
 
 }

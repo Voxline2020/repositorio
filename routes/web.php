@@ -26,18 +26,33 @@ Route::group(['prefix' => 'contents'], function () {
 	Route::get('editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
 	Route::get('{id}/view','ContentController@ScreenView')->name('contents.ScreenView');
 	Route::get('{content}/d','ContentController@download')->name('contents.download');
-
 });
 
 //SECTION Computers
 Route::resource('computers', 'ComputerController');
 Route::group(['prefix' => 'computers'], function () {
-	Route::get('filter_by_company_store','ComputerController@filter_by_company_store')->name('computers.filter_by_company_store');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
-	Route::get('filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
+	Route::get('filter/filter_computers','ComputerController@filter_computers')->name('computers.filter_computers');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
+	// Route::get('filter/filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
-	Route::get('{computer}/get/{key}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+});
+Route::group(['prefix' => 'pivot'], function () {
+	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+});
+
+//SECTION Pivots
+Route::resource('pivots', 'ComputerPivotController');
+Route::group(['prefix' => 'pivots'], function () {
+	Route::get('/', 'ComputerPivotController@index')->name('pivots.index');
+	Route::get('/create', 'ComputerPivotController@create')->name('pivots.create');
+	Route::post('/', 'ComputerPivotController@store')->name('pivots.store');
+	Route::get('/{pivot}/edit', 'ComputerPivotController@edit')->name('pivots.edit');
+	Route::put('/{pivot}', 'ComputerPivotController@update')->name('pivots.update');
+	Route::delete('/{pivot}', 'ComputerPivotController@destroy')->name('pivots.destroy');
+	Route::post('/{pivot}', 'ComputerPivotController@storeOnpivot')->name('pivots.storeOnpivot');
+	Route::delete('/{pivot}/onpivot', 'ComputerPivotController@destroyOnpivot')->name('pivots.destroyOnpivot');
 });
 
 //SECTION Users
@@ -54,8 +69,9 @@ Route::group(['prefix' => 'users'], function () {
 	Route::delete('{user}/company/unassign','UserController@assignCompany')->name('users.companies.unassign');
 });
 
-//SECTION Playlists
-Route::resource('playlists', 'PlaylistController');
+// //SECTION Playlists
+// Route::resource('playlists', 'PlaylistController');
+
 
 //SECTION Events
 Route::resource('events', 'EventController');
@@ -143,9 +159,6 @@ Route::group(['prefix' => 'stores'], function () {
 	Route::get('{id}/filter_by_name', 'StoreController@filter_by_name')->name('stores.filter_by_name'); //ruta para filtrar la sucursal con nombre
 	Route::get('editTwoParam/{id}/{company_id}','StoreController@edit')->name('stores.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
 	Route::get('create/{id}','StoreController@create')->name('stores.createOneParam');// ruta para recoger 1 parametro que es la id de la compañiay crear una sucursal.
-
-
-
 });
 
 //SECTION Screen
@@ -161,8 +174,19 @@ Route::group(['prefix' => 'screens'], function () {
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 // Route::resource('clients', 'ClientController');
 Route::group(['prefix' => 'clients'], function () {
+	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
 	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
-	Route::get('screen/{id}','ScreenController@create')->name('screens.createOneParam'); // ruta para recoger 1 parametro que es el id de computador y crear una pantalla.
+	Route::get('screen/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
+	// Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
+	// Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
+	// Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
+	// Route::put('screen/clone','ClientController@clone')->name('clients.clone');
+	Route::put('screen/assign/{id}','ScreenController@eventAssign')->name('screens.eventAssign');
+	Route::put('screen/clone','ScreenController@cloneEvent')->name('screens.cloneEvent');
+	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
+	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
+	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
+	Route::get('filter_screen','ClientController@filter_screen')->name('clients.filter_screen');
 	Route::get('/events', "EventController@index")->name('clients.events.index');
 	Route::get('/events/{event}/', "EventController@showClient")->name('clients.events.show');
 
@@ -180,11 +204,3 @@ Route::get('pdf/{id}','ReportController@generate')->name('pdf.generate');
 //SECTION Generar PDF de ??
 Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent');
 
-//SECTION Video Descargar
-Route::get('video/{id}/d','DownloadContent@download')->name('download.content');
-
-//SECTION Events Old
-Route::resource('eventsOld', 'EventControllerOld');
-Route::get('contents/editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
-Route::get('eventOld/filter_by_name', ['uses' => 'EventControllerOld@filter_by_name', 'as' => 'eventsOld.filter_by_name' ]);
-Route::get('eventsOld/{id}/AssignContent', "EventController@indexAssignContent")->name('eventsOld.indexAssignContent');

@@ -8,9 +8,10 @@
 		</h2>
 	</div>
 </div>
-
+@include('flash::message')
 {!! Form::open(['route' => ['companies.events.store', $company]]) !!}
 <div class="row">
+
 	@include('events._fields')
 </div>
 {!! Form::close() !!}
