@@ -36,7 +36,7 @@ class UserController extends AppBaseController
    */
   public function index(Request $request)
   {
-    $users = $this->userRepository->all();
+    $users = User::paginate();
     $companies = Company::all();
     return view('users.index')
       ->with('users', $users)->with('companies', $companies);
@@ -241,5 +241,24 @@ class UserController extends AppBaseController
 		$user->save();
 
 		return redirect(route('users.show', $user));
+	}
+	public function filter_by(Request $request)
+	{
+		$companies = Company::all();
+		if($request->nameFilter==null&&$request->emailFilter==null){
+			Flash::error('Debes ingresar almenos un filtro para la busqueda.');
+			return redirect(route('users.index'));
+		}
+		if($request->nameFilter!=null){
+			$users = User::where('name','like',"%$request->nameFilter%")->paginate();
+		}
+		if($request->emailFilter!=null){
+			$users = User::where('email','like',"%$request->emailFilter%")->paginate();
+		}
+		if($users->count()==0){
+			Flash::info('No se encontro resultados.');
+			return redirect(route('users.index'));
+		}
+		return view('users.index')->with('users', $users)->with('companies', $companies);
 	}
 }

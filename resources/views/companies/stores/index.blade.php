@@ -12,7 +12,7 @@
 		<a class="btn btn-success w-100" href="{!! route('companies.stores.create',$company->id) !!}">Nueva sucursal</a>
 	</div>
 	<div class="col-md-2">
-		<a class="btn btn-info w-100" href="{!! route('companies.index') !!}">Atras</a>
+		<a class="btn btn-outline-primary w-100" href="{!! route('companies.index') !!}">Atras</a>
 	</div>
 </div>
 {{ Form::open(['route' =>['companies.filterStore',$company], 'method' => 'GET']) }}

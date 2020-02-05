@@ -3,32 +3,29 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-9">
+		<div class="col-md-8">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company) !!}">Nuevo Evento</a>
+		</div>
+		<div class="col-md-2">
+			<a class="btn btn-primary w-100" href="{!! route('companies.index') !!}">Atras</a>
 		</div>
 	</div>
 	<hr>
 	{{ Form::open(['route' =>['events.filter_by_name'], 'method' => 'GET']) }}
 	<div class="row">
 
-		<div class="col-md-1">
-			Fecha Inicio:
-		</div>
+		<div class="col-md-1">Fecha Inicio:</div>
 		<div class="col-md-3">
-			{!! Form::input('date', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio'])
-			!!}
+			{!! Form::input('date', 'initdate', null,['class' => 'form-control','placeholder' => 'Fecha inicio'])!!}
 		</div>
-		<div class="col-md-1">
-			Fecha Termino:
+		<div class="col-md-1">Fecha Termino:</div>
+		<div class="col-md-3">
+			{!! Form::input('date', 'enddate', 'Fecha',['class' => 'form-control','placeholder' => 'Fecha termino'])!!}
 		</div>
 		<div class="col-md-4">
-			{!! Form::input('date', 'enddate', null,['class' => 'form-control','placeholder' => 'Fecha termino'])
-			!!}
-		</div>
-		<div class="col-md-3">
 			<select name="state" id="state" class="form-control">
 				<option null selected disabled>Estado</option>
 				<option value="0">Inactivo</option>
@@ -36,12 +33,11 @@
 			</select>
 		</div>
 	</div>
-<div class="row">
-	<br>
-	<div class="col-md-9">
-		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'buscar evento']) !!}
+	<div class="row">
+	<div class="col-md-10">
+		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre']) !!}
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button type="submit" class="btn btn-primary w-100">Buscar</button>
 	</div>
 </div>

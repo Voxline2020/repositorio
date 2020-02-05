@@ -41,7 +41,7 @@
 			<tr>
 				<th>Nombre</th>
 				<th>Nº Sucursales <i class="fas fa-store"></i></th>
-				<th>Nº Incidencias <i class="fas fa-fire"></i></th>
+				{{-- <th>Nº Incidencias <i class="fas fa-fire"></i></th> --}}
 				<th>Nº Eventos <i class="fas fa-calendar"></th>
 				<th>Nº Computadores <i class="fas fa-desktop"></i></th>
 				<th>Nº Pivotes <i class="fas fa-server"></i></th>
@@ -55,7 +55,7 @@
 				<td style="text-align: center" class="{!! $company->stores->count() == 0 ? 'red-text': '' !!}">
 					{!! $company->stores->count() !!}
 				</td>
-				<td style="text-align: center; color: red;">1</td>
+				{{-- <td style="text-align: center; color: red;">1</td> --}}
 				<td style="text-align: center" class="{!! $company->events->count() == 0 ? 'red-text': '' !!}">
 					{!! $company->events->count() !!}
 				</td>
@@ -66,7 +66,7 @@
 				<td>
 					<div class='btn-group'>
 						<a href="{{ route('companies.stores.index', [$company]) }}" class="btn btn-success w-100"><i class="fas fa-store"></i></a>
-						<a href="#" class="btn btn-danger w-100"><i class="fas fa-fire"></i></a>
+						{{-- <a href="#" class="btn btn-danger w-100"><i class="fas fa-fire"></i></a> --}}
 						<a href="{{ route('companies.events.index', [$company]) }}" class="btn btn-warning w-100"><i class="fas fa-calendar"></i></a>
 						<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100"><i class="fas fa-desktop"></i></a>
 						<a href="{{ route('companies.pivots.index', [$company]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
