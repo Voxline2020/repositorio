@@ -55,7 +55,7 @@ class ClientController extends Controller
 	}
 	public function show($id)
 	{
-		//filtramos la pantalla que queremoos ver con el id
+		//filtramos la pantalla que queremos ver con el id
 		if (Auth::user()->hasRole('Administrador')){
 			$screen = Screen::whereHas('computer', function ($query) {
 				$query->whereHas('store', function ($query) {

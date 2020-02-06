@@ -1,5 +1,4 @@
 <!-- Name Field -->
-@include('flash::message')
 <div class="form-group col-sm-12">
 	{!! Form::label('name', 'Nombre de la pantalla:') !!}
 	{!! Form::text('name', null, ['class' => 'form-control']) !!}

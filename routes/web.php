@@ -117,6 +117,23 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::delete('/{pivot}/onpivot', 'CompanyController@destroyOnpivot')->name('companies.destroyOnpivot');
 		Route::get('filter/filter_by', 'CompanyController@filter_by')->name('companies.pivots.filter_by');
 	});
+	//Computers
+	Route::group(['prefix' => '{company}/computers'], function () {
+		Route::get('/', 'CompanyController@indexComputer')->name('companies.computers.index');
+		Route::get('/create', 'CompanyController@createComputer')->name('companies.computers.create');
+		Route::post('/', 'CompanyController@storeComputer')->name('companies.storeComputer');
+		Route::get('/{computer}', 'CompanyController@showComputer')->name('companies.computers.show');
+		Route::get('/{computer}/edit','CompanyController@editComputer')->name('companies.computers.edit');
+		Route::put('/{computer}','CompanyController@updateComputer')->name('companies.computers.update');
+		Route::delete('/{computer}', 'CompanyController@destroyComputer')->name('companies.computers.destroy');
+		Route::post('/{computer}/screens', 'CompanyController@storeScreen')->name('companies.storeScreen');
+		Route::get('/{computer}/screens/{screen}','CompanyController@showScreen')->name('companies.computers.showScreen');
+		Route::get('/{computer}/screens/{screen}/edit','CompanyController@editScreen')->name('companies.computers.editScreen');
+		Route::put('/{computer}/screens', 'CompanyController@updateScreen')->name('companies.computers.updateScreen');
+		Route::get('filter/filter_computers', 'CompanyController@filter_computers')->name('companies.computers.filter_computers');
+		Route::put('/{computer}/screens/{screen}/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');
+
+	});
 
 	//Stores
 	Route::group(['prefix' => '{company}/stores'], function () {
@@ -145,7 +162,7 @@ Route::group(['prefix' => 'companies'], function () {
 			// 	Route::post('/', 'CompanyController@storeStoreComputerScreen')->name('companies.stores.computers.screens.store');
 			// 	Route::get('/{screen}/edit', 'CompanyController@editStoreComputerScreen')->name('companies.stores.computers.screens.edit');
 			// 	Route::put('/{screen}', 'CompanyController@updateStoreComputerScreen')->name('companies.stores.computers.screens.update');
-			// 	Route::get('/{screen}', 'CompanyController@showStoreComputerScreen')->name('companies.stores.computers.screens.show');
+				// Route::get('/{screen}', 'CompanyController@showStoreComputerScreen')->name('companies.stores.computers.screens.show');
 			// 	Route::delete('/{screen}', 'CompanyController@destroyStoreComputerScreen')->name('companies.stores.computers.screens.destroy');
 			// });
 		});
@@ -170,6 +187,7 @@ Route::group(['prefix' => 'stores'], function () {
 Route::resource('screens', 'ScreenController');
 Route::group(['prefix' => 'screens'], function () {
 	Route::get('filter_by_name/{id}','ScreenController@filter_by_name')->name('screens.filter_by_name');
+	Route::get('/create','ScreenController@create')->name('screens.createOneParam');
 	Route::get('AssignContent/{id}', "ScreenController@AssignContent")->name('screens.AssignContent');
 	Route::post('ScreenPlaylistAsign/{id}', "ScreenController@ScreenPlaylistAsign")->name('screens.ScreenPlaylistAsign');
 	Route::get('{code}/j','ScreenJson@json')->name('screens.screen');

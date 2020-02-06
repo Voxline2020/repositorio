@@ -5,18 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
-use App\Models\Company;
-use App\Models\Store;
-use App\Models\Computer;
-use App\Models\ComputerPivot;
-use App\Models\ComputerOnPivot;
-use Auth;
 use App\Repositories\CompanyRepository;
-use Flash;
+use Illuminate\Support\Str as Str;
 use Illuminate\Http\Request;
+use App\Models\EventAssignation;
+use App\Models\ComputerOnPivot;
+use App\Models\ComputerPivot;
+use App\Models\AccessType;
+use App\Models\Computer;
+use App\Models\Content;
+use App\Models\Company;
+use App\Models\screen;
+use App\Models\Store;
 use App\Models\Event;
 use Carbon\Carbon;
-use Illuminate\Support\Str as Str;
+use Flash;
+use Auth;
 
 
 class CompanyController extends AppBaseController
@@ -530,5 +534,253 @@ class CompanyController extends AppBaseController
 			Flash::error('No se encontro ningun resultado.');
 		}
 		return view('companies.pivots.index')->with('pivots',$pivots)->with('companies',$companies)->with('stores',$stores)->with('id',$id);
+	}
+	//Computers///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function indexComputer(Company $company,Request $request)
+	{
+		$types= AccessType::all();
+		$stores = Store::all();
+		$computers = Computer::whereHas('store', function ($query) use ($company) {
+			$query->where('company_id', $company->id);
+		})->paginate();
+		return view('companies.computers.index',['company' => $company], compact('stores', 'types'))
+		->with('computers', $computers);
+	}
+	public function showComputer(Company $company,Computer $computer)
+	{
+		// $computers = Computer::where('store_id', $id)->paginate();
+		$screens = Screen::where('computer_id',$computer->id)->get();
+		return view('companies.computers.show',['company' => $company])->with('computer',$computer)->with('screens',$screens);
+	}
+	public function createComputer(Company $company)
+	{
+		$types= AccessType::all();
+		$lists = Company::all();
+		$stores = Store::where('company_id',$company->id)->get();
+		$companies = Company::all();
+		return view('companies.computers.create',['company' => $company], compact('companies', 'stores', 'lists','types'));
+	}
+
+	//Request de creacion (POST)
+	public function storeComputer(Company $company,Request $request)
+	{
+		$input = $request->all();
+		Computer::create($input);
+		Flash::success('Computador agregado correctamente.');
+		return redirect(route('companies.computers.index',['company' => $company]));
+	}
+	public function createScreen($id)
+	{
+		$computer = Computer::where('id', $id)->get();
+		return view('screen.create')->with('computer',$computer);
+	}
+	public function editComputer(Company $company,Computer $computer,Store $store)
+	{
+		$types = AccessType::all();
+		$stores = Store::where('company_id', $company->id)->get();
+		if (empty($computer)) {
+			Flash::error('Computador no encontrado');
+			return redirect(route('companies.computers.index',['company' => $company]));
+		}
+		return view('companies.computers.edit',['company' => $company], compact('stores', 'types'))->with('computer', $computer)->with('company', $company);
+	}
+	//Request de editar (POST)
+	public function updateComputer(Company $company,$id, Request $request)
+	{
+		$computer = Computer::find($id);
+		if (empty($computer)) {
+			Flash::error('Computador no encontrado.');
+			return redirect(route('companies.computers.index',['company' => $company]));
+		}
+		Computer::find($id)->update($request->all());
+		Flash::success('Computador editado');
+		return redirect(route('companies.computers.index',['company' => $company]));
+	}
+	public function destroyComputer(Company $company,$id)
+	{
+		$computer = Computer::find($id);
+		if (empty($computer)) {
+			Flash::error('Computador no encontrado.');
+			return redirect(route('companies.computers.index',['company' => $company]));
+		}
+		$computer->delete();
+		Flash::success('Computador borrado.');
+		return redirect(route('companies.computers.index',['company' => $company]));
+	}
+	public function filter_computers(Company $company,Request $request)
+	{
+		$types= AccessType::all();
+		$stores = Store::all();
+		$computers = Computer::whereHas('store', function ($query) use ($company) {
+			$query->where('company_id', $company->id);
+			});
+		if($request->codeFiltrar==null&&$request->type==null&&$request->store==null){
+			Flash::error('Debes ingresar almenos un filtro para la busqueda.');
+			return redirect(route('companies.computers.index',[$company]));
+		}
+		if($request->store!=null){
+			$computers->Where('store_id', $request->store);
+		}
+
+		if($request->type!=null){
+			$computers->Where('type_id', $request->type);
+		}
+		if($request->codeFiltrar!=null){
+			$computers->Where('code','like', "%$request->codeFiltrar%");
+		}
+		$computers = $computers->paginate();
+		if($computers->count()==0){
+			$computers = Computer::whereHas('store', function ($query) use ($company) {
+			$query->where('company_id', $company->id);
+			})->paginate();
+			Flash::info('No se encontro ningun resultado.');
+		}
+		return view('companies.computers.index',['company' => $company], compact('companies', 'stores', 'lists', 'types'))->with('computers', $computers);
+	}
+	//Screens///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function storeScreen(Company $company,Computer $computer,Request $request)
+	{
+		$input = $request->all();
+		Screen::create($input);
+		Flash::success('Pantalla agregada correctamente.');
+		return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
+	}
+	public function editScreen(Company $company,Computer $computer, Screen $screen)
+	{
+		return view('companies.computers.editScreen',['company' => $company,'computer'=>$computer])->with('screen',$screen);
+	}
+	public function showScreen(Company $company,Computer $computer, Screen $screen)
+	{
+		//buscamos los eventos compatibles con la pantalla
+		$contents = Content::whereHas('event', function ($query) use($company) {
+			$query->where('company_id', $company->id)->where('enddate','>=',\Carbon\Carbon::now());
+		})->where('width',$screen->width)->where('height',$screen->height)->get();
+
+		$list=[];
+		foreach($contents as $content){
+			array_push($list,$content->event->id);
+		}
+		//extraemos los eventos compatibles
+		$events= Event::find($list);
+		//eventos asignados activos
+		$eventAssigns = EventAssignation::whereHas('content', function ($query) {
+			$query->whereHas('event', function ($query) {
+				 $query->where('enddate','>=',\Carbon\Carbon::now());
+			});
+		})->where('screen_id',$screen->id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
+		//eventos asignados inactivos
+		$eventInactives = EventAssignation::whereHas('content', function ($query) {
+			$query->whereHas('event', function ($query) {
+				$query->where('enddate','>=',\Carbon\Carbon::now());
+			});
+		})->where('screen_id',$screen->id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
+		return view('companies.computers.showScreen',['company' => $company,'computer'=>$computer])
+		->with('screen',$screen)->with('events', $events)->with('eventAssigns', $eventAssigns)
+		->with('eventInactives', $eventInactives);
+	}
+	public function updateScreen(Company $company,Computer $computer, Request $request)
+	{
+		$screen = Screen::find($request->id);
+		if (empty($screen)) {
+			Flash::error('Pantalla no encontrada.');
+			return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
+		}
+		$screen->update($request->all());
+		Flash::success('Pantalla editada correctamente.');
+		return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
+	}
+	public function destroyScreen($id)
+	{
+		$screen = $this->screenRepository->find($id);
+		if (empty($screen)) {
+			Flash::error('pantalla no encontrada');
+			return redirect(url()->previous());
+		}
+		$this->screenRepository->delete($id);
+		Flash::success('Pantalla borrada');
+		return redirect(url()->previous());
+	}
+	public function changeStatusScreen(Request $request)
+	{
+		// $screen = Screen::find($id);
+		// $screen->state = $request['state'];
+		// if (empty($request)) {
+		// 	Flash::error('Error');
+		// 	return redirect(url()->previous());
+		// }
+		// $screen->save();
+		// Flash::success('Estado actualizado');
+		// return redirect(url()->previous($screen));
+	}
+	public function EventAssignScreen($id, Request $request)
+	{
+		// $request->merge(['slug' => Str::slug($request['name'])]);
+		$screen= Screen::find($id);
+		$event = Event::find($request->event_id);
+		$contents = Content::where('event_id',$request->event_id)
+		->where('width',$screen->width)
+		->where('height',$screen->height)
+		->get();
+		if($contents->count()!=1){
+			foreach($contents AS $content){
+				$request->merge([
+				"screen_id"=> $id,
+				"state"=>$event->state,
+				"content_id"=>$content->id,
+				]);
+				$input = $request->all();
+				EventAssignation::create($input);
+			}
+		}else{
+			$request->merge([
+				"screen_id"=> $id,
+				"state"=>$event->state,
+				"content_id"=>$contents[0]->id,
+				]);
+				$input = $request->all();
+				EventAssignation::create($input);
+		}
+		Flash::success('Evento asignado exitosamente');
+		return redirect(url()->previous($screen));
+	}
+	public function changeOrderScreen(Request $request)
+	{
+		// validaciones
+		if($request->neworder==null){
+			Flash::error('Debes ingresar un nuevo Nº de orden.');
+			return redirect(url()->previous());
+		}
+		if($request->screen==null){
+			Flash::error('No se ha podido realizar la operación.');
+			return redirect(url()->previous());
+		}
+		if($request->id==null){
+			Flash::error('No se ha podido realizar la operación.');
+			return redirect(url()->previous());
+		}
+		//traemos la asignacion
+		$assign=EventAssignation::find($request->id);
+		//traemos la pantalla
+		$screen=Screen::find($request->screen);
+		//asignamos los nuevos valores y guradamos
+		$assign->order = $request->neworder;
+		$screen->version = $screen->version+1;
+		$assign->save();
+		$screen->save();
+		Flash::success('Se ha cambiado el Nº de orden correctamente.');
+		return redirect(url()->previous());
+	}
+	public function cloneEventScreen(Request $request)
+	{
+		// extraemos los datos del elemento original
+		$input = $request->all();
+		//cambiamos version en pantalla
+		$screen=Screen::find($request->screen_id);
+		$screen->version = $screen->version+1;
+		$screen->save();
+		//creamos el nuevo elemento clonado
+		EventAssignation::create($input);
+		Flash::success('Se ha clonado el elemento correctamente.');
+		return redirect(url()->previous());
 	}
 }
