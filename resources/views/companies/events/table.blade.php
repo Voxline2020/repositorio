@@ -26,9 +26,9 @@
 					<div class='btn-group'>
 						{!! Form::open(['route' => ['events.destroy',  $event], 'method' => 'delete']) !!}
 						<div class='btn-group'>
-							<a href="{{route('clients.events.show',[$event->id]) }}" class='btn btn-primary btn-xs'><i
+							<a href="{{route('companies.events.show',['company'=>$company,'event'=>$event]) }}" class='btn btn-primary btn-xs'><i
 							class="fas fa-eye"></i></a>
-							<a href="{!! route('events.show', [ $event->id]) !!}" class='btn btn-warning btn-xs'><i
+							<a href="{!! route('companies.events.edit',['company'=>$company,'event'=>$event]) !!}" class='btn btn-warning btn-xs'><i
 									class="fas fa-edit"></i></a>
 							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 							'onclick' => "return confirm('Estas seguro?')"]) !!}

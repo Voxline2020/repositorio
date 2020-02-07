@@ -209,17 +209,31 @@ class CompanyController extends AppBaseController
   {
     return view('companies.events.edit')->with('company', $company)->with('event', $event);
   }
-  public function updateEvent($id, UpdateCompanyRequest $request)
+  public function updateEvent(Company $company,Event $event, UpdateCompanyRequest $request)
   {
-    $company = $this->companyRepository->find($id);
-    if (empty($company)) {
-      Flash::error('compañia no encontrada.');
-      return redirect(route('companies.index'));
-    }
-    $company = $this->companyRepository->update($request->all(), $id);
-    Flash::success('compañia editada');
-		return redirect(route('companies.index'));
-		dd($request);
+    // $company = $this->companyRepository->find($id);
+    // if (empty($company)) {
+    //   Flash::error('compañia no encontrada.');
+    //   return redirect(route('companies.index'));
+    // }
+    // $company = $this->companyRepository->update($request->all(), $id);
+    // Flash::success('compañia editada');
+		// return redirect(route('companies.index'));
+
+		// $event = $this->eventRepository->find($id);
+		$request->merge([
+				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+				]);
+
+    // if (empty($event)) {
+    //   Flash::error('Evento no encontrado');
+    //   return redirect(route('events.index'));
+		// }
+    $event->update($request->all());
+    Flash::success('Evento editado exitosamente.');
+		// return redirect(route('events.show',['id' => $id]));
+		return redirect()->route('companies.events.edit', ['company'=>$company,'event'=>$event]);
   }
   public function destroyEvent($id)
   {

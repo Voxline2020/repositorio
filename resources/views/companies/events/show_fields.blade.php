@@ -24,7 +24,7 @@
 				@if($screen->state==1)
 				<td style="color:#01DF01;">Activo</td>
 				@endif
-				<td><a href="{{ route('clients.show',[$screen->id]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a></td>
+				<td><a href="{{ route('companies.computers.showScreen',[$company,$screen->computer,$screen]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a></td>
 			</tr>
 			@endforeach
 			@else

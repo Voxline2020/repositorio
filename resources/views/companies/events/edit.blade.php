@@ -66,7 +66,7 @@
 
 {{-- Collapse editar --}}
 <div class="collapse" id="Editar">
-	{!! Form::model($event, ['route' => ['events.update', $event->id], 'method' => 'patch', 'id' => 'editform']) !!}
+	{!! Form::model($event, ['route' => ['companies.events.update', $company,$event], 'method' => 'put']) !!}
 	<hr>
 	<h2>Editar evento</h2>
 	<div class="row">

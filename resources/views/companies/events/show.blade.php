@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-	@include('flash::message')
 	<div class="row">
 		<div class="col-md-6">
 			<h2 class=font-weight-bold>{{$event->name}} &#x1F4C6;</h2>
@@ -14,7 +13,7 @@
 			<a  type="button" class="btn btn-warning w-100" href="{!! route('companies.events.edit',['company' => $company,'event'=>$event]) !!}">Editar</a>
 		</div>
 		<div class="col-md-2">
-			<a  type="button" class="btn btn-outline-primary w-100" href="{{ URL::previous() }}">Atras</a>
+			<a  type="button" class="btn btn-outline-primary w-100" href="{!! route('companies.events.index',['company' => $company]) !!}">Atras</a>
 		</div>
 	</div>
 	<br>
@@ -102,6 +101,11 @@ $types=array_unique($listtypes);
 </div>
 {!! Form::close() !!}
 <hr>
+<div class="row">
+	<div class="col-md-12">
+		@include('flash::message')
+	</div>
+</div>
 <div class="row">
 	<div class="col-md-12">
 		<h2>Pantallas</h2>
