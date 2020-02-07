@@ -14,7 +14,7 @@ $company = App\Models\Company::find($id);
 	<a class="btn btn-success w-100" href="{{route('companies.pivots.create',[$company]) }}">Nuevo Pivote</a>
 	</div>
 	<div class="col-md-2 text-right">
-		<a class="btn btn-primary w-100" href="{{route('companies.index') }}">Atras</a>
+		<a class="btn btn-outline-primary w-100" href="{{route('companies.index') }}">Atras</a>
 		</div>
 </div>
 <hr>
@@ -31,10 +31,10 @@ $company = App\Models\Company::find($id);
 	<div class="col-md-3">
 		{!! Form::text('codeFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Codigo']) !!}
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-4">
 		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre']) !!}
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button type="submit" class="btn btn-primary w-100">Buscar </button>
 	</div>
 </div>

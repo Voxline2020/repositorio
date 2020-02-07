@@ -10,6 +10,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			@if($computers->count()!=0)
 			@foreach($computers as $computer)
 			<tr>
 				<td>{!! $computer->code !!}</td>
@@ -27,6 +28,15 @@
 				</td>
 			</tr>
 			@endforeach
+			@else
+			<tr>
+				<td>No hay ningun computador agregado.</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			@endif
 		</tbody>
 	</table>
 	{{ $computers->links()}}

@@ -12,6 +12,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			@if($pivots->count()!=0)
 			@foreach($pivots as $pivot)
 			<tr>
 				<td>{!! $pivot->name !!}</td>
@@ -33,6 +34,17 @@
 				</td>
 			</tr>
 			@endforeach
+			@else
+			<tr>
+				<td>No hay ningun Pivote agregado.</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			@endif
 		</tbody>
 	</table>
 	{{ $pivots->links()}}

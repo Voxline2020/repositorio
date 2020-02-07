@@ -86,8 +86,8 @@
 				</div>
       </div>
       <div class="modal-footer">
+				<input type="submit" class="btn btn-primary " value="Confirmar">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <input type="submit" class="btn btn-primary " value="Confirmar">
       </div>
     </div>
   </div>

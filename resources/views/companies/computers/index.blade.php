@@ -35,10 +35,10 @@
 			@endforeach
 		</select>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-4">
 		{!! Form::text('codeFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Codigo']) !!}
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button type="submit" class="btn btn-primary w-100">Buscar </button>
 	</div>
 </div>

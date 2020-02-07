@@ -28,16 +28,16 @@ Route::group(['prefix' => 'contents'], function () {
 	Route::get('{content}/d','ContentController@download')->name('contents.download');
 });
 
-//SECTION Computers
-Route::resource('computers', 'ComputerController');
-Route::group(['prefix' => 'computers'], function () {
-	Route::get('filter/filter_computers','ComputerController@filter_computers')->name('computers.filter_computers');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
-	// Route::get('filter/filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
-	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
-	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
+// //SECTION Computers
+// Route::resource('computers', 'ComputerController');
+// Route::group(['prefix' => 'computers'], function () {
+// 	Route::get('filter/filter_computers','ComputerController@filter_computers')->name('computers.filter_computers');  //ruta para filtrar computadores con la compañia y sucursal a la cual pertenecen.
+// 	// Route::get('filter/filter_by_name','ComputerController@filter_by_name')->name('computers.filter_by_name'); //ruta para filtrar computador con el nombre.
+// 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
+// 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
-	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
-});
+// 	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+// });
 Route::group(['prefix' => 'pivot'], function () {
 	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
 });
@@ -88,12 +88,15 @@ Route::group(['prefix' => 'events'], function () {
 	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
 
 });
+//filestore
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');
 Route::group(['prefix' => 'companies'], function () {
+	Route::delete('/', 'CompanyController@destroy')->name('companies.destroy');
+	Route::get('/filter/filter_by', 'CompanyController@filter_by')->name('companies.filter_by');
 	//Events
 	Route::group(['prefix' => '{company}/events'], function () {
 		Route::get('/', 'CompanyController@indexEvent')->name('companies.events.index');
@@ -103,6 +106,8 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::put('/{event}', 'CompanyController@updateEvent')->name('companies.events.update');
 		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
+		//Events/Contents
+		// Route::post('/fileStore', 'CompanyController@fileStore')->name('companies.fileStore');
 	});
 	//pivots
 	Route::group(['prefix' => '{company}/pivots'], function () {
@@ -115,7 +120,7 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::delete('/{pivot}', 'CompanyController@destroyPivot')->name('companies.pivots.destroy');
 		Route::post('/{pivot}', 'CompanyController@storeOnpivot')->name('companies.storeOnpivot');
 		Route::delete('/{pivot}/onpivot', 'CompanyController@destroyOnpivot')->name('companies.destroyOnpivot');
-		Route::get('filter/filter_by', 'CompanyController@filter_by')->name('companies.pivots.filter_by');
+		Route::get('/filter/filter_by', 'CompanyController@filterPivot_by')->name('companies.pivots.filter_by');
 	});
 	//Computers
 	Route::group(['prefix' => '{company}/computers'], function () {
@@ -126,12 +131,16 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::get('/{computer}/edit','CompanyController@editComputer')->name('companies.computers.edit');
 		Route::put('/{computer}','CompanyController@updateComputer')->name('companies.computers.update');
 		Route::delete('/{computer}', 'CompanyController@destroyComputer')->name('companies.computers.destroy');
+		Route::get('filter/filter_computers', 'CompanyController@filter_computers')->name('companies.computers.filter_computers');
+		//Computers/screens
 		Route::post('/{computer}/screens', 'CompanyController@storeScreen')->name('companies.storeScreen');
 		Route::get('/{computer}/screens/{screen}','CompanyController@showScreen')->name('companies.computers.showScreen');
 		Route::get('/{computer}/screens/{screen}/edit','CompanyController@editScreen')->name('companies.computers.editScreen');
 		Route::put('/{computer}/screens', 'CompanyController@updateScreen')->name('companies.computers.updateScreen');
-		Route::get('filter/filter_computers', 'CompanyController@filter_computers')->name('companies.computers.filter_computers');
-		Route::put('/{computer}/screens/{screen}/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');
+		Route::put('/{computer}/screens/{screen}/status','CompanyController@changeStatusScreen')->name('companies.computers.changeStatusScreen');
+		Route::post('/{computer}/screens/{screen}/assign','CompanyController@eventAssignScreen')->name('companies.computers.eventAssignScreen');
+		Route::put('/{computer}/screens/{screen}/clone','CompanyController@cloneEventScreen')->name('companies.computers.cloneEventScreen');
+		Route::put('/{computer}/screens/{screen}/change','CompanyController@changeOrderScreen')->name('companies.computers.changeOrderScreen');
 
 	});
 

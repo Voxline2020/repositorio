@@ -33,7 +33,7 @@
 	{!! Form::hidden('company_id', $company->id) !!}
 	{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
 	@if(Auth::user()->hasRole('Administrador'))
-		<a href="{!! route('companies.events.index',$company) !!}" class="btn btn-info">Cancelar</a>
+		<a href="{!! route('companies.events.index',$company) !!}" class="btn btn-secondary">Cancelar</a>
 	@else
 		<a href="{!! route('events.index') !!}" class="btn btn-info">Cancelar</a>
 	@endif

@@ -20,5 +20,5 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('playlists.index') !!}" class="btn btn-info">Atras</a>
+    <a href="{!! route('playlists.index') !!}" class="btn btn-outline-primary">Atras</a>
 </div>

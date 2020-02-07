@@ -4,14 +4,13 @@
 	{!! Form::text('name', $screen->name, ['class' => 'form-control']) !!}
 </div>
 <div class="form-group col-sm-4">
-	{!! Form::label('height', 'Ingrese alto:') !!}
-	{!! Form::input('number','height', $screen->height, ['class' => 'form-control']) !!}
-</div>
-<div class="form-group col-sm-4">
 	{!! Form::label('width', 'Ingrese ancho:') !!}
 	{!! Form::input('number','width', $screen->width, ['class' => 'form-control']) !!}
 </div>
-
+<div class="form-group col-sm-4">
+	{!! Form::label('height', 'Ingrese alto:') !!}
+	{!! Form::input('number','height', $screen->height, ['class' => 'form-control']) !!}
+</div>
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}

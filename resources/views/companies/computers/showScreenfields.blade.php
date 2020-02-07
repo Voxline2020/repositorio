@@ -1,19 +1,16 @@
-<div class="col-md-12">
-	@include('flash::message')
+<div class="row">
+	<div class="col-md-9">
+		@php $mytime = Carbon\Carbon::now()@endphp
+		<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
+	</div>
+	<div class="col-md-2">
+		<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">AñadirEvento</a>
+	</div>
+	<div class="col-md-1.5">
+		<a href="{!! route('companies.computers.show',['company' => $company,'computer'=>$computer]) !!}" type="button" class="btn btn-outline-primary w-100">Atras</a>
+	</div>
 </div>
-<div class="col-md-9">
-	@php $mytime = Carbon\Carbon::now()@endphp
-	<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
-</div>
-<div class="col-md-2">
-	<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">Añadir
-		Evento</a>
-</div>
-<div class="col-md-1.5">
-	<a href="{!! route('companies.computers.show',['company' => $company,'computer'=>$computer]) !!}" type="button" class="btn btn-primary w-100">Volver</a>
-</div>
-<br>
-<br>
+<hr>
 <div class="table-responsive">
 	<table class="table table-hover">
 		<thead class="thead-dark">
@@ -35,11 +32,11 @@
 				<td>{!! \Carbon\Carbon::parse($assign->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 				<td>
 					<div class='btn-group'>
-						<a href="{!! route('events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+						<a href="{!! route('companies.events.show', [ $company,$assign->content->event]) !!}" class='btn btn-info'><i
 								class="fas fa-eye"></i></a>
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
 						data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
-						{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+						{!! Form::model($screen,['route' => ['companies.computers.cloneEventScreen',$company,$computer,$screen], 'method' => 'put']) !!}
 						{!! Form::hidden('content_id',$assign->content->id) !!}
 						{!! Form::hidden('screen_id',$screen->id) !!}
 						{!! Form::hidden('order',$assign->order) !!}
@@ -87,9 +84,8 @@
 					<td>{!! \Carbon\Carbon::parse($inactive->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 					<td>
 						<div class='btn-group'>
-							<a href="{!! route('events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
-									class="fas fa-eye"></i></a>
-							<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
+							<a href="{!! route('companies.events.show', [ $company,$inactive->content->event]) !!}" class='btn btn-info'><i class="fas fa-eye"></i></a>
+							<a class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
 							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
 							{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
 							{!! Form::hidden('content_id',$inactive->content->id) !!}
@@ -128,7 +124,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				{!! Form::model($eventAssigns, ['route' => ['screens.changeOrder'], 'method' => 'put']) !!}
+				{!! Form::model($eventAssigns, ['route' => ['companies.computers.changeOrderScreen',$company,$computer,$screen], 'method' => 'put']) !!}
 				<div class="modal-body">
 					{!! Form::hidden('id') !!}
 					{!! Form::hidden('screen') !!}
@@ -156,7 +152,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					{!! Form::model($screen, ['route' => ['screens.eventAssign', $screen->id], 'method' => 'post']) !!}
+					{!! Form::model($screen, ['route' => ['companies.computers.eventAssignScreen','company'=>$company,'computer'=>$computer,'screen'=>$screen], 'method' => 'post']) !!}
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead class="thead-dark">

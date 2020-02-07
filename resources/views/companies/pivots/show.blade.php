@@ -10,7 +10,7 @@
 			<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#addOnpivot">Agregar</a>
 		</div>
 		<div class="col-md-2">
-			<a  type="button" class="btn btn-primary w-100" href="{{route('companies.pivots.index',[$pivot->company_id]) }}">Volver</a>
+			<a  type="button" class="btn btn-outline-primary w-100" href="{{route('companies.pivots.index',[$pivot->company_id]) }}">Atras</a>
 		</div>
 	</div>
 	<hr>

@@ -18,7 +18,7 @@
             <p><b>Tipo:</b> {!! $screen->type !!}</p>
 				</div>
         <div class="col-md-3">
-            {!! Form::model($screen, ['route' => ['screens.changeStatus', $screen->id], 'method' => 'put']) !!}
+            {!! Form::model($screen, ['route' => ['companies.computers.changeStatusScreen', 'company'=>$company,'computer'=>$computer,'screen'=>$screen], 'method' => 'put']) !!}
                 @if($screen->state==0)
                     {!! Form::hidden('state', 1) !!}
                     <b>Estado: </b>{!! Form::submit('Inactivo', ['class' => 'btn btn-danger']) !!}
@@ -35,12 +35,19 @@
 			<div class="col-md-3">
 				<p><b>Version: </b>@if($screen->version==null) N/A @else{!! $screen->version !!}@endif</p>
 		</div>
-    </div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				@include('flash::message')
+			</div>
+		</div>
     <div class="content">
         <div class="box box-primary">
             <div class="box-body">
-                <div class="row" style="padding-left: 20px">
-                    @include('companies.computers.showScreenfields')
+                <div class="row">
+									<div class="col-md-12">
+										@include('companies.computers.showScreenfields')
+									</div>
                 </div>
             </div>
         </div>

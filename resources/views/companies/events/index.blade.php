@@ -3,14 +3,17 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-6">
 			<h2 class=font-weight-bold>Eventos &#x1F4C6;</h2>
+		</div>
+		<div class="col-md-2">
+			<a class="btn btn-secondary w-100" href="{!! route('companies.events.index',$company) !!}">Limpiar</a>
 		</div>
 		<div class="col-md-2">
 			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company) !!}">Nuevo Evento</a>
 		</div>
 		<div class="col-md-2">
-			<a class="btn btn-primary w-100" href="{!! route('companies.index') !!}">Atras</a>
+			<a class="btn btn-outline-primary w-100" href="{!! route('companies.index') !!}">Atras</a>
 		</div>
 	</div>
 	<hr>

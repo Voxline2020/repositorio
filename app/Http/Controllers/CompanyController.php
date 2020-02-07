@@ -37,9 +37,10 @@ class CompanyController extends AppBaseController
   public function index(Request $request)
   {
 		$computers = Computer::all();
+		$pivots = ComputerPivot::all();
     $companies = Company::paginate();
     return view('companies.index')
-      ->with('companies', $companies)->with('computers', $computers);
+      ->with('companies', $companies)->with('computers', $computers)->with('pivots', $pivots);
   }
   //mostrar compañias con id en especifico
   public function show($id)
@@ -90,25 +91,44 @@ class CompanyController extends AppBaseController
 		dd($request);
   }
   //eliminar compañias
-  public function destroy($id)
+  public function destroy(Request $request)
   {
-    $company = $this->companyRepository->find($id);
+    $company = $this->companyRepository->find($request->company);
     if (empty($company)) {
-      Flash::error('compañia no encontrada');
+      Flash::error('compañia no encontrada.');
       return redirect(route('companies.index'));
     }
-    $this->companyRepository->delete($id);
-    Flash::success('Compañia borrada');
+    $this->companyRepository->delete($request->company);
+    Flash::success('Compañia borrada.');
     return redirect(route('companies.index'));
   }
-
   public function dash()
   {
     $companies = $this->companyRepository->all();
     return view('companies.index')
       ->with('companies', $companies);
-  }
+	}
+	public function filter_by(Request $request)
+	{
+		// dd($request);
+		$computers = Computer::all();
+		$pivots = ComputerPivot::all();
+    $companies = Company::all();
+		if($request->nameFiltrar==null){
+			Flash::error('Debes ingresar almenos un filtro para la busqueda.');
+			return redirect(route('companies.index'));
+		}
+		if($request->nameFiltrar!=null){
+			$companies = Company::where('name','like',"%$request->nameFiltrar%")->paginate();
+		}
+		if($companies->count()==0){
+			Flash::info('No se encontro ningun resultado.');
+			return redirect(route('companies.index'));
+		}
+		return view('companies.index')->with('companies', $companies)->with('computers', $computers)->with('pivots', $pivots);
 
+	}
+	//companies//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ANCHOR Eventos Compañia
   public function indexEvent(Company $company, Request $request)
   {
@@ -117,13 +137,29 @@ class CompanyController extends AppBaseController
     $listsStore = Store::all();
     return view('companies.events.index', compact('lists', 'listsStore', 'events', 'company'));
   }
-  public function showEvent(Company $company, Event $event)
+  public function showEvent(Company $company,Event $event)
   {
-    if (empty($company) || empty($event)) {
-      Flash::error('Compañia no encontrada');
-      return redirect(route('companies.events.index', $company));
-    }
-    return view('companies.events.show', compact('company','event'));
+		//comprobamos que el evento tenga contenido
+		if($event->contents->count()!=0){
+			//obtenemos los contenidos del evento
+			$contentsList = [];
+			foreach ($event->contents AS $content) {
+				array_push($contentsList, $content->id);
+			};
+			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+			//extraemos las pantallas de los contenidos asignados
+			$list = [];
+			foreach ($eventAssigns AS $asign) {
+				array_push($list, $asign->screen_id);
+			};
+			//extraemos las pantallas
+			$screens= screen::find($list);
+			return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))->with('screens',$screens);
+		}else{
+			$screens= $event->contents;
+			return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))->with('screens',$screens);
+		}
   }
   public function createEvent(Company $company)
   {
@@ -169,20 +205,15 @@ class CompanyController extends AppBaseController
 			return redirect(route('events.show', [ $event[0]->id]));
 		}
   }
-  public function editEvent($id)
+  public function editEvent(Company $company,Event $event )
   {
-    $company = $this->companyRepository->find($id);
-    if (empty($company)) {
-      Flash::error('Compañia no encontrada');
-      return redirect(route('companies.index'));
-    }
-    return view('companies.edit')->with('company', $company);
+    return view('companies.events.edit')->with('company', $company)->with('event', $event);
   }
   public function updateEvent($id, UpdateCompanyRequest $request)
   {
     $company = $this->companyRepository->find($id);
     if (empty($company)) {
-      Flash::error('compañia no encontrada');
+      Flash::error('compañia no encontrada.');
       return redirect(route('companies.index'));
     }
     $company = $this->companyRepository->update($request->all(), $id);
@@ -194,14 +225,87 @@ class CompanyController extends AppBaseController
   {
     $company = $this->companyRepository->find($id);
     if (empty($company)) {
-      Flash::error('compañia no encontrada');
+      Flash::error('compañia no encontrada.');
       return redirect(route('companies.index'));
     }
     $this->companyRepository->delete($id);
     Flash::success('Compañia borrada');
     return redirect(route('companies.index'));
-  }
+	}
+	public function formatDuration($duration)
+	{
+		// The base case is A:BB
+		if(strlen($duration) == 4){
+				return "00:0" . $duration;
+		}
+		// If AA:BB
+		else if(strlen($duration) == 5){
+				return "00:" . $duration;
+		}   // If A:BB:CC
+		else if(strlen($duration) == 7){
+				return "0" . $duration;
+		}
+	}
+	public function fileStore(Request $request)
+	{
+		dd($request);
+	// 	$files = $request->file('file');
 
+	// 	$event = null;
+	// 	if (isset($request['event_id']) && !empty($request['event_id'])) {
+	// 	$event = Event::find($request['event_id']);
+	// 	} else {
+	// 		return response('Evento no existe o el id es incorrecto', 404)->header('Content-Type', 'text/plain');
+	// 	}
+
+	// 	if ($request->hasFile('file')) {
+	// 	//Rescata valores de los archivos subidos
+	// 		foreach ($files as $file) {
+	// 			//Analizar Video
+	// 			$getID3 = new \getID3;
+	// 			$fileX = $getID3->analyze($file);
+	// 			$filetype = $file->getClientOriginalExtension();
+	// 			$mime = $file->getClientMimeType();
+	// 			$user_id = Auth::user()->id;
+	// 			$size = $file->getSize();
+	// 			$width = $fileX['video']['resolution_x'];
+	// 			$height = $fileX['video']['resolution_y'];
+	// 			$duration = EventController::formatDuration($fileX['playtime_string']);
+
+	// 			//Nombre archivo
+	// 			$name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+	// 			$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+	// 			$slug = Str::slug($name);
+
+	// 			//Guardar archivos
+	// 			$path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
+
+	// 			$request->merge([
+	// 				'user_id' => $user_id,
+	// 				'location' => $path,
+	// 				'original_name' => $original_name,
+	// 				'slug' => $slug,
+	// 				'filetype' => $filetype,
+	// 				'mime' => $mime,
+	// 				'event_id' => $event->id,
+	// 				'size' => $size,
+	// 				'width' => $width,
+	// 				'height' => $height,
+	// 				'name' => $name,
+	// 				'duration' => $duration,
+	// 			]);
+
+	// 			// $file->move($path, $original_name . '.mp4');
+
+	// 			$input = $request->all();
+	// 			if ($this->contentRepository->create($input)) {
+	// 				return response('OK', 200)->header('Content-Type', 'text/plain');
+	// 			}
+	// 		}
+	// 	}
+	// return redirect()->route('events.index');
+	}
+	//stores//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ANCHOR Sucursales Compañia
   public function indexStore(Company $company, Request $request)
   {
@@ -234,7 +338,7 @@ class CompanyController extends AppBaseController
   public function showStore(Company $company, Store $store)
   {
     if (empty($company)) {
-      Flash::error('Compañia no encontrada');
+      Flash::error('Compañia no encontrada.');
       return redirect(route('companies.stores.index', compact('company')));
     }
     return view('companies.stores.show', compact('company', 'store'));
@@ -299,7 +403,7 @@ class CompanyController extends AppBaseController
   {
     $company = $this->companyRepository->find($id);
     if (empty($company)) {
-      Flash::error('Compañia no encontrada');
+      Flash::error('Compañia no encontrada.');
       return redirect(route('companies.index'));
     }
     return view('companies.show')->with('company', $company);
@@ -410,7 +514,7 @@ class CompanyController extends AppBaseController
     Flash::success('Tienda borrada');
     return redirect(route('companies.stores.index', $company));
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//Pivot///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function indexPivot($id,Request $request)
   {
 		$stores = Store::where('company_id',$id)->get();
@@ -511,7 +615,7 @@ class CompanyController extends AppBaseController
 		Flash::success('Asignacion eliminada.');
 		return redirect()->route('companies.pivots.show', ['company'=>$company,$pivot->id]);
 	}
-	public function filter_by($id,Request $request)
+	public function filterPivot_by($id,Request $request)
 	{
 
 		$companies = Company::all();
@@ -700,22 +804,20 @@ class CompanyController extends AppBaseController
 		Flash::success('Pantalla borrada');
 		return redirect(url()->previous());
 	}
-	public function changeStatusScreen(Request $request)
+	public function changeStatusScreen(Company $company,Computer $computer, Screen $screen,Request $request)
 	{
-		// $screen = Screen::find($id);
-		// $screen->state = $request['state'];
-		// if (empty($request)) {
-		// 	Flash::error('Error');
-		// 	return redirect(url()->previous());
-		// }
-		// $screen->save();
-		// Flash::success('Estado actualizado');
-		// return redirect(url()->previous($screen));
+		$screen->state = $request['state'];
+		if (empty($request)) {
+			Flash::error('Error');
+			return redirect(url()->previous());
+		}
+		$screen->save();
+		Flash::success('Estado actualizado');
+		return redirect(url()->previous($screen));
 	}
-	public function EventAssignScreen($id, Request $request)
+	public function eventAssignScreen(Company $company,Computer $computer, Screen $screen, Request $request)
 	{
-		// $request->merge(['slug' => Str::slug($request['name'])]);
-		$screen= Screen::find($id);
+		$request->merge(['slug' => Str::slug($request['name'])]);
 		$event = Event::find($request->event_id);
 		$contents = Content::where('event_id',$request->event_id)
 		->where('width',$screen->width)
@@ -724,7 +826,7 @@ class CompanyController extends AppBaseController
 		if($contents->count()!=1){
 			foreach($contents AS $content){
 				$request->merge([
-				"screen_id"=> $id,
+				"screen_id"=> $screen->id,
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				]);
@@ -733,17 +835,19 @@ class CompanyController extends AppBaseController
 			}
 		}else{
 			$request->merge([
-				"screen_id"=> $id,
+				"screen_id"=> $screen->id,
 				"state"=>$event->state,
 				"content_id"=>$contents[0]->id,
 				]);
 				$input = $request->all();
 				EventAssignation::create($input);
+				$screen->version=$screen->version+1;
+				$screen->save();
 		}
 		Flash::success('Evento asignado exitosamente');
 		return redirect(url()->previous($screen));
 	}
-	public function changeOrderScreen(Request $request)
+	public function changeOrderScreen(Company $company,Computer $computer, Screen $screen,Request $request)
 	{
 		// validaciones
 		if($request->neworder==null){
@@ -760,9 +864,7 @@ class CompanyController extends AppBaseController
 		}
 		//traemos la asignacion
 		$assign=EventAssignation::find($request->id);
-		//traemos la pantalla
-		$screen=Screen::find($request->screen);
-		//asignamos los nuevos valores y guradamos
+		//asignamos los nuevos valores y guardamos
 		$assign->order = $request->neworder;
 		$screen->version = $screen->version+1;
 		$assign->save();
@@ -770,12 +872,11 @@ class CompanyController extends AppBaseController
 		Flash::success('Se ha cambiado el Nº de orden correctamente.');
 		return redirect(url()->previous());
 	}
-	public function cloneEventScreen(Request $request)
+	public function cloneEventScreen(Company $company,Computer $computer, Screen $screen,Request $request)
 	{
 		// extraemos los datos del elemento original
 		$input = $request->all();
 		//cambiamos version en pantalla
-		$screen=Screen::find($request->screen_id);
 		$screen->version = $screen->version+1;
 		$screen->save();
 		//creamos el nuevo elemento clonado

@@ -52,8 +52,8 @@
 				<a class="nav-link" href="{{route('dash') }}">Inicio</a>
 			</li>
 			@if (Auth::user()->hasRole('Administrador'))
-				{{-- <li class="nav-item {{ Route::is('events.index') ? 'active': null }}">
-					<a class="nav-link" href="{{ route('eventsOld.index') }}">Eventos</a>
+				{{-- <li class="nav-item {{ Route::is('clients.index') ? 'active': null }}">
+					<a class="nav-link" href="{{ route('clients.index') }}">Cliente</a>
 				</li> --}}
 				<li class="nav-item {{ Route::is('users.index') ? 'active': null }}">
 					<a class="nav-link" href="{{ route('users.index') }}">Usuarios</a>

@@ -6,7 +6,7 @@
 		<h2 class=font-weight-bold> Sucursal {{ $store->name }}  </h2>
 	</div>
 	<div class="col-md-3">
-		<a class="btn btn-primary w-100"  href="{!! route('companies.stores.index', $company) !!}">Atras</a>
+		<a class="btn btn-outline-primary w-100"  href="{!! route('companies.stores.index', $company) !!}">Atras</a>
 	</div>
 </div>
 

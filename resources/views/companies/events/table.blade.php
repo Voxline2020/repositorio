@@ -12,6 +12,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			@if($events->count()!=0)
 			@foreach($events as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
@@ -37,6 +38,16 @@
 				</td>
 			</tr>
 			@endforeach
+			@else
+				<tr>
+					<td>No hay ningun evento agregado.</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			@endif
 		</tbody>
 	</table>
 	{{ $events->links() }}

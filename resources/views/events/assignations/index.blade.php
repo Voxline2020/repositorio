@@ -20,7 +20,7 @@
 		<h4><span class="badge badge-light">Medidas: {!! $content->Resolution !!}</span></h4>
 	</div>
 	<div class="col-md-3">
-	<a href="{{ url()->previous() }}" class="btn btn-info w-100">Atras</a>
+	<a href="{{ url()->previous() }}" class="btn btn-outline-primary w-100">Atras</a>
 	</div>
 </div>
 

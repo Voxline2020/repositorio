@@ -50,6 +50,20 @@
 		</thead>
 		<tbody>
 			@foreach ($companies as $company)
+			@php
+			$computersCount=0;
+			foreach($computers AS $computer){
+				if($computer->store->company_id==$company->id){
+					$computersCount=$computersCount+1;
+				}
+			}
+			$pivotCount=0;
+			foreach($pivots AS $pivot){
+				if($pivot->company_id==$company->id){
+					$pivotCount=$pivotCount+1;
+				}
+			}
+			@endphp
 			<tr>
 				<td>{!! $company->name !!}</td>
 				<td style="text-align: center" class="{!! $company->stores->count() == 0 ? 'red-text': '' !!}">
@@ -59,10 +73,12 @@
 				<td style="text-align: center" class="{!! $company->events->count() == 0 ? 'red-text': '' !!}">
 					{!! $company->events->count() !!}
 				</td>
-				<td style="text-align: center" class="{!! $computers->count() == 0 ? 'red-text': '' !!}">
-					{!! $computers->count() !!}
+				<td style="text-align: center" class="{!! $computersCount == 0 ? 'red-text': '' !!}">
+					{!! $computersCount !!}
 				</td>
-				<td style="text-align: center">0</td>
+				<td style="text-align: center" class="{!! $pivotCount == 0 ? 'red-text': '' !!}">
+					{!! $pivotCount !!}
+				</td>
 				<td>
 					<div class='btn-group'>
 						<a href="{{ route('companies.stores.index', [$company]) }}" class="btn btn-success w-100"><i class="fas fa-store"></i></a>

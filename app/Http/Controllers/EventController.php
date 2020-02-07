@@ -420,7 +420,6 @@ class EventController extends Controller
 			foreach ($event->contents AS $content) {
 				array_push($contentsList, $content->id);
 			};
-			// dd($contentsList);
 			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
 			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
 			//extraemos las pantallas de los contenidos asignados

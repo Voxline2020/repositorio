@@ -38,9 +38,9 @@
             <div class="box-body">
                 <div class="row" style="padding-left: 20px">
                     @include('playlists.show_fields')
-                    <a href="{{ URL::previous() }}" class="btn btn-info">Atras</a>
+                    <a href="{{ URL::previous() }}" class="btn btn-outline-primary">Atras</a>
                 </div>
-                
+
             </div>
         </div>
     </div>

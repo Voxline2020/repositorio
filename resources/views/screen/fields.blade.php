@@ -17,5 +17,5 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
 	{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-	<a href="{{ url()->previous() }}" class="btn btn-info">Cancelar</a>
+	<a href="{{ url()->previous() }}" class="btn btn-secondary">Cancelar</a>
 </div>

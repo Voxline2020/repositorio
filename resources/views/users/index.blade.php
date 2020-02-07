@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 		<h2 class=font-weight-bold> Usuarios 👨👩 </h2>
 	</div>
 	<div class="col-md-2">
@@ -11,6 +11,9 @@
 	</div>
 	<div class="col-md-2">
 		<a class="btn btn-success w-100"  href="{!! route('users.create') !!}">Nuevo Usuario</a>
+	</div>
+	<div class="col-md-2">
+		<a  type="button" class="btn btn-outline-primary w-100" href="{!! route('companies.index') !!}">Atras</a>
 	</div>
 </div>
 <hr>
