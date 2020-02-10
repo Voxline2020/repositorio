@@ -14,7 +14,7 @@
 			<a  type="button" class="btn btn-warning w-100" href="{!! route('events.show', [ $event->id]) !!}">Editar</a>
 		</div>
 		<div class="col-md-2">
-			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
+			<a  type="button" class="btn btn-outline-primary w-100" href="{{ URL::previous() }}">Atras</a>
 		</div>
 	</div>
 	<br>

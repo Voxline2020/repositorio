@@ -10,7 +10,7 @@
 		</h4>
 	</div>
 	<div class="col-md-3">
-		<a class="btn btn-primary w-100"  href="{!! route('users.index') !!}">Atras</a>
+		<a class="btn btn-outline-primary w-100"  href="{!! route('users.index') !!}">Atras</a>
 	</div>
 </div>
 

@@ -28,7 +28,6 @@
 				<td>
 					{!! Form::open(['route' => ['screens.destroy', $screen->id], 'method' => 'delete']) !!}
 					<div class='btn-group'>
-						<a>
 							<a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}"
 								class="btn btn-warning"><i class="fas fa-edit"></i></a>
 							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger

@@ -1,6 +1,6 @@
 <div class="table-responsive">
 	<table class="table" id="users-table">
-		<thead>
+		<thead class="thead-dark">
 			<tr>
 				<th>Nombre</th>
 				<th>Email</th>
@@ -70,4 +70,5 @@
 			@endforeach
 		</tbody>
 	</table>
+	{{$users->links()}}
 </div>

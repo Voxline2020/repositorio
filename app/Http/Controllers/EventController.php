@@ -44,7 +44,7 @@ class EventController extends Controller
   {
     $company = Company::where('id',  auth()->user()->company_id)->first();
     // $events = $this->eventRepository->all();
-    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate(5);
+    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate();
     // $lists = Event::where('company_id', $id);
     $listsStore = Store::all();
     return view('events.index', compact('events', 'listsStore'))->with('company', $company);
@@ -238,11 +238,14 @@ class EventController extends Controller
     if (empty($event)) {
       Flash::error('Evento no encontrado');
 
-      return redirect(route('events.index'));
+      return redirect(route('companies.events.index',[$id]));
     }
     $this->eventRepository->delete($id);
-    Flash::success('El evento ha sido borrado.');
-    return redirect(route('events.index'));
+		Flash::success('El evento ha sido borrado.');
+		if (Auth::user()->hasRole('Administrador')){
+			return redirect(route('companies.events.index',[$event->company_id]));
+		}
+		return redirect(route('clients.events.index',[$event->company_id]));
   }
 
   //ANCHOR Asignations
@@ -410,20 +413,28 @@ class EventController extends Controller
 
   public function showClient(Event $event, Request $request)
   {
-		//obtenemos los contenidos del evento
-		$contentsList = [];
-    foreach ($event->contents AS $content) {
-			array_push($contentsList, $content->id);
-		};
-		//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
-		$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
-		//extraemos las pantallas de los contenidos asignados
-		$list = [];
-		foreach ($eventAssigns AS $asign) {
-			array_push($list, $asign->screen_id);
-		};
-		$screens= screen::find($list);
-    return view('client.events.show', compact('event'))->with('screens',$screens);
+		//comprobamos que el evento tenga contenido
+		if($event->contents->count()!=0){
+			//obtenemos los contenidos del evento
+			$contentsList = [];
+			foreach ($event->contents AS $content) {
+				array_push($contentsList, $content->id);
+			};
+			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+			//extraemos las pantallas de los contenidos asignados
+			$list = [];
+			foreach ($eventAssigns AS $asign) {
+				array_push($list, $asign->screen_id);
+			};
+			//extraemos las pantallas
+			$screens= screen::find($list);
+			return view('client.events.show', compact('event'))->with('screens',$screens);
+		}else{
+			$screens= $event->contents;
+    	return view('client.events.show', compact('event'))->with('screens',$screens);
+		}
+
   }
 
   public function ScreenShow($id)

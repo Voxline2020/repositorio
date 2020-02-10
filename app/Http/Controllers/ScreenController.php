@@ -48,12 +48,12 @@ class ScreenController extends AppBaseController
 	//mostrar pantallas con id en especifico
 	public function show($id)
 	{
-		$computers = Computer::where('id', $id)->first();
+		$computer = Computer::where('id', $id)->first();
 		$screen = Screen::where('computer_id', $id)->paginate();
 		return view(
 			'screen.index',
 			['screens' => $screen],
-			compact('computers')
+			compact('computer')
 		);
 	}
 	public function AssignContent($id)
@@ -96,8 +96,8 @@ class ScreenController extends AppBaseController
 	//vista de creacion
 	public function create($id)
 	{
-		$computers = Computer::where('id', $id)->get();
-		return view('screen.create', compact('computers'));
+		$computer = Computer::where('id', $id)->get();
+		return view('screen.create')->with('computer',$computer);
 	}
 	//Request de creacion (POST)
 	public function store(CreateScreenRequest $request)

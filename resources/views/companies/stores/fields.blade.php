@@ -21,5 +21,5 @@
 <div class="form-group col-sm-12 col-md-6">
 		{!! Form::hidden('company_id', $company->id)!!}
     {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-    <a href="{{ route('companies.stores.index', $company) }}" class="btn btn-danger">Cancelar</a>
+    <a href="{{ route('companies.stores.index', $company) }}" class="btn btn-secondary">Cancelar</a>
 </div>

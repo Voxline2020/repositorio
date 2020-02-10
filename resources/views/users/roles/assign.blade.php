@@ -27,7 +27,7 @@
 	</div>
 	<div class="form-group col-sm-12 text-right">
 			{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-			<a href="{!! route('users.index') !!}" class="btn btn-warning">Cancelar</a>
+			<a href="{!! route('users.index') !!}" class="btn btn-secondary">Cancelar</a>
 	</div>
 </div>
 {!! Form::close() !!}

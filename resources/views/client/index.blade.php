@@ -89,7 +89,7 @@
 				var topping = data.getValue(selectedItem.row, 1);
 				var topping2 = data.getValue(selectedItem.row, 0);
 				alert('hay ' + topping +' pantalla(s) '+ topping2 );
-				document.location.href="{!!  route('computers.index'); !!}";
+				document.location.href="{!!  route('companies.computers.index',Auth::user()->company_id); !!}";
 			}
 		}
 

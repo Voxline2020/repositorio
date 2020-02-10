@@ -10,7 +10,7 @@
 		Evento</a>
 </div>
 <div class="col-md-1.5">
-	<a href="{{ route('clients.index') }}" type="button" class="btn btn-primary w-100">Volver</a>
+	<a href="{{ route('clients.index') }}" type="button" class="btn btn-outline-primary w-100">Atras</a>
 </div>
 <br>
 <br>
@@ -53,7 +53,7 @@
 			@endforeach
 			@else
 			<tr>
-				<td>Aun no hay eventos asignados.</td>
+				<td>No hay eventos asignados.</td>
 				<td></td>
 				<td></td>
 				<td></td>

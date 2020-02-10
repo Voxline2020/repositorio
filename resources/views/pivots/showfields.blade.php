@@ -28,7 +28,7 @@
 			@endforeach
 			@else
 			<tr>
-				<td>Aun No hay computadores asignados.</td>
+				<td>No hay computadores asignados.</td>
 				<td></td>
 				<td></td>
 				<td></td>

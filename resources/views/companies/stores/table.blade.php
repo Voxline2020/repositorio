@@ -11,6 +11,7 @@
             </tr>
 					</thead>
         <tbody>
+				@if($stores->count()!=0)
         @foreach($stores as $store)
             <tr>
 								<td>{!! $store->name !!}</td>
@@ -38,7 +39,15 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
-        @endforeach
+				@endforeach
+				@else
+						<tr>
+							<td>No hay ninguna Tienda o Sucursal agregada.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+				@endif
         </tbody>
     </table>
 </div>

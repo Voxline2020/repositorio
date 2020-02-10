@@ -3,10 +3,10 @@
 @section('content')
 <div class="row">
 	<div class="col-md-9">
-		<h1 class="font-weight-bold">{{ $computers->code }} </h1>
+		<h1 class="font-weight-bold">{{ $computer->code }} </h1>
 	</div>
 			<div class="col-md-3">
-				<a class="btn btn-success w-100" href="{!! route('screens.createOneParam',$computers->id)!!}">Nueva pantalla</a>
+				<a class="btn btn-success w-100" href="{!! route('screens.createOneParam',$computer)!!}">Nueva pantalla</a>
 			</div>
 
 </div>

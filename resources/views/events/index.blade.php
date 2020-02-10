@@ -13,7 +13,7 @@
 			<a class="btn btn-success w-100" href="{!! route('companies.events.create',$company->id) !!}">Nuevo Evento</a>
 		</div>
 		<div class="col-md-2">
-			<a  type="button" class="btn btn-primary w-100" href="{{ URL::previous() }}">Volver</a>
+			<a  type="button" class="btn btn-outline-primary w-100" href="{{ URL::previous() }}">Atras</a>
 		</div>
 	</div>
 	<hr>
@@ -51,7 +51,9 @@
 </div>
 <hr>
 <div class="row">
-@include('flash::message')
+	<div class="col-md-12">
+		@include('flash::message')
+	</div>
 	<div class="col-md-12">
 		@include('companies.events.table')
 	</div>

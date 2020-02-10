@@ -41,7 +41,7 @@
 			<tr>
 				<th>Nombre</th>
 				<th>Nº Sucursales <i class="fas fa-store"></i></th>
-				<th>Nº Incidencias <i class="fas fa-fire"></i></th>
+				{{-- <th>Nº Incidencias <i class="fas fa-fire"></i></th> --}}
 				<th>Nº Eventos <i class="fas fa-calendar"></th>
 				<th>Nº Computadores <i class="fas fa-desktop"></i></th>
 				<th>Nº Pivotes <i class="fas fa-server"></i></th>
@@ -50,26 +50,42 @@
 		</thead>
 		<tbody>
 			@foreach ($companies as $company)
+			@php
+			$computersCount=0;
+			foreach($computers AS $computer){
+				if($computer->store->company_id==$company->id){
+					$computersCount=$computersCount+1;
+				}
+			}
+			$pivotCount=0;
+			foreach($pivots AS $pivot){
+				if($pivot->company_id==$company->id){
+					$pivotCount=$pivotCount+1;
+				}
+			}
+			@endphp
 			<tr>
 				<td>{!! $company->name !!}</td>
 				<td style="text-align: center" class="{!! $company->stores->count() == 0 ? 'red-text': '' !!}">
 					{!! $company->stores->count() !!}
 				</td>
-				<td style="text-align: center; color: red;">1</td>
+				{{-- <td style="text-align: center; color: red;">1</td> --}}
 				<td style="text-align: center" class="{!! $company->events->count() == 0 ? 'red-text': '' !!}">
 					{!! $company->events->count() !!}
 				</td>
-				<td style="text-align: center" class="{!! $computers->count() == 0 ? 'red-text': '' !!}">
-					{!! $computers->count() !!}
+				<td style="text-align: center" class="{!! $computersCount == 0 ? 'red-text': '' !!}">
+					{!! $computersCount !!}
 				</td>
-				<td style="text-align: center">0</td>
+				<td style="text-align: center" class="{!! $pivotCount == 0 ? 'red-text': '' !!}">
+					{!! $pivotCount !!}
+				</td>
 				<td>
 					<div class='btn-group'>
 						<a href="{{ route('companies.stores.index', [$company]) }}" class="btn btn-success w-100"><i class="fas fa-store"></i></a>
-						<a href="#" class="btn btn-danger w-100"><i class="fas fa-fire"></i></a>
+						{{-- <a href="#" class="btn btn-danger w-100"><i class="fas fa-fire"></i></a> --}}
 						<a href="{{ route('companies.events.index', [$company]) }}" class="btn btn-warning w-100"><i class="fas fa-calendar"></i></a>
-						<a href="{{ route('computers.index', [$company]) }}" class="btn btn-primary w-100"><i class="fas fa-desktop"></i></a>
-						<a href="{{ route('pivots.index', [$company]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
+						<a href="{{ route('companies.computers.index', [$company]) }}" class="btn btn-primary w-100"><i class="fas fa-desktop"></i></a>
+						<a href="{{ route('companies.pivots.index', [$company]) }}" class="btn btn-dark w-100"><i class="fas fa-server"></i></a>
 					</div>
 				</td>
 			</tr>
