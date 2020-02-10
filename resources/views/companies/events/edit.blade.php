@@ -156,7 +156,7 @@
 		autoDiscover: false,
 		autoProcessQueue: false,
 		uploadMultiple: true,
-		maxFilezise: 500,
+		maxFilezise: 1000,
 		maxFiles: 25,
 		parallelUploads: 5,
 		upload_max_filesize: 10000,
