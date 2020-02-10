@@ -232,6 +232,8 @@ Route::group(['prefix' => 'clients'], function () {
 		Route::put('/{event}', 'ClientController@updateEvent')->name('clients.events.update');
 		Route::delete('/{event}/delete', 'ClientController@destroyEvent')->name('clients.events.destroy');
 		Route::get('/filter/filter_by', 'ClientController@filterEvent_by')->name('clients.events.filter_by');
+		//Event/Assign
+		Route::delete('/assign/{assign}/delete', 'ClientController@destroyEventAssign')->name('clients.events.destroyAssign');
 	});
 });
 

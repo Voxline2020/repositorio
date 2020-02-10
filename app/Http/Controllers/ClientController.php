@@ -31,11 +31,6 @@ class ClientController extends Controller
 	//mostrar compañias
 	public function index(Request $request)
 	{
-		if (Auth::user()->hasRole('Administrador')){
-			$events = $this->eventRepository->all();
-			$screens = Screen::with(['computer','computer.store'])->orderBy('state', 'asc')->paginate();
-			$screensCount = Screen::with(['computer','computer.store'])->get();
-		}else{
 		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
 		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
@@ -47,7 +42,6 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->get();
-		}
 		$error = $request->session()->get('error');
 		if(!empty($error)){
 			Flash::error($error);
@@ -265,6 +259,12 @@ class ClientController extends Controller
     Flash::error('Ingrese un valor para generar la busqueda.');
     return redirect(url()->previous());
 		}
+	}
+	public function destroyEventAssign(EventAssignation $assign)
+  {
+    $assign->delete();
+    Flash::success('Evento desasignado.');
+    return redirect()->route('clients.show', ['id'=>$assign->screen_id]);
 	}
 	public function filter_screen(Request $request)
 	{
