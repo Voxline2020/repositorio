@@ -170,14 +170,13 @@ class ClientController extends Controller
 	public function createEvent()
   {
 		return view('client.events.create');
-		// return redirect(route('clients.index'));
   }
   public function storeEvent(Company $company, Request $request)
   {
 		$name = Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
 		if($name->count() != 0){
 			Flash::error('El evento "'.$request->name.'" ya existe.');
-			return redirect(route('companies.events.create', $company));
+			return redirect(route('clients.events.create'));
 		}
 		//Format Init Date
 		$request->merge([
@@ -188,18 +187,18 @@ class ClientController extends Controller
 		]);
 		if($request->initdate > $request->enddate){
 			Flash::error('La fecha de termino no puede ser inferior a la fecha de inicio.');
-			return redirect(route('companies.events.create', $company));
+			return redirect(route('clients.events.create'));
 		}else{
 			$input = $request->all();
 			Event::create($input);
 			$id = [];
 			$callevent =  Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
-			foreach($callevent as $e){
-				array_push($id,$e->id);
-			}
-			$event = Event::find($id);
+			// foreach($callevent as $e){
+			// 	array_push($id,$e->id);
+			// }
+			$event = Event::find($callevent[0]->id);
 			Flash::success('Evento agregado exitosamente');
-			return redirect(route('clients.events.index'));
+			return view('client.events.edit')->with('event', $event);
 		}
     Flash::error('Error al agregar el evento.');
 		return redirect(route('clients.events.index'));

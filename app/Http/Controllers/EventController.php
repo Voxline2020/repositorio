@@ -74,7 +74,7 @@ class EventController extends Controller
       $input = $request->all();
       $request->merge(['slug' => Str::slug($request['name'])]);
       $event = $this->eventRepository->create($input);
-      Flash::success('Evento agregado exitosamente');
+      Flash::success('Evento agregado exitosamente.');
       return redirect(route('events.index'));
     } else {
       Flash::error('La fecha  de termino tiene que ser mayor a la fecha de inicio ');
