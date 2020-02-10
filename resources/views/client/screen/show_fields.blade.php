@@ -1,6 +1,3 @@
-<div class="col-md-12">
-	@include('flash::message')
-</div>
 <div class="col-md-9">
 	@php $mytime = Carbon\Carbon::now()@endphp
 	<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
@@ -35,7 +32,7 @@
 				<td>{!! \Carbon\Carbon::parse($assign->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 				<td>
 					<div class='btn-group'>
-						<a href="{!! route('events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+						<a href="{!! route('clients.events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
 								class="fas fa-eye"></i></a>
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
 						data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
@@ -46,6 +43,10 @@
 						{!! Form::hidden('user_id',$assign->user_id) !!}
 						{!! Form::hidden('state',$assign->state) !!}
 						<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
+						{!! Form::close() !!}
+						{{ Form::open(['route' => ['clients.events.destroyAssign',$assign], 'method' => 'delete']) }}
+						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
+							'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
 						{!! Form::close() !!}
 					</div>
 				</td>
@@ -87,7 +88,7 @@
 					<td>{!! \Carbon\Carbon::parse($inactive->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 					<td>
 						<div class='btn-group'>
-							<a href="{!! route('events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
+							<a href="{!! route('client.events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
 									class="fas fa-eye"></i></a>
 							<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
 							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
