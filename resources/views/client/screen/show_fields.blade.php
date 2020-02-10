@@ -88,7 +88,7 @@
 					<td>{!! \Carbon\Carbon::parse($inactive->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 					<td>
 						<div class='btn-group'>
-							<a href="{!! route('client.events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
+							<a href="{!! route('clients.events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
 									class="fas fa-eye"></i></a>
 							<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
 							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
