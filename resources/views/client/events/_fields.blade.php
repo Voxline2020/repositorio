@@ -30,9 +30,9 @@
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
-	{!! Form::hidden('company_id', $company->id) !!}
+	{!! Form::hidden('company_id', Auth::user()->company_id) !!}
 	{!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
-	<a href="{!! route('companies.events.index',$company) !!}" class="btn btn-secondary">Cancelar</a>
+	<a href="{!! route('clients.events.index') !!}" class="btn btn-secondary">Cancelar</a>
 </div>
 
 @section('script')

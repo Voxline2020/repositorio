@@ -30,7 +30,7 @@ class CompanyController extends AppBaseController
 
   public function __construct(CompanyRepository $companyRepo)
   {
-		$this->middleware('admin')->except(['createEvent','storeEvent','editEvent','destroyEvent','updateEvent','showEvent','indexEvent']);
+		$this->middleware('admin');
     $this->companyRepository = $companyRepo;
   }
   //mostrar compañias

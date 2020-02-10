@@ -74,19 +74,19 @@ Route::group(['prefix' => 'users'], function () {
 // Route::resource('playlists', 'PlaylistController');
 
 
-//SECTION Events
-Route::resource('events', 'EventController');
-Route::group(['prefix' => 'events'], function () {
-	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
-	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
-	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
+// //SECTION Events
+// Route::resource('events', 'EventController');
+// Route::group(['prefix' => 'events'], function () {
+// 	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
+// 	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
+// 	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
 
-	//ANCHOR Asignations
-	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
-	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
-	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
+// 	//ANCHOR Asignations
+// 	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
+// 	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
+// 	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
 
-});
+// });
 //filestore
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
@@ -207,9 +207,7 @@ Route::group(['prefix' => 'screens'], function () {
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 // Route::resource('clients', 'ClientController');
 Route::group(['prefix' => 'clients'], function () {
-	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
-	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
-	Route::get('screen/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
+
 	// Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
 	// Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
 	// Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
@@ -219,10 +217,22 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
 	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
+	//client/screens
 	Route::get('filter_screen','ClientController@filter_screen')->name('clients.filter_screen');
-	Route::get('/events', "EventController@index")->name('clients.events.index');
-	Route::get('/events/{event}/', "EventController@showClient")->name('clients.events.show');
-
+	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
+	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
+	Route::get('screen/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
+	//event
+	Route::group(['prefix' => 'events'], function () {
+		Route::get('/', "ClientController@indexEvent")->name('clients.events.index');
+		Route::get('/create', 'ClientController@createEvent')->name('clients.events.create');
+		Route::get('/{event}', "ClientController@showEvent")->name('clients.events.show');
+		Route::post('/', 'ClientController@storeEvent')->name('clients.events.store');
+		Route::get('/{event}/edit', 'ClientController@editEvent')->name('clients.events.edit');
+		Route::put('/{event}', 'ClientController@updateEvent')->name('clients.events.update');
+		Route::delete('/{event}/delete', 'ClientController@destroyEvent')->name('clients.events.destroy');
+		Route::get('/filter/filter_by', 'ClientController@filterEvent_by')->name('clients.events.filter_by');
+	});
 });
 
 //SECTION File
