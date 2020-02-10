@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<hr>
-	{{ Form::open(['route' =>['events.filter_by_name'], 'method' => 'GET']) }}
+	{{ Form::open(['route' =>['companies.events.filterEvent_by',$company], 'method' => 'GET']) }}
 	<div class="row">
 
 		<div class="col-md-1">Fecha Inicio:</div>

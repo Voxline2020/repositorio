@@ -211,40 +211,24 @@ class CompanyController extends AppBaseController
   }
   public function updateEvent(Company $company,Event $event, UpdateCompanyRequest $request)
   {
-    // $company = $this->companyRepository->find($id);
-    // if (empty($company)) {
-    //   Flash::error('compañia no encontrada.');
-    //   return redirect(route('companies.index'));
-    // }
-    // $company = $this->companyRepository->update($request->all(), $id);
-    // Flash::success('compañia editada');
-		// return redirect(route('companies.index'));
-
-		// $event = $this->eventRepository->find($id);
 		$request->merge([
 				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
 				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
 				]);
-
-    // if (empty($event)) {
-    //   Flash::error('Evento no encontrado');
-    //   return redirect(route('events.index'));
-		// }
     $event->update($request->all());
     Flash::success('Evento editado exitosamente.');
 		// return redirect(route('events.show',['id' => $id]));
 		return redirect()->route('companies.events.edit', ['company'=>$company,'event'=>$event]);
   }
-  public function destroyEvent($id)
+  public function destroyEvent(Company $company,Event $event)
   {
-    $company = $this->companyRepository->find($id);
-    if (empty($company)) {
-      Flash::error('compañia no encontrada.');
-      return redirect(route('companies.index'));
+    if (empty($event->id)) {
+      Flash::error('Evento no encontrado.');
+      return redirect(route('companies.events.index', ['company'=>$company]));
     }
-    $this->companyRepository->delete($id);
-    Flash::success('Compañia borrada');
-    return redirect(route('companies.index'));
+    $event->delete();
+    Flash::success('Evento borrado.');
+    return redirect(route('companies.events.index', ['company'=>$company]));
 	}
 	public function formatDuration($duration)
 	{
@@ -260,65 +244,38 @@ class CompanyController extends AppBaseController
 				return "0" . $duration;
 		}
 	}
-	public function fileStore(Request $request)
-	{
-		dd($request);
-	// 	$files = $request->file('file');
-
-	// 	$event = null;
-	// 	if (isset($request['event_id']) && !empty($request['event_id'])) {
-	// 	$event = Event::find($request['event_id']);
-	// 	} else {
-	// 		return response('Evento no existe o el id es incorrecto', 404)->header('Content-Type', 'text/plain');
-	// 	}
-
-	// 	if ($request->hasFile('file')) {
-	// 	//Rescata valores de los archivos subidos
-	// 		foreach ($files as $file) {
-	// 			//Analizar Video
-	// 			$getID3 = new \getID3;
-	// 			$fileX = $getID3->analyze($file);
-	// 			$filetype = $file->getClientOriginalExtension();
-	// 			$mime = $file->getClientMimeType();
-	// 			$user_id = Auth::user()->id;
-	// 			$size = $file->getSize();
-	// 			$width = $fileX['video']['resolution_x'];
-	// 			$height = $fileX['video']['resolution_y'];
-	// 			$duration = EventController::formatDuration($fileX['playtime_string']);
-
-	// 			//Nombre archivo
-	// 			$name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-	// 			$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-	// 			$slug = Str::slug($name);
-
-	// 			//Guardar archivos
-	// 			$path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
-
-	// 			$request->merge([
-	// 				'user_id' => $user_id,
-	// 				'location' => $path,
-	// 				'original_name' => $original_name,
-	// 				'slug' => $slug,
-	// 				'filetype' => $filetype,
-	// 				'mime' => $mime,
-	// 				'event_id' => $event->id,
-	// 				'size' => $size,
-	// 				'width' => $width,
-	// 				'height' => $height,
-	// 				'name' => $name,
-	// 				'duration' => $duration,
-	// 			]);
-
-	// 			// $file->move($path, $original_name . '.mp4');
-
-	// 			$input = $request->all();
-	// 			if ($this->contentRepository->create($input)) {
-	// 				return response('OK', 200)->header('Content-Type', 'text/plain');
-	// 			}
-	// 		}
-	// 	}
-	// return redirect()->route('events.index');
-	}
+	public function filterEvent_by(Company $company,Request $request)
+  {
+    $eventsFinal = null;
+    $filter = $request->get('nameFiltrar');
+    $filterState = $request->get('state');
+    $filterDate = $request->get('initdate');
+    $filterDateEnd = $request->get('enddate');
+    $company = Company::where('id',  auth()->user()->company_id)->first();
+    $listsStore = Store::all();
+    if ($filter != null || $filterState != null || $filterDate != null || $filterDateEnd != null) {
+      if ($filter != null) {
+      $events = Event::where('company_id', auth()->user()->company_id)->where('name', 'LIKE', "%$filter%")->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterState != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterDate != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterDateEnd != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
+      }
+      if(count($events)==0){
+        Flash::info('No se encontro ningun resultado.');
+        return redirect(url()->previous());
+      }
+      return view('events.index', compact('events', 'listsStore'))->with('company', $company);
+    }else {
+    Flash::error('Ingrese un valor para generar la busqueda.');
+    return redirect(url()->previous());
+    }
+  }
 	//stores//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ANCHOR Sucursales Compañia
   public function indexStore(Company $company, Request $request)
@@ -807,15 +764,11 @@ class CompanyController extends AppBaseController
 		Flash::success('Pantalla editada correctamente.');
 		return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
 	}
-	public function destroyScreen($id)
+	public function destroyScreen(Company $company,Computer $computer, Screen $screen)
 	{
-		$screen = $this->screenRepository->find($id);
-		if (empty($screen)) {
-			Flash::error('pantalla no encontrada');
-			return redirect(url()->previous());
-		}
-		$this->screenRepository->delete($id);
-		Flash::success('Pantalla borrada');
+		$screenDelete = Screen::find($screen->id);
+		$screenDelete->delete();
+		Flash::success('Pantalla borrada.');
 		return redirect(url()->previous());
 	}
 	public function changeStatusScreen(Company $company,Computer $computer, Screen $screen,Request $request)

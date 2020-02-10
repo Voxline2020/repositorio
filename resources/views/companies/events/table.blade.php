@@ -24,7 +24,7 @@
 				<td>{!! $event->EndDateF!!}</td>
 				<td>
 					<div class='btn-group'>
-						{!! Form::open(['route' => ['events.destroy',  $event], 'method' => 'delete']) !!}
+						{!! Form::open(['route' => ['companies.events.destroy',$company,$event], 'method' => 'delete']) !!}
 						<div class='btn-group'>
 							<a href="{{route('companies.events.show',['company'=>$company,'event'=>$event]) }}" class='btn btn-primary btn-xs'><i
 							class="fas fa-eye"></i></a>

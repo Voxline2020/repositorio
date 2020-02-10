@@ -20,7 +20,7 @@
 		<td>{!! $screen->name !!}</td>
 		<td>{!! $screen->width !!}x{!! $screen->height !!}</td>
 		<td>
-			{!! Form::open(['route' => ['screens.destroy', $screen->id], 'method' => 'delete']) !!}
+			{!! Form::open(['route' => ['companies.computers.destroyScreen',$company, $computer, $screen], 'method' => 'delete']) !!}
 			<div class='btn-group'>
 				<a href="{{ route('companies.computers.showScreen',['company'=>$company,'computer'=>$computer,'screen'=>$screen]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
 				<a href="{{ route('companies.computers.editScreen',['company'=>$company,'screen'=>$screen,'computer'=>$computer]) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
