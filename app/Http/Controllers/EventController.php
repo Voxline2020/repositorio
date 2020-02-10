@@ -149,11 +149,10 @@ class EventController extends Controller
 
         // $file->move($path, $original_name . '.mp4');
 
-        $input = $request->all();
-        if ($this->contentRepository->create($input)) {
-          return response('OK', 200)->header('Content-Type', 'text/plain');
-        }
-      }
+				$input = $request->all();
+				$this->contentRepository->create($input);
+			}
+			return response('OK', 200)->header('Content-Type', 'text/plain');
     }
 
     return redirect()->route('events.index');
