@@ -154,7 +154,7 @@ class CompanyController extends AppBaseController
 				array_push($list, $asign->screen_id);
 			};
 			//extraemos las pantallas
-			$screens= screen::find($list);
+			$screens= Screen::find($list);
 			return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))->with('screens',$screens);
 		}else{
 			$screens= $event->contents;
