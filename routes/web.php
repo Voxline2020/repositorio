@@ -74,19 +74,19 @@ Route::group(['prefix' => 'users'], function () {
 // Route::resource('playlists', 'PlaylistController');
 
 
-// //SECTION Events
-// Route::resource('events', 'EventController');
-// Route::group(['prefix' => 'events'], function () {
-// 	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
-// 	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
-// 	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
+//SECTION Events
+Route::resource('events', 'EventController');
+Route::group(['prefix' => 'events'], function () {
+	Route::get('{id}/AssignContent', "EventController@indexAssignContent")->name('events.indexAssignContent');
+	Route::get('filter/filter_by_name', "EventController@filter_by_name")->name('events.filter_by_name');
+	Route::get('{eventId}/assign/{id}', "EventController@Assign")->name('events.Assign');
 
-// 	//ANCHOR Asignations
-// 	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
-// 	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
-// 	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
+	//ANCHOR Asignations
+	Route::get('{event}/assignations/{content}', "EventController@indexAssign")->name('events.assignations');
+	Route::post('{event}/assignations/{content}', "EventController@storeAssign")->name('events.assignations.store');
+	Route::get('{event}/assignations/{content}/show', "EventController@showAssign")->name('events.assignations.show');
 
-// });
+});
 //filestore
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
@@ -184,24 +184,24 @@ Route::group(['prefix' => 'companies'], function () {
 
 });
 
-// //SECTION Stores
-// Route::resource('stores', 'StoreController');
-// Route::group(['prefix' => 'stores'], function () {
-// 	Route::get('{id}/show', 'StoreController@show')->name('store.show'); //ruta para obtener id
-// 	Route::get('{id}/filter_by_name', 'StoreController@filter_by_name')->name('stores.filter_by_name'); //ruta para filtrar la sucursal con nombre
-// 	Route::get('editTwoParam/{id}/{company_id}','StoreController@edit')->name('stores.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
-// 	Route::get('create/{id}','StoreController@create')->name('stores.createOneParam');// ruta para recoger 1 parametro que es la id de la compañiay crear una sucursal.
-// });
+//SECTION Stores
+Route::resource('stores', 'StoreController');
+Route::group(['prefix' => 'stores'], function () {
+	Route::get('{id}/show', 'StoreController@show')->name('store.show'); //ruta para obtener id
+	Route::get('{id}/filter_by_name', 'StoreController@filter_by_name')->name('stores.filter_by_name'); //ruta para filtrar la sucursal con nombre
+	Route::get('editTwoParam/{id}/{company_id}','StoreController@edit')->name('stores.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia).
+	Route::get('create/{id}','StoreController@create')->name('stores.createOneParam');// ruta para recoger 1 parametro que es la id de la compañiay crear una sucursal.
+});
 
-// //SECTION Screen
-// Route::resource('screens', 'ScreenController');
-// Route::group(['prefix' => 'screens'], function () {
-// 	Route::get('filter_by_name/{id}','ScreenController@filter_by_name')->name('screens.filter_by_name');
-// 	Route::get('/create','ScreenController@create')->name('screens.createOneParam');
-// 	Route::get('AssignContent/{id}', "ScreenController@AssignContent")->name('screens.AssignContent');
-// 	Route::post('ScreenPlaylistAsign/{id}', "ScreenController@ScreenPlaylistAsign")->name('screens.ScreenPlaylistAsign');
-// 	Route::get('{code}/j','ScreenJson@json')->name('screens.screen');
-// });
+//SECTION Screen
+Route::resource('screens', 'ScreenController');
+Route::group(['prefix' => 'screens'], function () {
+	Route::get('filter_by_name/{id}','ScreenController@filter_by_name')->name('screens.filter_by_name');
+	Route::get('/create','ScreenController@create')->name('screens.createOneParam');
+	Route::get('AssignContent/{id}', "ScreenController@AssignContent")->name('screens.AssignContent');
+	Route::post('ScreenPlaylistAsign/{id}', "ScreenController@ScreenPlaylistAsign")->name('screens.ScreenPlaylistAsign');
+	Route::get('{code}/j','ScreenJson@json')->name('screens.screen');
+});
 
 //SECTION Clients
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
