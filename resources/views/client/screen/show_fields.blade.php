@@ -156,7 +156,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					{!! Form::model($screen, ['route' => ['screens.eventAssign', $screen->id], 'method' => 'post']) !!}
+					{!! Form::model($screen, ['route' => ['screens.eventAssign', $screen->id], 'method' => 'put']) !!}
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead class="thead-dark">
