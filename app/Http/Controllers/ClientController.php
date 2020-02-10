@@ -165,7 +165,7 @@ class ClientController extends Controller
 		//filtros
 		$screens=null;
 		if($name != null){
-			$screens= screen::where('name','LIKE',"%$name%")->orderBy('state', 'asc')->find($list);
+			$screens= Screen::where('name','LIKE',"%$name%")->orderBy('state', 'asc')->find($list);
 		}
 		if($state != null){
 			$screens = Screen::whereHas('computer', function ($query) {
@@ -175,13 +175,13 @@ class ClientController extends Controller
 			})->where('state', $state )->find($list);
 		}
 		if($sector != null){
-			$screens= screen::where('sector','LIKE',"%$sector%")->orderBy('state', 'asc')->find($list);
+			$screens= Screen::where('sector','LIKE',"%$sector%")->orderBy('state', 'asc')->find($list);
 		}
 		if($floor != null){
-			$screens= screen::where('floor','LIKE',"%$floor%")->orderBy('state', 'asc')->find($list);
+			$screens= Screen::where('floor','LIKE',"%$floor%")->orderBy('state', 'asc')->find($list);
 		}
 		if($type != null){
-			$screens= screen::where('type','LIKE',"%$type%")->orderBy('state', 'asc')->find($list);
+			$screens= Screen::where('type','LIKE',"%$type%")->orderBy('state', 'asc')->find($list);
 		}
 		// dd($screens->count());
 		if($screens->count()==0){

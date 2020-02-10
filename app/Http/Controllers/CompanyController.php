@@ -15,7 +15,7 @@ use App\Models\AccessType;
 use App\Models\Computer;
 use App\Models\Content;
 use App\Models\Company;
-use App\Models\screen;
+use App\Models\Screen;
 use App\Models\Store;
 use App\Models\Event;
 use Carbon\Carbon;
