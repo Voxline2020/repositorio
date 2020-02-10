@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Repositories\EventRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str as Str;
 use App\Models\Screen;
 use App\Models\Content;
 use App\Models\Company;
@@ -13,8 +14,8 @@ use App\Models\Computer;
 use App\Models\Event;
 use App\Models\EventAssignation;
 use App\Models\Store;
+use Carbon\Carbon;
 use Flash;
-use Carbon;
 use Response;
 
 class ClientController extends Controller
@@ -134,6 +135,135 @@ class ClientController extends Controller
 		}else{
 			Flash::error('Ingrese un valor para generar la busqueda.');
     		return redirect(url()->previous());
+		}
+	}
+	//Events///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function indexEvent(Request $request)
+  {
+    $company = Company::where('id',  auth()->user()->company_id)->first();
+    // $events = $this->eventRepository->all();
+    $events = Event::where('company_id',  auth()->user()->company_id)->orderBy('state', 'asc')->paginate();
+    // $lists = Event::where('company_id', $id);
+    $listsStore = Store::all();
+    return view('client.events.index', compact('events', 'listsStore'))->with('company', $company);
+
+	}
+	public function showEvent(Event $event)
+  {
+		//comprobamos que el evento tenga contenido
+		if($event->contents->count()!=0){
+			//obtenemos los contenidos del evento
+			$contentsList = [];
+			foreach ($event->contents AS $content) {
+				array_push($contentsList, $content->id);
+			};
+			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+			//extraemos las pantallas de los contenidos asignados
+			$list = [];
+			foreach ($eventAssigns AS $asign) {
+				array_push($list, $asign->screen_id);
+			};
+			//extraemos las pantallas
+			$screens= screen::find($list);
+			return view('client.events.show', compact('event'))->with('screens',$screens);
+		}else{
+			$screens= $event->contents;
+    	return view('client.events.show', compact('event'))->with('screens',$screens);
+		}
+
+	}
+	public function createEvent()
+  {
+		return view('client.events.create');
+		// return redirect(route('clients.index'));
+  }
+  public function storeEvent(Company $company, Request $request)
+  {
+		$name = Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+		if($name->count() != 0){
+			Flash::error('El evento "'.$request->name.'" ya existe.');
+			return redirect(route('companies.events.create', $company));
+		}
+		//Format Init Date
+		$request->merge([
+		"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+		"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+		'state'=>'0',
+		'slug'=>Str::slug($request['name'])
+		]);
+		if($request->initdate > $request->enddate){
+			Flash::error('La fecha de termino no puede ser inferior a la fecha de inicio.');
+			return redirect(route('companies.events.create', $company));
+		}else{
+			$input = $request->all();
+			Event::create($input);
+			$id = [];
+			$callevent =  Event::where('company_id',$request->company_id)->where('name',$request->name)->get();
+			foreach($callevent as $e){
+				array_push($id,$e->id);
+			}
+			$event = Event::find($id);
+			Flash::success('Evento agregado exitosamente');
+			return redirect(route('clients.events.index'));
+		}
+    Flash::error('Error al agregar el evento.');
+		return redirect(route('clients.events.index'));
+  }
+  public function editEvent(Event $event )
+  {
+    return view('client.events.edit')->with('event', $event);
+  }
+  public function updateEvent(Event $event,Request $request)
+  {
+		$request->merge([
+				"initdate"=> Carbon::createFromFormat('d/m/Y H:i',$request["initdate"])->toDateTimeString(),
+				"enddate"=> Carbon::createFromFormat('d/m/Y H:i',$request["enddate"])->toDateTimeString(),
+				]);
+    $event->update($request->all());
+    Flash::success('Evento editado exitosamente.');
+		return redirect()->route('clients.events.edit', ['event'=>$event]);
+  }
+  public function destroyEvent(Event $event)
+  {
+    if (empty($event->id)) {
+      Flash::error('Evento no encontrado.');
+      return redirect(route('clients.events.index'));
+    }
+    $event->delete();
+    Flash::success('Evento borrado.');
+    return redirect(route('clients.events.index'));
+	}
+	public function filterEvent_by(Request $request)
+  {
+    $eventsFinal = null;
+    $filter = $request->get('nameFiltrar');
+    $filterState = $request->get('state');
+    $filterDate = $request->get('initdate');
+    $filterDateEnd = $request->get('enddate');
+    $company = Company::where('id',  auth()->user()->company_id)->first();
+    $listsStore = Store::all();
+    if ($filter != null || $filterState != null || $filterDate != null || $filterDateEnd != null) {
+      if ($filter != null) {
+      $events = Event::where('company_id', auth()->user()->company_id)->where('name', 'LIKE', "%$filter%")->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterState != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterDate != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
+      }
+      if ($filterDateEnd != null) {
+        $events = Event::where('company_id', auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
+      }
+      if(count($events)==0){
+        Flash::info('No se encontro ningun resultado.');
+        return redirect(url()->previous());
+      }
+      return view('client.events.index', compact('events', 'listsStore'))->with('company', $company);
+    }else {
+    Flash::error('Ingrese un valor para generar la busqueda.');
+    return redirect(url()->previous());
 		}
 	}
 	public function filter_screen(Request $request)
