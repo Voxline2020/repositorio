@@ -100,6 +100,10 @@
 							{!! Form::hidden('state',$inactive->state) !!}
 							<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 							{!! Form::close() !!}
+							{{ Form::open(['route' => ['clients.events.destroyAssign',$inactive], 'method' => 'delete']) }}
+							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
+								'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
+							{!! Form::close() !!}
 						</div>
 					</td>
 				</tr>
