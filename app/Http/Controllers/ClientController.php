@@ -50,22 +50,17 @@ class ClientController extends Controller
 	}
 	public function show($id)
 	{
+		//fijamos el hoy
+		$today=date('Y-m-d H:i:s');
 		//filtramos la pantalla que queremos ver con el id
-		if (Auth::user()->hasRole('Administrador')){
-			$screen = Screen::whereHas('computer', function ($query) {
-				$query->whereHas('store', function ($query) {
-				});
-			})->find($id);
-		}else {
-			$screen = Screen::whereHas('computer', function ($query) {
-				$query->whereHas('store', function ($query) {
-					$query->where('company_id', Auth::user()->company_id);
-				});
-			})->find($id);
-		}
+		$screen = Screen::whereHas('computer', function ($query) {
+			$query->whereHas('store', function ($query) {
+				$query->where('company_id', Auth::user()->company_id);
+			});
+		})->find($id);
 		//ahora buscamos los eventos compatibles con la pantalla
-		$contents = Content::whereHas('event', function ($query) {
-			$query->where('company_id', Auth::user()->company_id)->where('enddate','>=',\Carbon\Carbon::now());
+		$contents = Content::whereHas('event', function ($query) use ($today) {
+			$query->where('company_id', Auth::user()->company_id)->where('enddate','>=',$today);
 		})->where('width',$screen->width)->where('height',$screen->height)->get();
 		$list=[];
 		foreach($contents as $content){
@@ -74,15 +69,15 @@ class ClientController extends Controller
 		//extraemos los eventos compatibles
 		$events= Event::find($list);
 		//eventos asignados activos
-		$eventAssigns = EventAssignation::whereHas('content', function ($query) {
-			$query->whereHas('event', function ($query) {
-				 $query->where('enddate','>=',\Carbon\Carbon::now());
+		$eventAssigns = EventAssignation::whereHas('content', function ($query) use ($today) {
+			$query->whereHas('event', function ($query) use ($today){
+				 $query->where('enddate','>=',$today);
 			});
 		})->where('screen_id',$id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
 		//eventos asignados inactivos
-		$eventInactives = EventAssignation::whereHas('content', function ($query) {
-			$query->whereHas('event', function ($query) {
-				$query->where('enddate','>=',\Carbon\Carbon::now());
+		$eventInactives = EventAssignation::whereHas('content', function ($query) use ($today) {
+			$query->whereHas('event', function ($query) use ($today) {
+				$query->where('enddate','>=',$today);
 			});
 		})->where('screen_id',$id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
 
