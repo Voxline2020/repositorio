@@ -141,13 +141,16 @@ class ClientController extends Controller
   {
 		//comprobamos que el evento tenga contenido
 		if($event->contents->count()!=0){
-			//obtenemos los contenidos del evento
-			$contentsList = [];
+			//obtenemos los contenidos del evento y vemos su asignacion
+			$assignsList = [];
 			foreach ($event->contents AS $content) {
-				array_push($contentsList, $content->id);
+				$assign = EventAssignation::where('content_id',$content->id)->first();
+				if($assign!=null){
+					array_push($assignsList, $assign->id);
+				}
 			};
 			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
-			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
+			$eventAssigns = EventAssignation::find($assignsList);
 			//extraemos las pantallas de los contenidos asignados
 			$list = [];
 			foreach ($eventAssigns AS $asign) {

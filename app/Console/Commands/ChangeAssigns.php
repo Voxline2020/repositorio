@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Event;
 use App\Models\EventAssignation;
+use App\Models\Screen;
 
 class ChangeAssigns extends Command
 {
