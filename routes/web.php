@@ -106,8 +106,7 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
 		Route::get('filter/filter_by', "CompanyController@filterEvent_by")->name('companies.events.filterEvent_by');
-		//Events/Contents
-		// Route::post('/fileStore', 'CompanyController@fileStore')->name('companies.fileStore');
+
 	});
 	//pivots
 	Route::group(['prefix' => '{company}/pivots'], function () {
@@ -142,7 +141,8 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::post('/{computer}/screens/{screen}/assign','CompanyController@eventAssignScreen')->name('companies.computers.eventAssignScreen');
 		Route::put('/{computer}/screens/{screen}/clone','CompanyController@cloneEventScreen')->name('companies.computers.cloneEventScreen');
 		Route::put('/{computer}/screens/{screen}/change','CompanyController@changeOrderScreen')->name('companies.computers.changeOrderScreen');
-
+		//Computers/screens/Assign
+		Route::delete('/{computer}/ScreenAssign/{assign}/delete', 'CompanyController@destroyEventAssign')->name('companies.computers.destroyScreenAssign');
 	});
 
 	//Stores

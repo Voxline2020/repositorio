@@ -262,7 +262,10 @@ class ClientController extends Controller
 	public function destroyEventAssign(EventAssignation $assign)
   {
     $assign->delete();
-    Flash::success('Evento desasignado.');
+		Flash::success('Evento desasignado.');
+		$screen = Screen::find($assign->screen_id);
+		$screen->version = $screen->version+1;
+		$screen->save();
     return redirect()->route('clients.show', ['id'=>$assign->screen_id]);
 	}
 	public function filter_screen(Request $request)
