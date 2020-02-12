@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 			$schedule->command('activate:events')->everyMinute();
-			$schedule->command('change:assigns')->everyMinute();
 			$schedule->command('desactivate:events')->everyMinute();
+			$schedule->command('change:assigns')->everyMinute();
     }
 
     /**

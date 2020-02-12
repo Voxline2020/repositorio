@@ -12,7 +12,7 @@
 		<tbody>
 			@php
 					$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
-					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->take(5);
+					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow);
 			@endphp
 			@foreach($eventsInactive as $event)
 			<tr>

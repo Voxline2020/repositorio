@@ -40,8 +40,8 @@ class ActivateEvents extends Command
     {
 			$today=date('Y-m-d H:i:s');
 			$InactiveEvents = Event::where('state',0)
-			->whereDate('initdate', '<=', $today)
-			->whereDate('enddate', '>=', $today)
+			->where('initdate', '<=', $today)
+			->where('enddate', '>=', $today)
 			->get();
 			foreach($InactiveEvents AS $Inactive){
 				$Inactive->state = 1;

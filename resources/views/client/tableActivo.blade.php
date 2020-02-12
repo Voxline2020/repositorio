@@ -10,7 +10,7 @@
 		</thead>
 		<tbody>
 			@php
-					$eventsActive = $events->where('state',1)->take(5);
+					$eventsActive = $events->where('state',1);
 			@endphp
 			@foreach($eventsActive as $event)
 			<tr>

@@ -4,7 +4,7 @@
 		<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
 	</div>
 	<div class="col-md-2">
-		<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">AñadirEvento</a>
+		<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">Añadir Evento</a>
 	</div>
 	<div class="col-md-1.5">
 		<a href="{!! route('companies.computers.show',['company' => $company,'computer'=>$computer]) !!}" type="button" class="btn btn-outline-primary w-100">Atras</a>

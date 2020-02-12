@@ -40,7 +40,7 @@ class DesactivateEvents extends Command
     {
 			$today=date('Y-m-d H:i:s');
 			$ActiveEvents = Event::where('state',1)
-			->whereDate('enddate', '<=', $today)
+			->where('enddate', '<=', $today)
 			->get();
 			foreach($ActiveEvents AS $Active){
 				$Active->state = 0;
