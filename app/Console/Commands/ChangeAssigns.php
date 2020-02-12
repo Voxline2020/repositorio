@@ -48,6 +48,9 @@ class ChangeAssigns extends Command
 							if($assignation->state!=$content->event->state){
 								$assignation->state = $content->event->state;
 								$assignation->save();
+								$screen = Screen::find($assignation->screen_id);
+								$screen->version = $screen->version+1;
+								$screen->save();
 							}
 						}
 					}
