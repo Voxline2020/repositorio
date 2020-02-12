@@ -197,8 +197,8 @@ class ClientController extends Controller
 			// 	array_push($id,$e->id);
 			// }
 			$event = Event::find($callevent[0]->id);
-			Flash::success('Evento agregado exitosamente');
-			return view('client.events.edit')->with('event', $event);
+			Flash::success('Evento agregado exitosamente.');
+			return redirect(route('clients.events.edit',['event'=>$event]));
 		}
     Flash::error('Error al agregar el evento.');
 		return redirect(route('clients.events.index'));

@@ -193,7 +193,7 @@ class CompanyController extends AppBaseController
 			$event = Event::find($id);
 			Flash::success('Evento agregado exitosamente.');
 			if (Auth::user()->hasRole('Administrador')){
-				return redirect(route('companies.events.index', $company));
+				return redirect(route('companies.events.edit',['company'=>$company,'event'=>$event]));
 			}else{
 				return redirect(route('events.show', [ $event[0]->id]));
 			}
