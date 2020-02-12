@@ -44,6 +44,10 @@
 						{!! Form::hidden('state',$assign->state) !!}
 						<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 						{!! Form::close() !!}
+						{{ Form::open(['route' => ['companies.computers.destroyScreenAssign','company'=>$company,'computer'=>$computer,'assign'=>$assign], 'method' => 'delete']) }}
+						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
+							'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
+						{!! Form::close() !!}
 					</div>
 				</td>
 			</tr>
@@ -94,6 +98,10 @@
 							{!! Form::hidden('user_id',$inactive->user_id) !!}
 							{!! Form::hidden('state',$inactive->state) !!}
 							<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
+							{!! Form::close() !!}
+							{{ Form::open(['route' => ['companies.computers.destroyScreenAssign','company'=>$company,'computer'=>$computer,'assign'=>$inactive], 'method' => 'delete']) }}
+							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
+								'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
 							{!! Form::close() !!}
 						</div>
 					</td>

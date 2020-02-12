@@ -244,6 +244,15 @@ class CompanyController extends AppBaseController
 				return "0" . $duration;
 		}
 	}
+	public function destroyEventAssign(Company $company,Computer $computer,EventAssignation $assign)
+  {
+    $assign->delete();
+		Flash::success('Evento desasignado.');
+		$screen = Screen::find($assign->screen_id);
+		$screen->version = $screen->version+1;
+		$screen->save();
+    return redirect()->route('companies.computers.showScreen', ['company'=>$company,'computer'=>$computer,'screen'=>$screen]);
+	}
 	public function filterEvent_by(Company $company,Request $request)
   {
     $eventsFinal = null;
