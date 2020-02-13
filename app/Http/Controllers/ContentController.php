@@ -132,6 +132,10 @@ class ContentController extends Controller
       return redirect(route('contents.index'));
     }
 
+		foreach ($content->eventAssignations as $eventAssignation) {
+			$eventAssignation->delete();
+		}
+
     $this->contentRepository->delete($id);
 
     Flash::success('Contenido eliminado exitosamente.');

@@ -221,6 +221,13 @@ class ClientController extends Controller
       Flash::error('Evento no encontrado.');
       return redirect(route('clients.events.index'));
     }
+
+		foreach ($event->contents as $content) {
+			foreach ($content->eventAssignations as $eventAssignation) {
+				$eventAssignation->delete();
+			}
+			$content->delete();
+		}
     $event->delete();
     Flash::success('Evento borrado.');
     return redirect(route('clients.events.index'));
