@@ -228,6 +228,10 @@ class CompanyController extends AppBaseController
     }
 		foreach ($event->contents as $content) {
 			foreach ($content->eventAssignations as $eventAssignation) {
+				if($event->state == 1){
+					$eventAssignation->screen->version = $eventAssignation->screen->version+1;
+					$eventAssignation->screen->save();
+				}
 				$eventAssignation->delete();
 			}
 			$content->delete();
