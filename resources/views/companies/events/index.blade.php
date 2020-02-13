@@ -37,24 +37,25 @@
 		</div>
 	</div>
 	<div class="row">
-	<div class="col-md-10">
-		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre']) !!}
+		<div class="col-md-10">
+			{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre']) !!}
+		</div>
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary w-100">Buscar</button>
+		</div>
 	</div>
-	<div class="col-md-2">
-		<button type="submit" class="btn btn-primary w-100">Buscar</button>
+	{!! Form::close() !!}
+	<hr>
+	<div class="row">
+		<div class="col-md-12">
+			@include('flash::message')
+		</div>
 	</div>
-</div>
-<hr>
-<div class="row">
-	<div class="col-md-12">
-		@include('flash::message')
+	<div class="row">
+		<div class="col-md-12">
+			@include('companies.events.table')
+		</div>
 	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		@include('companies.events.table')
-	</div>
-</div>
-{!! Form::close() !!}
+
 </div>
 @endsection
