@@ -108,53 +108,59 @@ class EventController extends Controller
       $event = Event::find($request['event_id']);
     } else {
       return response('Evento no existe o el id es incorrecto', 404)->header('Content-Type', 'text/plain');
-    }
-
-    if ($request->hasFile('file')) {
-      //Rescata valores de los archivos subidos
-      foreach ($files as $file) {
-        //Analizar Video
-        $getID3 = new \getID3;
-        $fileX = $getID3->analyze($file);
-        $filetype = $file->getClientOriginalExtension();
-        $mime = $file->getClientMimeType();
-        $user_id = Auth::user()->id;
-        $size = $file->getSize();
-        $width = $fileX['video']['resolution_x'];
-        $height = $fileX['video']['resolution_y'];
+		}
+		if ($request->hasFile('file')) {
+			//Rescata valores de los archivos subidos
+			foreach ($files as $file) {
+				//Analizar Video
+				$getID3 = new \getID3;
+				$fileX = $getID3->analyze($file);
+				$filetype = $file->getClientOriginalExtension();
+				$mime = $file->getClientMimeType();
+				$user_id = Auth::user()->id;
+				$size = $file->getSize();
+				$width = $fileX['video']['resolution_x'];
+				$height = $fileX['video']['resolution_y'];
 				$duration = EventController::formatDuration($fileX['playtime_string']);
 
-        //Nombre archivo
-        $name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-        $original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-        $slug = Str::slug($name);
+				//Nombre archivo
+				$name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+				$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
+				$slug = Str::slug($name);
 
-        //Guardar archivos
-        $path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
+				//Guardar archivos
+				$path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
 
-        $request->merge([
-          'user_id' => $user_id,
-          'location' => $path,
-          'original_name' => $original_name,
-          'slug' => $slug,
-          'filetype' => $filetype,
-          'mime' => $mime,
-          'event_id' => $event->id,
-          'size' => $size,
-          'width' => $width,
-          'height' => $height,
+				$request->merge([
+					'user_id' => $user_id,
+					'location' => $path,
+					'original_name' => $original_name,
+					'slug' => $slug,
+					'filetype' => $filetype,
+					'mime' => $mime,
+					'event_id' => $event->id,
+					'size' => $size,
+					'width' => $width,
+					'height' => $height,
 					'name' => $name,
 					'duration' => $duration,
-        ]);
+				]);
 
-        // $file->move($path, $original_name . '.mp4');
+				// $file->move($path, $original_name . '.mp4');
 
 				$input = $request->all();
-				$this->contentRepository->create($input);
+				// //validar si ya existe la resulcion y guardar
+				$content = Content::where('name',$name)->get();
+				$contentValidate = $content->count();
+				if($contentValidate!=0){
+					Flash::error('Esta resolucion ya esta asignada al evento.');
+				}else{
+					$this->contentRepository->create($input);
+					Flash::success('Contenido agregado.');
+				}
 			}
 			return response('OK', 200)->header('Content-Type', 'text/plain');
-    }
-
+		}
     return redirect()->route('events.index');
   }
 
