@@ -816,10 +816,13 @@ class CompanyController extends AppBaseController
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				]);
+				$screen->version=$screen->version+1;
+				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
-		}else{
+		}
+		else{
 			$request->merge([
 				"screen_id"=> $screen->id,
 				"state"=>$event->state,
