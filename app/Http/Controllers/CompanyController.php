@@ -226,6 +226,12 @@ class CompanyController extends AppBaseController
       Flash::error('Evento no encontrado.');
       return redirect(route('companies.events.index', ['company'=>$company]));
     }
+		foreach ($event->contents as $content) {
+			foreach ($content->eventAssignations as $eventAssignation) {
+				$eventAssignation->delete();
+			}
+			$content->delete();
+		}
     $event->delete();
     Flash::success('Evento borrado.');
     return redirect(route('companies.events.index', ['company'=>$company]));
