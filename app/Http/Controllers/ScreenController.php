@@ -184,6 +184,8 @@ class ScreenController extends AppBaseController
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				]);
+				$screen->version = $screen->version+1;
+				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
@@ -193,6 +195,8 @@ class ScreenController extends AppBaseController
 				"state"=>$event->state,
 				"content_id"=>$contents[0]->id,
 				]);
+				$screen->version = $screen->version+1;
+				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 		}
