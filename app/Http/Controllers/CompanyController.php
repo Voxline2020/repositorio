@@ -226,6 +226,16 @@ class CompanyController extends AppBaseController
       Flash::error('Evento no encontrado.');
       return redirect(route('companies.events.index', ['company'=>$company]));
     }
+		foreach ($event->contents as $content) {
+			foreach ($content->eventAssignations as $eventAssignation) {
+				if($event->state == 1){
+					$eventAssignation->screen->version = $eventAssignation->screen->version+1;
+					$eventAssignation->screen->save();
+				}
+				$eventAssignation->delete();
+			}
+			$content->delete();
+		}
     $event->delete();
     Flash::success('Evento borrado.');
     return redirect(route('companies.events.index', ['company'=>$company]));
@@ -806,10 +816,13 @@ class CompanyController extends AppBaseController
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				]);
+				$screen->version=$screen->version+1;
+				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
-		}else{
+		}
+		else{
 			$request->merge([
 				"screen_id"=> $screen->id,
 				"state"=>$event->state,
