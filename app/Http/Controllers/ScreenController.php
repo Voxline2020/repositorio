@@ -218,16 +218,54 @@ class ScreenController extends AppBaseController
 			Flash::error('No se ha podido realizar la operación.');
 			return redirect(url()->previous());
 		}
-		//traemos la asignacion
-		$assign=EventAssignation::find($request->id);
+		//llamado de objeto inicial
+		$objIni = EventAssignation::find($request->id);
 		//traemos la pantalla
 		$screen=Screen::find($request->screen);
-		//asignamos los nuevos valores y guradamos
-		$assign->order = $request->neworder;
-		$screen->version = $screen->version+1;
-		$assign->save();
-		$screen->save();
-		Flash::success('Se ha cambiado el Nº de orden correctamente.');
+		//si la nueva posicion y la posicion actual son iguales
+		if ($request->neworder == $objIni->order) {
+			Flash::error('La nueva posicion no puede ser igual a la actual.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion excede el rango de elementos
+		$countObjs = EventAssignation::where('screen_id',$screen->id)->get();
+		if ($countObjs->count() < $request->neworder) {
+			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion es menor de 1
+		if ($request->neworder < 1) {
+			Flash::error('La nueva posicion no puede ser menor que el primer elemento.');
+			return redirect(url()->previous());
+		}
+		//llamado coleccion de objs intermedios
+		if($objIni->order < $request->neworder){
+			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			->where('order','<=',$request->neworder)
+			->where('order','>',$objIni->order)
+			->get();
+		}else if($objIni->order > $request->neworder){
+			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			->where('order','>=',$request->neworder)
+			->where('order','<',$objIni->order)
+			->get();
+		}
+		//intercambio de orden y guardado
+		$order = $objIni->order;
+		$neworder = $request->neworder;
+		$objIni->order = $neworder;
+		foreach($listobjs as $objs){
+			if($order < $neworder){
+				$objs->order = $order;
+				$order = $order+1;
+			}else if($order > $neworder){
+				$neworder = $neworder+1;
+				$objs->order = $neworder;
+			}
+			$objs->save();
+		}
+		$objIni->save();
+		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
 	public function cloneEvent(Request $request)

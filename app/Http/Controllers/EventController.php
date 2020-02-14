@@ -156,7 +156,6 @@ class EventController extends Controller
 					Flash::error('Esta resolucion ya esta asignada al evento.');
 				}else{
 					$this->contentRepository->create($input);
-					Flash::success('Contenido agregado.');
 				}
 			}
 			return response('OK', 200)->header('Content-Type', 'text/plain');
