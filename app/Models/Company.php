@@ -53,8 +53,22 @@ class Company extends Model
   /**
    * @return \Illuminate\Database\Eloquent\Relations\HasMany
    **/
-  // public function stores()
-  // {
-  //   return $this->hasMany(\App\Models\Store::class);
-	// }
+	public function stores()
+	{
+		return $this->hasMany(\App\Models\Store::class);
+	}
+
+	public function users()
+	{
+		return $this->hasMany(\App\Models\User::class);
+	}
+
+	public function events()
+	{
+		return $this->hasMany(\App\Models\Event::class);
+	}
+	public function pivots()
+	{
+		return $this->hasMany(\App\Models\ComputerPivot::class);
+	}
 }
