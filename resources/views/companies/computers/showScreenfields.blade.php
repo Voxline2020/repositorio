@@ -137,7 +137,7 @@
 					{!! Form::hidden('id') !!}
 					{!! Form::hidden('screen') !!}
 					{!! Form::label('neworder','Nuevo Nº Orden') !!}
-					{!! Form::number('neworder','') !!}
+					{!! Form::number('neworder','',['min'=>'0']) !!}
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

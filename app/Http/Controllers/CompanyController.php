@@ -226,6 +226,16 @@ class CompanyController extends AppBaseController
       Flash::error('Evento no encontrado.');
       return redirect(route('companies.events.index', ['company'=>$company]));
     }
+		foreach ($event->contents as $content) {
+			foreach ($content->eventAssignations as $eventAssignation) {
+				if($event->state == 1){
+					$eventAssignation->screen->version = $eventAssignation->screen->version+1;
+					$eventAssignation->screen->save();
+				}
+				$eventAssignation->delete();
+			}
+			$content->delete();
+		}
     $event->delete();
     Flash::success('Evento borrado.');
     return redirect(route('companies.events.index', ['company'=>$company]));
@@ -524,9 +534,14 @@ class CompanyController extends AppBaseController
 
   public function storePivot($id,Request $request)
   {
-		$validate = ComputerPivot::where('name',$request->name)->where('company_id',$request->company_id);
-		if ($validate->count()!=0){
+		$validatename = ComputerPivot::where('name',$request->name)->where('company_id',$request->company_id);
+		$validatecode = ComputerPivot::where('code',$request->code)->where('company_id',$request->company_id);
+		if ($validatename->count()!=0){
 			Flash::error('Ese nombre de pivote ya existe.');
+			return redirect(route('companies.pivots.create',[$id]));
+		}
+		if ($validatecode->count()!=0){
+			Flash::error('Este codigo ya ha sido asignado a otro pivote.');
 			return redirect(route('companies.pivots.create',[$id]));
 		}
 		$input = $request->all();
@@ -638,6 +653,7 @@ class CompanyController extends AppBaseController
 	}
 	public function createComputer(Company $company)
 	{
+
 		$types= AccessType::all();
 		$lists = Company::all();
 		$stores = Store::where('company_id',$company->id)->get();
@@ -648,6 +664,15 @@ class CompanyController extends AppBaseController
 	//Request de creacion (POST)
 	public function storeComputer(Company $company,Request $request)
 	{
+		$computers = Computer::where('code',$request->code)->get();
+		if($computers->count()!=0){
+			Flash::error('Este codigo ya ha sido asignado a otro computador.');
+			$types= AccessType::all();
+			$lists = Company::all();
+			$stores = Store::where('company_id',$company->id)->get();
+			$companies = Company::all();
+			return view('companies.computers.create',['company' => $company], compact('companies', 'stores', 'lists','types'));
+		}
 		$input = $request->all();
 		Computer::create($input);
 		Flash::success('Computador agregado correctamente.');
@@ -806,10 +831,13 @@ class CompanyController extends AppBaseController
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				]);
+				$screen->version=$screen->version+1;
+				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
-		}else{
+		}
+		else{
 			$request->merge([
 				"screen_id"=> $screen->id,
 				"state"=>$event->state,
