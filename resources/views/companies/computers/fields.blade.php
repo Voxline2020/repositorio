@@ -1,9 +1,8 @@
 
 <div class="form-group col-sm-6">
     {!! Form::label('code', 'codigo') !!}
-    {!! Form::text('code', null, ['class' => 'form-control']) !!}
+    {!! Form::number('code', null, ['class' => 'form-control']) !!}
 </div>
-
 <div class="form-group col-sm-6">
     {!! Form::label('location', 'ubicacion:') !!}
     {!! Form::text('location', null, ['class' => 'form-control']) !!}

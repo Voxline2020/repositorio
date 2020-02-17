@@ -648,6 +648,7 @@ class CompanyController extends AppBaseController
 	}
 	public function createComputer(Company $company)
 	{
+
 		$types= AccessType::all();
 		$lists = Company::all();
 		$stores = Store::where('company_id',$company->id)->get();
@@ -658,6 +659,15 @@ class CompanyController extends AppBaseController
 	//Request de creacion (POST)
 	public function storeComputer(Company $company,Request $request)
 	{
+		$computers = Computer::where('code',$request->code)->get();
+		if($computers->count()!=0){
+			Flash::error('Este codigo ya ha sido asignado a otro computador.');
+			$types= AccessType::all();
+			$lists = Company::all();
+			$stores = Store::where('company_id',$company->id)->get();
+			$companies = Company::all();
+			return view('companies.computers.create',['company' => $company], compact('companies', 'stores', 'lists','types'));
+		}
 		$input = $request->all();
 		Computer::create($input);
 		Flash::success('Computador agregado correctamente.');

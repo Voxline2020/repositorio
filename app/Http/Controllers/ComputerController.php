@@ -74,6 +74,7 @@ class ComputerController extends AppBaseController
 	//Request de creacion (POST)
 	public function store(CreateComputerRequest $request)
 	{
+
 		$input = $request->all();
 		$computer = $this->computerRepository->create($input);
 		Flash::success('Computador agregado con exito.');
