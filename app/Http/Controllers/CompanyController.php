@@ -534,9 +534,14 @@ class CompanyController extends AppBaseController
 
   public function storePivot($id,Request $request)
   {
-		$validate = ComputerPivot::where('name',$request->name)->where('company_id',$request->company_id);
-		if ($validate->count()!=0){
+		$validatename = ComputerPivot::where('name',$request->name)->where('company_id',$request->company_id);
+		$validatecode = ComputerPivot::where('code',$request->code)->where('company_id',$request->company_id);
+		if ($validatename->count()!=0){
 			Flash::error('Ese nombre de pivote ya existe.');
+			return redirect(route('companies.pivots.create',[$id]));
+		}
+		if ($validatecode->count()!=0){
+			Flash::error('Este codigo ya ha sido asignado a otro pivote.');
 			return redirect(route('companies.pivots.create',[$id]));
 		}
 		$input = $request->all();
