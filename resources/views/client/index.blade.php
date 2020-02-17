@@ -4,18 +4,21 @@
 @php
 		$screenActive = $screensCount->where('state', 1)->count();
 		$screenInactive = $screensCount->where('state', 0)->count();
+		$mytime = Carbon\Carbon::now()
 @endphp
 <div class="container">
-	@include('flash::message')
 	<div class="row">
-		<div class="col-sm-12 col-md-6">
+		{{-- <div class="col-sm-12 col-md-6">
 			<h4>Estado Reproductores</h4>
 			<div id="chart_div" style="width:650; height:500"></div>
-		</div>
+		</div> --}}
 		<div class="col-sm-12 col-md-6">
 			<h4 class=font-weight-bold> Bienvenido {{ Auth::user()->name }} </h4>
-			@php $mytime = Carbon\Carbon::now()@endphp
+		</div>
+		<div class="col-sm-12 col-md-6">
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
+		</div>
+		<div class="col-sm-12 col-md-12">
 			<hr>
 			<h4>Eventos actuales &#x1F4C6;</h4>
 			@include('client.tableActivo')
@@ -24,9 +27,12 @@
 			@include('client.tableInactivo')
 			<hr>
 		</div>
-
-		<div class="col-sm-12">
-			<hr>
+		<div class="col-md-12">
+			<h4 > Estado reproductores </h4>
+			@include('flash::message')
+		</div>
+		<div class="col-md-12">
+			<br>
 			{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
 			<div class="row">
 			<div class="col-md-5">
@@ -47,7 +53,6 @@
 		<hr>
 		</div>
 		<div class="col-sm-12">
-				<h4 > Estado reproductores </h4>
 				@include('client.tableScreen')
 		</div>
 	</div>
