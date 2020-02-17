@@ -1,4 +1,5 @@
-<div class="table-responsive" style="height:150px;overflow-y:scroll">
+{{-- <div class="table-responsive" style="height:150px;overflow-y:scroll"> --}}
+	<div class="table-responsive">
 	<table class="table table-hover">
 		<thead class="table-dark">
 			<tr>
@@ -12,8 +13,9 @@
 		<tbody>
 			@php
 					$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
-					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow);
+					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->paginate();
 			@endphp
+			@if($eventsInactive->count()!=0)
 			@foreach($eventsInactive as $event)
 			<tr>
 				<td>{!! $event->name !!}</td>
@@ -24,6 +26,13 @@
 				</td>
 			</tr>
 			@endforeach
+			@else
+			<td>No hay eventos proximos.</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			@endif
 		</tbody>
 	</table>
+	{{$eventsInactive->links()}}
 </div>
