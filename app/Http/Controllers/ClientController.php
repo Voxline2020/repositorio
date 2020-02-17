@@ -31,7 +31,7 @@ class ClientController extends Controller
 	//mostrar compañias
 	public function index(Request $request)
 	{
-		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
+		$events = Event::where('company_id', Auth::user()->company_id);
 		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
