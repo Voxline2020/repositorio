@@ -217,6 +217,8 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
 	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
+	Route::get('filter_active','ClientController@filter_active')->name('clients.filter_active');
+	Route::get('filter_inactive','ClientController@filter_inactive')->name('clients.filter_inactive');
 	//client/screens
 	Route::get('filter_screen','ClientController@filter_screen')->name('clients.filter_screen');
 	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
