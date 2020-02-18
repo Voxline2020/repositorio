@@ -192,18 +192,10 @@ class CompanyController extends AppBaseController
 			}
 			$event = Event::find($id);
 			Flash::success('Evento agregado exitosamente.');
-			if (Auth::user()->hasRole('Administrador')){
-				return redirect(route('companies.events.edit',['company'=>$company,'event'=>$event]));
-			}else{
-				return redirect(route('events.show', [ $event[0]->id]));
-			}
+			return redirect(route('companies.events.edit',['company'=>$company,'event'=>$event[0]]));
 		}
     Flash::error('Error al agregar el evento.');
-		if (Auth::user()->hasRole('Administrador')){
-			return redirect(route('companies.events.index', $company));
-		}else{
-			return redirect(route('events.show', [ $event[0]->id]));
-		}
+		return redirect(route('companies.events.index', $company));
   }
   public function editEvent(Company $company,Event $event )
   {
