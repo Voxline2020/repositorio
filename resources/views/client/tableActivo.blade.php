@@ -1,5 +1,5 @@
-{{-- <div class="table-responsive" style="height:150px;overflow-y:scroll"> --}}
-	<div class="table-responsive">
+<div class="table-responsive" style="height:150px;overflow-y:scroll">
+	{{-- <div class="table-responsive"> --}}
 	<table class="table table-hover">
 		<thead class="table-dark">
 			<tr>
@@ -10,9 +10,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			@php
-					$eventsActive = $events->where('state',1)->paginate(3);
-			@endphp
 			@if($eventsActive->count()!=0)
 			@foreach($eventsActive as $event)
 			<tr>
@@ -25,12 +22,11 @@
 			</tr>
 			@endforeach
 			@else
-			<td>No hay eventos proximos.</td>
+			<td>No hay eventos actuales.</td>
 			<td></td>
 			<td></td>
 			<td></td>
 			@endif
 		</tbody>
 	</table>
-	{{$eventsActive->links()}}
 </div>

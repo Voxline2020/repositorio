@@ -18,39 +18,101 @@
 		<div class="col-sm-12 col-md-6">
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
 		</div>
-		<div class="col-sm-12 col-md-12">
-			<hr>
-			<h4>Eventos actuales &#x1F4C6;</h4>
-			@include('client.tableActivo')
-			<hr>
-			<h4>Eventos proximos &#x1F4C6;</h4>
-			@include('client.tableInactivo')
-			<hr>
-		</div>
 		<div class="col-md-12">
 			<h4 > Estado reproductores </h4>
 			@include('flash::message')
 		</div>
+		<div class="col-sm-12 col-md-12">
+			<hr>
+			<div class="row">
+				<div class="col-md-9">
+					<h4>Eventos actuales &#x1F4C6;</h4>
+				</div>
+				<div class="col-sm-3">
+					<button type="button" class="btn btn-secondary w-100" onclick="location.href='/clients'">Limpiar Busquedas</button>
+				</div>
+			</div>
+			<br>
+			{!! Form::open(['route' =>['clients.filter_active'], 'method' => 'GET']) !!}
+				<div class="row">
+					<div class="col-md-3">
+						{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre evento']) !!}
+					</div>
+					<div class="col-md-3">
+						<div class="input-group date" id="initdate" data-target-input="nearest">
+							{!! Form::text('initdate',null, ['class'=> 'form-control datetimepicker-input', 'placeholder' => 'Fecha Inicio']) !!}
+							<div class="input-group-append" data-target="#initdate" data-toggle="datetimepicker">
+								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group date" id="enddate" data-target-input="nearest">
+							{!! Form::text('enddate',null, ['class'=> 'form-control datetimepicker-input', 'placeholder' => 'Fecha Termino']) !!}
+							<div class="input-group-append" data-target="#enddate" data-toggle="datetimepicker">
+								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						{!! Form::submit('Buscar',['class'=>'btn btn-primary w-100']) !!}
+					</div>
+				</div>
+				{!! Form::close() !!}
+				<hr>
+			@include('client.tableActivo')
+			<hr>
+			<h4>Eventos proximos &#x1F4C6;</h4>
+			{!! Form::open(['route' =>['clients.filter_inactive'], 'method' => 'GET']) !!}
+				<div class="row">
+					<div class="col-md-3">
+						{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre evento']) !!}
+					</div>
+					<div class="col-md-3">
+						<div class="input-group date" id="initdate2" data-target-input="nearest">
+							{!! Form::text('initdate',null, ['class'=> 'form-control datetimepicker-input', 'placeholder' => 'Fecha Inicio']) !!}
+							<div class="input-group-append" data-target="#initdate2" data-toggle="datetimepicker">
+								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group date" id="enddate2" data-target-input="nearest">
+							{!! Form::text('enddate',null, ['class'=> 'form-control datetimepicker-input', 'placeholder' => 'Fecha Termino']) !!}
+							<div class="input-group-append" data-target="#enddate2" data-toggle="datetimepicker">
+								<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						{!! Form::submit('Buscar',['class'=>'btn btn-primary w-100']) !!}
+					</div>
+				</div>
+				{!! Form::close() !!}
+			<hr>
+			@include('client.tableInactivo')
+			<hr>
+		</div>
 		<div class="col-md-12">
 			<br>
-			{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
-			<div class="row">
-			<div class="col-md-5">
-			{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre Pantalla']) !!}
-			</div>
-			<div class="col-md-4">
-				<select name="state" id="state" class="form-control">
-					<option null selected disabled>Estado</option>
-					<option value="0">Inactivo</option>
-					<option value="1">Activo</option>
-				</select>
-			</div>
-			<div class="col-md-3">
-				<button type="submit" class="btn btn-primary w-100">Buscar</button>
-			</div>
-		</div>
-		{!! Form::close() !!}
-		<hr>
+				{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
+				<div class="row">
+					<div class="col-md-5">
+					{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre Pantalla']) !!}
+					</div>
+					<div class="col-md-4">
+						<select name="state" id="state" class="form-control">
+							<option null selected disabled>Estado</option>
+							<option value="0">Inactivo</option>
+							<option value="1">Activo</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<button type="submit" class="btn btn-primary w-100">Buscar</button>
+					</div>
+				</div>
+				{!! Form::close() !!}
+			<hr>
 		</div>
 		<div class="col-sm-12">
 				@include('client.tableScreen')
@@ -58,6 +120,97 @@
 	</div>
 </div>
 @endsection
+@section('script')
+<script>
+	$(function () {
+			$('#initdate').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es"
+
+			});
+			$('#enddate').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es",
+				useCurrent: false,
+			});
+
+		$("#initdate").on("change.datetimepicker", function (e) {
+				$('#enddate').datetimepicker('minDate', e.date);
+		});
+		$("#enddate").on("change.datetimepicker", function (e) {
+				$('#initdate').datetimepicker('maxDate', e.date);
+		});
+	});
+</script>
+<script>
+	$(function () {
+			$('#initdate2').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es"
+
+			});
+			$('#enddate2').datetimepicker({
+				icons: {
+						time: 'fas fa-clock',
+						date: 'fas fa-calendar',
+						up: 'fas fa-arrow-up',
+						down: 'fas fa-arrow-down',
+						previous: 'fas fa-chevron-left',
+						next: 'fas fa-chevron-right',
+						today: 'fas fa-calendar-check-o',
+						clear: 'fas fa-trash',
+						close: 'fas fa-times'
+				},
+				focusOnShow: true,
+				allowInputToggle: true,
+				locale: "es",
+				useCurrent: false,
+			});
+
+		$("#initdate2").on("change.datetimepicker", function (e) {
+				$('#enddate2').datetimepicker('minDate', e.date);
+		});
+		$("#enddate2").on("change.datetimepicker", function (e) {
+				$('#initdate2').datetimepicker('maxDate', e.date);
+		});
+	});
+</script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 	// Load the Visualization API and the piechart package.
@@ -103,4 +256,5 @@
 	}
 
 </script>
+@endsection
 
