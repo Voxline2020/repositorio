@@ -13,7 +13,7 @@
 			@foreach($onpivots AS $onpivot)
 			<tr>
 				<td>{!! $onpivot->computer->code !!}</td>
-				<td>{!! $onpivot->computer->location !!}</td>
+				<td>{!! $onpivot->computer->store->name !!}</td>
 				<td>{!! $onpivot->computer->type->name !!}</td>
 				<td>
 					{!! Form::open(['route' => ['companies.destroyOnpivot',$onpivot->id,'company'=>$pivot->company_id], 'method' => 'delete']) !!}

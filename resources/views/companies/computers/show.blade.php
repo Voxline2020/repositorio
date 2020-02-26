@@ -66,12 +66,12 @@ aria-hidden="true">
 												{!! Form::text('name', null, ['class' => 'form-control']) !!}
 											</div>
 											<div class="form-group col-sm-4">
-												{!! Form::label('height', 'Ingrese alto:') !!}
-												{!! Form::input('number','height', null, ['class' => 'form-control']) !!}
-											</div>
-											<div class="form-group col-sm-4">
 												{!! Form::label('width', 'Ingrese ancho:') !!}
 												{!! Form::input('number','width', null, ['class' => 'form-control']) !!}
+											</div>
+											<div class="form-group col-sm-4">
+												{!! Form::label('height', 'Ingrese alto:') !!}
+												{!! Form::input('number','height', null, ['class' => 'form-control']) !!}
 											</div>
 											<input type="hidden" id="computer_id" name="computer_id" value="{{$computer->id}}">
 									</div>

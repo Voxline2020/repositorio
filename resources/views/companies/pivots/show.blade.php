@@ -71,16 +71,15 @@ aria-hidden="true">
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($computers as $computer)
+						@foreach($computers as $key => $computer)
 						<tr>
 							<td>{{$computer->code}}</td>
-							<td>{{$computer->location}}</td>
+							<td>{{$computer->store->name}}</td>
 							<td>{{$computer->type->name}}</td>
-							<td><input type="radio" name="computer_id" id="{!! $computer->id !!}" value="{!! $computer->id !!}" required>
+						<td><input type="checkbox" name="computer_id[{{$key}}]" id="{!! $computer->id !!}" value="{!! $computer->id !!}">
 							</td>
 						</tr>
 						@endforeach
-						{{-- {!! Form::hidden('pivot', $pivot->id) !!} --}}
 						{!! Form::hidden('computer_pivot_id', $pivot->id) !!}
 						{!! Form::hidden('state', 1) !!}
 					</tbody>
