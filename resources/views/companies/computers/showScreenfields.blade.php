@@ -172,17 +172,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($events as $event)
+								@foreach($events as $key => $event)
 								<tr>
 									<td>{{$event->name}}</td>
 									<td>{!! \Carbon\Carbon::parse($event->initdate)->format('d-m-Y H:i') !!}</td>
 									<td>{!! \Carbon\Carbon::parse($event->enddate)->format('d-m-Y H:i') !!}</td>
-									<td><input type="radio" name="event_id" id="{!! $event->id !!}" value="{!! $event->id !!}" required>
+									<td><input type="checkbox" name="event_id[{{$key}}]" id="{!! $event->id !!}" value="{!! $event->id !!}">
 									</td>
 								</tr>
 								@endforeach
 								{!! Form::hidden('user_id', Auth::user()->id) !!}
-								{!! Form::hidden('order', 999) !!}
 							</tbody>
 						</table>
 					</div>

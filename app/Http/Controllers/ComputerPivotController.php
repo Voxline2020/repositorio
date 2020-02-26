@@ -9,6 +9,7 @@ use App\Models\ComputerOnPivot;
 use App\Models\ComputerPivot;
 use App\Models\Content;
 use App\Models\Store;
+use App\Models\Event;
 use App\Repositories\ComputerPivotRepository;
 use Carbon\Carbon;
 use Flash;
@@ -165,15 +166,18 @@ class ComputerPivotController extends AppBaseController
           $jsonResponse['computers'][$key]['screens'][$key2]['state'] = $screen->state;
           $jsonResponse['computers'][$key]['screens'][$key2]['version'] = $screen->version;
 
-          $aux_eventAssignations = $screen->eventAssignations->where('state', 1);
+					$aux_eventAssignations = $screen->eventAssignations->where('state', 1);
           $i = 0;
           foreach ($aux_eventAssignations as $eventAsignation) {
+						$event = Event::find($eventAsignation->content->event_id);
             $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['defOrder'] = $eventAsignation->order;
             $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['originalID'] = $eventAsignation->content->id;
             $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['name'] = $eventAsignation->content->name;
             $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['width'] = $eventAsignation->content->width;
-            $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['height'] = $eventAsignation->content->height;
-            $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['deleted'] = empty($eventAsignation->content->deleted_at) ? null : Carbon::parse($eventAsignation->content->deleted_at)->format('d/m/Y H:i');
+						$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['height'] = $eventAsignation->content->height;
+						$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['initdate'] = Carbon::parse($event->initdate)->format('d/m/Y H:i');
+						$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['enddate'] = Carbon::parse($event->enddate)->format('d/m/Y H:i');
+						$jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['deleted'] = empty($eventAsignation->content->deleted_at) ? null : Carbon::parse($eventAsignation->content->deleted_at)->format('d/m/Y H:i');
             $jsonResponse['computers'][$key]['screens'][$key2]['playlist'][$i]['download'] = route('contents.download', $eventAsignation->content->id);
             $i++;
           }

@@ -132,10 +132,14 @@ class CompanyController extends AppBaseController
   //ANCHOR Eventos Compañia
   public function indexEvent(Company $company, Request $request)
   {
-    $events = Event::with('contents')->where('company_id', $company->id)->paginate();
-    $lists = Event::with('contents')->where('company_id', $company->id)->paginate();
-    $listsStore = Store::all();
-    return view('companies.events.index', compact('lists', 'listsStore', 'events', 'company'));
+		$now = Carbon::now()->format('Y/m/d H:i');
+		$old_check = 0;
+		$events = Event::with('contents')
+		->where('company_id', $company->id)
+		->where('enddate','>=',$now)
+		->orderBy('state', 'asc')
+		->paginate();
+    return view('companies.events.index', compact('lists', 'listsStore', 'events', 'company'))->with('old_check', $old_check);
   }
   public function showEvent(Company $company,Event $event)
   {
@@ -257,36 +261,40 @@ class CompanyController extends AppBaseController
 	}
 	public function filterEvent_by(Company $company,Request $request)
   {
-    $eventsFinal = null;
-    $filter = $request->get('nameFiltrar');
-    $filterState = $request->get('state');
-    $filterDate = $request->get('initdate');
-    $filterDateEnd = $request->get('enddate');
-    $company = Company::where('id',  auth()->user()->company_id)->first();
-    $listsStore = Store::all();
-    if ($filter != null || $filterState != null || $filterDate != null || $filterDateEnd != null) {
-      if ($filter != null) {
-      $events = Event::where('company_id', auth()->user()->company_id)->where('name', 'LIKE', "%$filter%")->orderBy('state', 'asc')->paginate();
-      }
-      if ($filterState != null) {
-        $events = Event::where('company_id', auth()->user()->company_id)->where('state', $filterState)->orderBy('state', 'asc')->paginate();
-      }
-      if ($filterDate != null) {
-        $events = Event::where('company_id', auth()->user()->company_id)->where('initdate', 'LIKE', "%$filterDate%")->orderBy('state', 'asc')->paginate();
-      }
-      if ($filterDateEnd != null) {
-        $events = Event::where('company_id', auth()->user()->company_id)->where('enddate', 'LIKE', "%$filterDateEnd%")->orderBy('state', 'asc')->paginate();
-      }
-      if(count($events)==0){
-        Flash::info('No se encontro ningun resultado.');
-        return redirect(url()->previous());
-      }
-      return view('events.index', compact('events', 'listsStore'))->with('company', $company);
-    }else {
-    Flash::error('Ingrese un valor para generar la busqueda.');
-    return redirect(url()->previous());
-    }
-  }
+		if($request->nameFiltrar==null&&$request->state==null&&$request->initdate==null&&$request->enddate==null){
+			Flash::error('Debe ingresar almenos un filtro para la busqueda.');
+			return redirect(url()->previous());
+		}
+		$old_check = $request->old_check;
+		$initdate = Carbon::parse(str_replace('/', '-',$request->initdate))->format('Y-m-d H:i');
+		$enddate = Carbon::parse(str_replace('/', '-',$request->enddate))->format('Y-m-d H:i');
+		$events = Event::with('contents')->where('company_id', $company->id);
+		if($request->nameFiltrar!=null){
+			$events->Where('name','like',"%$request->nameFiltrar%");
+		}
+		if($request->state!=null){
+			$events->Where('state',$request->state);
+		}
+		if($request->initdate!=null){
+			$events->where('initdate','>=',$initdate);
+		}
+		if($request->enddate!=null){
+			$events->where('enddate','<=',$enddate);
+		}
+		$events = $events->paginate();
+		if($events->count()==0){
+			Flash::info('No se encontro ningun resultado.');
+		}
+		return view('companies.events.index', compact('events', 'company'));
+	}
+	public function view_old(Company $company,Request $request)
+	{
+		$old_check = 1;
+		$events = Event::where('company_id',$company->id)
+		->orderBy('state', 'asc')
+		->paginate();
+    return view('companies.events.index', compact('events'))->with('company', $company)->with('old_check', $old_check);
+	}
 	//stores//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //ANCHOR Sucursales Compañia
   public function indexStore(Company $company, Request $request)
@@ -580,14 +588,32 @@ class CompanyController extends AppBaseController
 	}
 	public function storeOnpivot($company,$id,Request $request)
   {
-		$validate = ComputerOnPivot::where('computer_id',$request->computer_id)->where('computer_pivot_id',$request->computer_pivot_id);
-		if($validate->count()!=0){
-			Flash::error('Computador ya asignado en este pivote.');
+		if(empty($request->computer_id)){
+			$count = 0;
+		}else{
+			$count = count($request->computer_id);
+		}
+		if($count==0){
+			Flash::error('Debes seleccionar almenos 1 computador.');
 			return redirect()->route('companies.pivots.show', ['company'=>$company,$id]);
 		}
-		$input = $request->all();
-		ComputerOnPivot::create($input);
-		Flash::success('Computador agregado con exito.');
+		foreach($request->computer_id AS $computer_id){
+			$validate = ComputerOnPivot::where('computer_id',$computer_id)
+			->where('computer_pivot_id',$request->computer_pivot_id);
+			if($validate->count()!=0){
+				$computer = Computer::find($computer_id);
+				Flash::error('Computador '.$computer->code.' ya asignado en este pivote.');
+			}else{
+				$computer = Computer::find($computer_id);
+				$request->merge([
+					'computer_id' => $computer_id,
+				]);
+
+				$input = $request->all();
+				ComputerOnPivot::create($input);
+				Flash::success('Computador '.$computer->code.' agregado con exito.');
+			}
+		}
 		return redirect()->route('companies.pivots.show', ['company'=>$company,$id]);
 	}
 	public function destroyOnpivot($company,$id)
@@ -811,36 +837,29 @@ class CompanyController extends AppBaseController
 	public function eventAssignScreen(Company $company,Computer $computer, Screen $screen, Request $request)
 	{
 		$request->merge(['slug' => Str::slug($request['name'])]);
-		$event = Event::find($request->event_id);
-		$contents = Content::where('event_id',$request->event_id)
-		->where('width',$screen->width)
-		->where('height',$screen->height)
-		->get();
-		if($contents->count()!=1){
+		$events = Event::find($request->event_id);
+
+		foreach($events AS $event){
+			$contents = Content::where('event_id',$event->id)
+			->where('width',$screen->width)
+			->where('height',$screen->height)
+			->get();
+			// if($contents->count()!=1){
 			foreach($contents AS $content){
+				$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
 				$request->merge([
 				"screen_id"=> $screen->id,
 				"state"=>$event->state,
 				"content_id"=>$content->id,
+				"order"=>$count_assigns,
 				]);
 				$screen->version=$screen->version+1;
 				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
+			Flash::success('Evento "'.$event->name.'" asignado exitosamente');
 		}
-		else{
-			$request->merge([
-				"screen_id"=> $screen->id,
-				"state"=>$event->state,
-				"content_id"=>$contents[0]->id,
-				]);
-				$input = $request->all();
-				EventAssignation::create($input);
-				$screen->version=$screen->version+1;
-				$screen->save();
-		}
-		Flash::success('Evento asignado exitosamente');
 		return redirect(url()->previous($screen));
 	}
 	public function changeOrderScreen(Company $company,Computer $computer, Screen $screen,Request $request)
@@ -858,18 +877,65 @@ class CompanyController extends AppBaseController
 			Flash::error('No se ha podido realizar la operación.');
 			return redirect(url()->previous());
 		}
-		//traemos la asignacion
-		$assign=EventAssignation::find($request->id);
-		//asignamos los nuevos valores y guardamos
-		$assign->order = $request->neworder;
-		$screen->version = $screen->version+1;
-		$assign->save();
-		$screen->save();
-		Flash::success('Se ha cambiado el Nº de orden correctamente.');
+		//llamado de objeto inicial
+		$objIni = EventAssignation::find($request->id);
+		//si la nueva posicion y la posicion actual son iguales
+		if ($request->neworder == $objIni->order) {
+			Flash::error('La nueva posicion no puede ser igual a la actual.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion excede el rango de elementos
+		$countObjs = EventAssignation::where('screen_id',$screen->id)->get();
+		if ($countObjs->count() < $request->neworder) {
+			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
+			return redirect(url()->previous());
+		}
+		//si la nueva posicion es menor de 1
+		if ($request->neworder < 1) {
+			Flash::error('La nueva posicion no puede ser menor que el primer elemento.');
+			return redirect(url()->previous());
+		}
+		//llamado coleccion de objs intermedios
+		if($objIni->order < $request->neworder){
+			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			->where('order','<=',$request->neworder)
+			->where('order','>',$objIni->order)
+			->orderby('order','ASC')
+			->where('state',1)
+			->get();
+		}else if($objIni->order > $request->neworder){
+			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			->where('order','>=',$request->neworder)
+			->where('order','<',$objIni->order)
+			->orderby('order','ASC')
+			->where('state',1)
+			->get();
+		}
+		//intercambio de orden y guardado
+		$order = $objIni->order;
+		$neworder = $request->neworder;
+		$objIni->order = $neworder;
+		foreach($listobjs as $objs){
+			if($order < $neworder){
+				$objs->order = $order;
+				$order = $order+1;
+			}else if($order > $neworder){
+				$neworder = $neworder+1;
+				$objs->order = $neworder;
+			}
+			$objs->save();
+		}
+		$objIni->save();
+		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
 	public function cloneEventScreen(Company $company,Computer $computer, Screen $screen,Request $request)
 	{
+		//asignamos el order para el clon
+		$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
+		$request->merge([
+			"order"=>$count_assigns,
+		]);
 		// extraemos los datos del elemento original
 		$input = $request->all();
 		//cambiamos version en pantalla

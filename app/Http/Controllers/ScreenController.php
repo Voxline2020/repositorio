@@ -170,37 +170,31 @@ class ScreenController extends AppBaseController
 	}
 	public function eventAssign($id, Request $request)
 	{
-		// $request->merge(['slug' => Str::slug($request['name'])]);
+		$request->merge(['slug' => Str::slug($request['name'])]);
 		$screen=Screen::find($id);
-		$event = Event::find($request->event_id);
-		$contents = Content::where('event_id',$request->event_id)
-		->where('width',$screen->width)
-		->where('height',$screen->height)
-		->get();
-		if($contents->count()!=1){
+		$events = Event::find($request->event_id);
+
+		foreach($events AS $event){
+			$contents = Content::where('event_id',$event->id)
+			->where('width',$screen->width)
+			->where('height',$screen->height)
+			->get();
+			// if($contents->count()!=1){
 			foreach($contents AS $content){
+				$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
 				$request->merge([
-				"screen_id"=> $id,
+				"screen_id"=> $screen->id,
 				"state"=>$event->state,
 				"content_id"=>$content->id,
+				"order"=>$count_assigns,
 				]);
-				$screen->version = $screen->version+1;
+				$screen->version=$screen->version+1;
 				$screen->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
-		}else{
-			$request->merge([
-				"screen_id"=> $id,
-				"state"=>$event->state,
-				"content_id"=>$contents[0]->id,
-				]);
-				$screen->version = $screen->version+1;
-				$screen->save();
-				$input = $request->all();
-				EventAssignation::create($input);
+			Flash::success('Evento "'.$event->name.'" asignado exitosamente');
 		}
-		Flash::success('Evento asignado exitosamente');
 		return redirect(url()->previous($screen));
 	}
 	public function changeOrder(Request $request)
@@ -243,11 +237,15 @@ class ScreenController extends AppBaseController
 			$listobjs = EventAssignation::where('screen_id',$screen->id)
 			->where('order','<=',$request->neworder)
 			->where('order','>',$objIni->order)
+			->orderby('order','ASC')
+			->where('state',1)
 			->get();
 		}else if($objIni->order > $request->neworder){
 			$listobjs = EventAssignation::where('screen_id',$screen->id)
 			->where('order','>=',$request->neworder)
 			->where('order','<',$objIni->order)
+			->orderby('order','ASC')
+			->where('state',1)
 			->get();
 		}
 		//intercambio de orden y guardado
@@ -270,6 +268,11 @@ class ScreenController extends AppBaseController
 	}
 	public function cloneEvent(Request $request)
 	{
+		//asignamos el order para el clon
+		$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
+		$request->merge([
+			"order"=>$count_assigns,
+		]);
 		// extraemos los datos del elemento original
 		$input = $request->all();
 		//cambiamos version en pantalla
@@ -280,5 +283,6 @@ class ScreenController extends AppBaseController
 		EventAssignation::create($input);
 		Flash::success('Se ha clonado el elemento correctamente.');
 		return redirect(url()->previous());
+
 	}
 }

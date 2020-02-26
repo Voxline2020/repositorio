@@ -105,7 +105,8 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::put('/{event}', 'CompanyController@updateEvent')->name('companies.events.update');
 		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
-		Route::get('filter/filter_by', "CompanyController@filterEvent_by")->name('companies.events.filterEvent_by');
+		Route::get('/filter/filter_by', "CompanyController@filterEvent_by")->name('companies.events.filterEvent_by');
+		Route::get('/view/old', 'CompanyController@view_old')->name('companies.events.view_old');
 
 	});
 	//pivots
@@ -234,6 +235,7 @@ Route::group(['prefix' => 'clients'], function () {
 		Route::put('/{event}', 'ClientController@updateEvent')->name('clients.events.update');
 		Route::delete('/{event}/delete', 'ClientController@destroyEvent')->name('clients.events.destroy');
 		Route::get('/filter/filter_by', 'ClientController@filterEvent_by')->name('clients.events.filter_by');
+		Route::get('/view/old', 'ClientController@view_old')->name('clients.events.view_old');
 		//Event/Assign
 		Route::delete('/assign/{assign}/delete', 'ClientController@destroyEventAssign')->name('clients.events.destroyAssign');
 	});
