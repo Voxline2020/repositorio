@@ -226,7 +226,7 @@ class ClientController extends Controller
 		$now = Carbon::now()->format('Y/m/d H:i');
 		$old_check = 0;
     $company = Company::where('id',  Auth::user()->company_id)->first();
-		$events = Event:::with('contents')
+		$events = Event::with('contents')
 		->where('company_id',  Auth::user()->company_id)
 		->where('enddate','>=',$now)
 		->orderBy('state', 'asc')
