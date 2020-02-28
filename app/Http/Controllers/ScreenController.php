@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateScreenRequest;
 use App\Repositories\ScreenRepository;
 use App\Repositories\VersionPlaylistDetailRepository;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Str as Str;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Store;
