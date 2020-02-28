@@ -270,7 +270,7 @@ class ScreenController extends AppBaseController
 	public function cloneEvent(Request $request)
 	{
 		//asignamos el order para el clon
-		$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
+		$count_assigns = EventAssignation::where('screen_id',$request->screen_id)->where('state',1)->count()+1;
 		$request->merge([
 			"order"=>$count_assigns,
 		]);
