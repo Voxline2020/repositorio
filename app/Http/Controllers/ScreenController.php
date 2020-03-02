@@ -34,6 +34,7 @@ class ScreenController extends AppBaseController
 
 	public function __construct(ScreenRepository $screenRepo)
 	{
+		$this->middleware('auth');
 		$this->middleware('admin')->except(['AssignContent','ScreenPlaylistAsign','changeStatus','filter_by_name','eventAssign','changeOrder','cloneEvent']);
 		$this->screenRepository = $screenRepo;
 	}
