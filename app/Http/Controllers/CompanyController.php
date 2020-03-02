@@ -518,7 +518,7 @@ class CompanyController extends AppBaseController
 		$onpivots = ComputerOnPivot::where('computer_pivot_id',$id)->paginate();
 		$computers = Computer::whereHas('store', function ($query) use ($pivot) {
 			$query->where('company_id', $pivot->company_id);
-		})->paginate();
+		})->get();
 		return view('companies.pivots.show',['id' => $id])->with('pivot',$pivot)
 		->with('onpivots',$onpivots)->with('computers',$computers);
   }
@@ -609,7 +609,6 @@ class CompanyController extends AppBaseController
 				$request->merge([
 					'computer_id' => $computer_id,
 				]);
-
 				$input = $request->all();
 				ComputerOnPivot::create($input);
 				Flash::success('Computador '.$computer->code.' agregado con exito.');
