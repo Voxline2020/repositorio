@@ -32,6 +32,7 @@ class ClientController extends Controller
 	public function index(Request $request)
 	{
 		$events = Event::where('company_id', Auth::user()->company_id);
+		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
 		$eventsActive = $events->where('state',1)->get();
 		$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->get();
@@ -51,7 +52,8 @@ class ClientController extends Controller
 		}
 		return view('client.index',compact('screens','events','screensCount'))
 		->with('eventsActive',$eventsActive)
-		->with('eventsInactive',$eventsInactive);
+		->with('eventsInactive',$eventsInactive)
+		->with('stores',$stores);
 	}
 	public function show($id)
 	{
@@ -92,6 +94,8 @@ class ClientController extends Controller
 	{
 		$name = $request->nameFiltrar;
 		$state = $request->state;
+		$store = $request->store;
+		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		$events = $this->eventRepository->all()->where('company_id', Auth::user()->company_id);
 		$dateNow = \Carbon\Carbon::now()->format('Y-m-d H:i:s');
 		$eventsActive = $events->where('state',1);
@@ -101,40 +105,38 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->get();
-		if($name != null || $state != null){
-
-			if($name != null){
-				$screens = Screen::whereHas('computer', function ($query) {
-					$query->whereHas('store', function ($query) {
-						$query->where('company_id', Auth::user()->company_id);
-					});
-				})->where('name','LIKE',"%$name%")->orderBy('state', 'asc')->paginate();
-			}
-			if($state != null){
-				$screens = Screen::whereHas('computer', function ($query) {
-					$query->whereHas('store', function ($query) {
-						$query->where('company_id', Auth::user()->company_id);
-					});
-				})->where('state', $state )->orderBy('state', 'asc')->paginate();
-			}
-			if(count($screens)==0){
-				Flash::info('No se encontro ningun resultado.');
-				return redirect(url()->previous());
-			}
-			if($name != null && $state != null){
-				$screens = Screen::whereHas('computer', function ($query) {
-					$query->whereHas('store', function ($query) {
-						$query->where('company_id', Auth::user()->company_id);
-					});
-				})->where('name','LIKE',"%$name%")->where('state', $state )->orderBy('state', 'asc')->paginate();
-			}
-			return view('client.index',compact('screens','events','screensCount'))
-			->with('eventsActive',$eventsActive)
-			->with('eventsInactive',$eventsInactive);
-		}else{
+		$screens = Screen::whereHas('computer', function ($query) {
+			$query->whereHas('store', function ($query) {
+				$query->where('company_id', Auth::user()->company_id);
+			});
+		});
+		if($name==null && $state==null && $store==null){
 			Flash::error('Debe ingresar almenos un filtro para la busqueda.');
 			return redirect(url()->previous());
 		}
+		if($name != null){
+			$screens->where('name','LIKE',"%$name%")->orderBy('state', 'asc');
+		}
+		if($state != null){
+			$screens->where('state', $state )->orderBy('state', 'asc');
+		}
+		if($store != null){
+			$screens = Screen::whereHas('computer', function ($query) use($store) {
+			$query->whereHas('store', function ($query) use($store) {
+				$query->where('company_id', Auth::user()->company_id);
+			})->where('store_id', $store );
+		})->orderBy('state', 'asc');
+		}
+		$screens=$screens->paginate();
+		if(count($screens)==0){
+			Flash::info('No se encontro ningun resultado.');
+			return redirect(url()->previous());
+		}
+		return view('client.index',compact('screens','screensCount'))
+		->with('eventsActive',$eventsActive)
+		->with('eventsInactive',$eventsInactive)
+		->with('screens',$screens)
+		->with('stores',$stores);
 	}
 	public function filter_active(Request $request)
 	{

@@ -7,7 +7,9 @@
 <table class="table table-hover" id="screens-table">
 <thead class="thead-dark">
 <tr>
+	<th>ID</th>
 	<th>Pantallas</th>
+	<th>Estado</th>
 	<th>Resolución</th>
 	<th> Acciones </th>
 
@@ -17,7 +19,20 @@
 @if($screens->count()!=0)
 	@foreach($screens as $screen)
 	<tr>
+		<td>{!! $screen->id !!}</td>
 		<td>{!! $screen->name !!}</td>
+		<td>
+		{!! Form::model($screen, ['route' => ['companies.computers.changeStatusScreen', 'company'=>$company,'computer'=>$computer,'screen'=>$screen], 'method' => 'put', 'id' => 'changestatus']) !!}
+			@if($screen->state==0)
+					{!! Form::hidden('state', 1) !!}
+					{!! Form::submit('Inactivo', ['class' => 'btn btn-outline-danger']) !!}
+			@endif
+			@if($screen->state==1)
+					{!! Form::hidden('state', 0) !!}
+					{!! Form::submit('Activo', ['class' => 'btn btn-outline-success']) !!}
+			@endif
+		{!! Form::close() !!}
+		</td>
 		<td>{!! $screen->width !!}x{!! $screen->height !!}</td>
 		<td>
 			{!! Form::open(['route' => ['companies.computers.destroyScreen',$company, $computer, $screen], 'method' => 'delete']) !!}
