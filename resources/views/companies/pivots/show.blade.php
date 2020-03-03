@@ -163,19 +163,3 @@ aria-hidden="true">
 	});
 </script>
 @endsection
-@section('style')
-<style>
-.enlace {
-	display:inline;
-	border:0;
-	padding:0;
-	margin:0;
-	text-decoration:underline;
-	background:none;
-	color:#000088;
-	font-family: arial, sans-serif;
-	font-size: 1em;
-	line-height:1em;
-}
-</style>
-@endsection

@@ -97,14 +97,22 @@
 			<br>
 				{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-3">
 					{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre Pantalla']) !!}
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<select name="state" id="state" class="form-control">
 							<option null selected disabled>Estado</option>
 							<option value="0">Inactivo</option>
 							<option value="1">Activo</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<select name="store" id="store" class="form-control">
+							<option null selected disabled>Tienda/Sucursal</option>
+							@foreach ($stores as $store)
+							<option value="{{$store->id}}">{{$store->name}}</option>
+							@endforeach
 						</select>
 					</div>
 					<div class="col-md-3">
