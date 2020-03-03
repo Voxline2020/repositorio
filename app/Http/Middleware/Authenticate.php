@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Flash;
+use Auth;
 
 class Authenticate extends Middleware
 {
@@ -19,9 +20,11 @@ class Authenticate extends Middleware
 
     protected function redirectTo($request)
     {
-        if (!$request->expectsJson()) {
-						Flash::error('Debes iniciar sesión para acceder a la aplicación.');
-            return route('login');
-        }
+			if (!$request->expectsJson()) {
+				if($request->getPathInfo()!='/'){
+					Flash::error('Debes iniciar sesión para acceder a la aplicación.');
+				}
+				return route('login');
+			}
     }
 }
