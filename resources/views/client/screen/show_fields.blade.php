@@ -173,12 +173,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach($events as $event)
+								@foreach($events as $key => $event)
 								<tr>
 									<td>{{$event->name}}</td>
 									<td>{{$event->initdate}}</td>
 									<td>{{$event->enddate}}</td>
-									<td><input type="radio" name="event_id" id="{!! $event->id !!}" value="{!! $event->id !!}" required>
+									<td><input type="checkbox" name="event_id[{{$key}}]" id="{!! $event->id !!}" value="{!! $event->id !!}">
 									</td>
 								</tr>
 								@endforeach

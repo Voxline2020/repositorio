@@ -11,10 +11,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			@php
-					$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
-					$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->paginate();
-			@endphp
 			@if($eventsInactive->count()!=0)
 			@foreach($eventsInactive as $event)
 			<tr>
@@ -34,5 +30,4 @@
 			@endif
 		</tbody>
 	</table>
-	{{$eventsInactive->links()}}
 </div>

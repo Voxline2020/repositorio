@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="{{ asset('vendor/select2/css/select2-bootstrap4.css') }}">
 	<link rel="stylesheet" href="{{ asset('vendor/dropzonejs/dropzone.css') }}">
 	<link rel="stylesheet" href="{{ asset('vendor/tempusdominus/css/tempusdominus-bootstrap-4.css') }}">
+	<link rel="stylesheet" href="{{ asset('vendor/jquery.datatable/css/jquery.dataTables.css') }}">
 </head>
 
 <body>
@@ -37,7 +38,7 @@
 	<script src="{{ asset('vendor/select2/js/select2.js')}}"></script>
 	<script src="{{ asset('vendor/tempusdominus/js/tempusdominus-bootstrap-4.js')}}"></script>
 	<script src="{{ asset('vendor/moment/moment-with-locales.js')}}"></script>
-
+	<script src="{{ asset('vendor/jquery.datatable/js/jquery.dataTables.js')}}"></script>
 	<!-- Languaje -->
 	<script>
 		$(function () {

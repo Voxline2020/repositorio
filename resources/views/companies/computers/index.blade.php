@@ -17,15 +17,8 @@
 <hr>
 {{ Form::open(['route' =>['companies.computers.filter_computers',$company], 'method' => 'GET']) }}
 <div class="row">
-	<div class="col-md-3">
-		<select name="store" id="store" class="form-control">
-			<option null selected disabled>Tienda/Sucursal</option>
-			@foreach ($stores as $store)
-				@if($store->company_id==$company->id)
-					<option value="{{$store->id}}">{{$store->name}}</option>
-				@endif
-			@endforeach
-		</select>
+	<div class="col-md-4">
+		{!! Form::text('codeFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Codigo']) !!}
 	</div>
 	<div class="col-md-3">
 		<select name="type" id="type" class="form-control">
@@ -35,8 +28,15 @@
 			@endforeach
 		</select>
 	</div>
-	<div class="col-md-4">
-		{!! Form::text('codeFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Codigo']) !!}
+	<div class="col-md-3">
+		<select name="store" id="store" class="form-control">
+			<option null selected disabled>Tienda/Sucursal</option>
+			@foreach ($stores as $store)
+				@if($store->company_id==$company->id)
+					<option value="{{$store->id}}">{{$store->name}}</option>
+				@endif
+			@endforeach
+		</select>
 	</div>
 	<div class="col-md-2">
 		<button type="submit" class="btn btn-primary w-100">Buscar </button>
