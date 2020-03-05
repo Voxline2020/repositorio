@@ -2,25 +2,21 @@
 
 @section('content')
 <div class="row">
-	<div class="col-md-9">
+	<div class="col-md-6">
 		<h2> Evento {{ $event->name }} </h2>
 	</div>
-	<div class="btn-group col-md-3">
-		<div class="col-md-3">
-			<a class="btn btn-warning" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false"
-				aria-controls="collapseExample">
-				<i class="fas fa-edit"></i>
-			</a>
-		</div>
-		<div class="col-md-3">
-			<a class="btn btn-primary" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false"
-				aria-controls="collapseExample">
-				<img src="http://cdn.onlinewebfonts.com/svg/img_520505.png" width="20" height="20">
-			</a>
-		</div>
-		<div class="col-md-3">
-			<a href="{!! route('clients.events.index') !!}" class="btn btn-info"><i class="fas fa-undo"></i></a>
-		</div>
+	<div class="col-md-2">
+		<a class="btn btn-warning w-100" data-toggle="collapse" href="#Editar" role="button" aria-expanded="false"aria-controls="collapseExample">
+			Editar
+		</a>
+	</div>
+	<div class="col-md-2">
+		<a class="btn btn-primary w-100" data-toggle="collapse" href="#AgregarContenido" role="button" aria-expanded="false"aria-controls="collapseExample">
+			Agregar Contenido
+		</a>
+	</div>
+	<div class="col-md-2">
+		<a href="{!! route('clients.events.index') !!}" class="btn btn-outline-primary w-100">Atras</a>
 	</div>
 </div>
 <br>
@@ -156,10 +152,10 @@
 		autoDiscover: false,
 		autoProcessQueue: false,
 		uploadMultiple: true,
-		maxFilezise: 1000,
+		maxFilezise: 1000000,
 		maxFiles: 25,
 		parallelUploads: 5,
-		upload_max_filesize: 10000,
+		upload_max_filesize: 1000000000,
 		addRemoveLinks: true,
 		dictDefaultMessage: "Suba los archivos aqui",
 		headers: {
