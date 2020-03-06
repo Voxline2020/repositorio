@@ -683,19 +683,19 @@ class CompanyController extends AppBaseController
 	public function storeComputer(Company $company,Request $request)
 	{
 		if($request->code==null){
-			Flash::error('El campo "codigo" es requerido');
+			Flash::error('El campo "codigo" es requerido.');
 			return redirect(url()->previous());
 		}
 		if($request->location==null){
-			Flash::error('El campo "Ubicacion" es requerido');
+			Flash::error('El campo "Ubicacion" es requerido.');
 			return redirect(url()->previous());
 		}
 		if($request->store_id==null){
-			Flash::error('El campo "Sucursal" es requerido');
+			Flash::error('El campo "Sucursal" es requerido.');
 			return redirect(url()->previous());
 		}
 		if($request->type_id==null){
-			Flash::error('El campo "Tipo" es requerido');
+			Flash::error('El campo "Tipo" es requerido.');
 			return redirect(url()->previous());
 		}
 		$computers = Computer::where('code',$request->code)->get();
