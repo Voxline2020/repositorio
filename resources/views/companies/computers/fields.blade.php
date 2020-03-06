@@ -1,11 +1,11 @@
 
 <div class="form-group col-sm-6">
     {!! Form::label('code', 'codigo') !!}
-    {!! Form::number('code', null, ['class' => 'form-control']) !!}
+    {!! Form::number('code', null, ['class' => 'form-control','required']) !!}
 </div>
 <div class="form-group col-sm-6">
     {!! Form::label('location', 'ubicacion:') !!}
-    {!! Form::text('location', null, ['class' => 'form-control']) !!}
+    {!! Form::text('location', null, ['class' => 'form-control','required']) !!}
 </div>
 <div class="form-group col-sm-6">
     {!! Form::label('teamviewer_code', 'Codigo teamviewer') !!}
@@ -29,8 +29,8 @@
 </div>
 <div class="form-group col-sm-6">
 		{!! Form::label('company', 'Ingrese sucursal:') !!}
-    <select name="store_id" id="store_id" class="browser-default custom-select">
-				<option null selected disabled>seleccione</option>
+    <select name="store_id" id="store_id" class="browser-default custom-select" required>
+				<option value="" selected disabled>seleccione</option>
 				@foreach ($stores as $store)
 						<option value="{{$store->id}}">{{$store->name}}</option>
 				@endforeach
@@ -38,8 +38,8 @@
 </div>
 <div class="form-group col-sm-6">
 		{!! Form::label('tipo', 'Ingrese tipo:') !!}
-    <select name="type_id" id="type_id" class="browser-default custom-select">
-				<option null selected disabled>seleccione</option>
+    <select name="type_id" id="type_id" class="browser-default custom-select" required>
+				<option value="" selected disabled>seleccione</option>
 				@foreach ($types as $type)
 						<option value="{{$type->id}}">{{$type->name}}</option>
 				@endforeach
