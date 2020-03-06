@@ -8,14 +8,6 @@
     {!! Form::label('address', 'Direccion:') !!}
     {!! Form::text('address', null, ['class' => 'form-control']) !!}
 </div>
-{{-- <div class="form-group col-sm-12 col-md-6">
-    {!! Form::label('lat', 'Ingrese latitud:') !!}
-    {!! Form::text('lat', null, ['class' => 'form-control']) !!}
-</div>
-<div class="form-group col-sm-12 col-md-6">
-    {!! Form::label('lng', 'Ingrese longitud:') !!}
-    {!! Form::text('lng', null, ['class' => 'form-control']) !!}
-</div> --}}
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12 col-md-6">

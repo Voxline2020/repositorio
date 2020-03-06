@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Response;
 use App\Models\User;
+use Mail;
 
 use Spatie\Permission\Models\Role;
 
@@ -59,16 +60,50 @@ class UserController extends AppBaseController
    *
    * @return Response
    */
-  public function store(CreateUserRequest $request)
+  public function store(Request $request)
   {
-    $request->merge(['password' => Hash::make($request['password'])]);
-    $input = $request->all();
-
-    $user = $this->userRepository->create($input);
-
-    Flash::success('Usuario guardado correctamente.');
-
-    return redirect(route('users.index'));
+		//validacion de campos
+		if($request->email==null){
+			Flash::error('El campo "Email" es requerido.');
+		}
+		if($request->password==null){
+			Flash::error('El campo "Contraseña" es requerido.');
+		}
+		if($request->rut==null){
+			Flash::error('El campo "Rut" es requerido.');
+		}
+		if($request->name==null){
+			Flash::error('El campo "Nombre" es requerido.');
+		}
+		if($request->lastname==null){
+			Flash::error('El campo "Apellido" es requerido.');
+		}
+		if($request->email!=null&&$request->pasword!=null&&$request->rut!=null&&$request->name!=null&&$request->lastname!=null){
+			//envio de notificacion email
+			$from = 'voxline.notification@gmail.com';
+			$fromName = 'Notificaciones VxCMS';
+			$subject = 'Creación de usuario exitoso.';
+			$for = $request->email;
+			$forName = ''.$request->name.' '.$request->lastname.'';
+			$data = $request->all();
+			Mail::send('layouts.notifycreateuser',$data,
+			function($message)
+			use($subject,$for,$forName,$from,$fromName)
+			{
+				$message->from($from,$fromName );
+				$message->to($for, $forName);
+				$message->subject($subject);
+				$message->priority(3);
+			});
+			//creacion de usuario a db
+			$request->merge(['password' => Hash::make($request['password'])]);
+			$input = $request->all();
+			$user = $this->userRepository->create($input);
+			//envio de notificacion a la vista
+			Flash::success('Usuario guardado correctamente.');
+			return redirect(route('users.index'));
+		}
+		return redirect(url()->previous());
   }
 
   /**

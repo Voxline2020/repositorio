@@ -341,11 +341,19 @@ class CompanyController extends AppBaseController
 
   public function storeStore(Company $company, Request $request)
   {
-    $input = $request->all();
-
-    $store = Store::create($input);
-    Flash::success('Tienda agregada con exito.');
-    return redirect(route('companies.stores.index', compact('company')));
+		if($request->name==null){
+			Flash::error('El campo "nombre" es requerido.');
+		}
+		if($request->address==null){
+			Flash::error('El campo "Direccion" es requerido.');
+		}
+		if($request->name!=null&&$request->address!=null){
+			$input = $request->all();
+			$store = Store::create($input);
+			Flash::success('Tienda agregada con exito.');
+			return redirect(route('companies.stores.index', compact('company')));
+		}
+		return redirect(url()->previous());
   }
   public function editStore(Company $company, Store $store)
   {
@@ -783,10 +791,22 @@ class CompanyController extends AppBaseController
 	//Screens///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function storeScreen(Company $company,Computer $computer,Request $request)
 	{
-		$input = $request->all();
-		Screen::create($input);
-		Flash::success('Pantalla agregada correctamente.');
-		return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
+		if($request->name==null){
+			Flash::error('El campo "nombre" es requerido.');
+		}
+		if($request->width==null){
+			Flash::error('El campo "ancho" es requerido.');
+		}
+		if($request->height==null){
+			Flash::error('El campo "alto" es requerido.');
+		}
+		if($request->name!=null&&$request->width!=null&&$request->height!=null){
+			$input = $request->all();
+			Screen::create($input);
+			Flash::success('Pantalla agregada correctamente.');
+			return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
+		}
+		return redirect(url()->previous());
 	}
 	public function editScreen(Company $company,Computer $computer, Screen $screen)
 	{

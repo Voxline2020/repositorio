@@ -13,7 +13,7 @@
 </div>
 <div class="form-group col-sm-6">
 	{!! Form::label('pass', 'Contraseña') !!}
-	{!! Form::text('pass', null, ['class' => 'form-control','required']) !!}
+	{!! Form::input('password','pass', null, ['class' => 'form-control','required']) !!}
 </div>
 <div class="form-group col-sm-6">
     {!! Form::label('teamviewer_code', 'Codigo teamviewer') !!}
