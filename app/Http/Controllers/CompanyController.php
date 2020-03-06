@@ -341,11 +341,18 @@ class CompanyController extends AppBaseController
 
   public function storeStore(Company $company, Request $request)
   {
-    $input = $request->all();
-
-    $store = Store::create($input);
-    Flash::success('Tienda agregada con exito.');
-    return redirect(route('companies.stores.index', compact('company')));
+		if($request->name==null){
+			Flash::error('El campo "nombre" es requerido.');
+		}
+		if($request->address==null){
+			Flash::error('El campo "Direccion" es requerido.');
+		}else{
+			$input = $request->all();
+			$store = Store::create($input);
+			Flash::success('Tienda agregada con exito.');
+			return redirect(route('companies.stores.index', compact('company')));
+		}
+		return redirect(url()->previous());
   }
   public function editStore(Company $company, Store $store)
   {
