@@ -63,16 +63,17 @@ aria-hidden="true">
 									<div class="row">
 											<div class="form-group col-sm-4">
 												{!! Form::label('name', 'Nombre de la pantalla:') !!}
-												{!! Form::text('name', null, ['class' => 'form-control']) !!}
+												{!! Form::text('name', null, ['class' => 'form-control','required']) !!}
 											</div>
 											<div class="form-group col-sm-4">
 												{!! Form::label('width', 'Ingrese ancho:') !!}
-												{!! Form::input('number','width', null, ['class' => 'form-control']) !!}
+												{!! Form::input('number','width', null, ['class' => 'form-control','required']) !!}
 											</div>
 											<div class="form-group col-sm-4">
 												{!! Form::label('height', 'Ingrese alto:') !!}
-												{!! Form::input('number','height', null, ['class' => 'form-control']) !!}
+												{!! Form::input('number','height', null, ['class' => 'form-control','required']) !!}
 											</div>
+											{!! Form::hidden('version',0)!!}
 											<input type="hidden" id="computer_id" name="computer_id" value="{{$computer->id}}">
 									</div>
 							</div>
