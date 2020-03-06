@@ -37,7 +37,7 @@ class CompanyController extends AppBaseController
   //mostrar compañias
   public function index(Request $request)
   {
-		$computers = Computer::all();
+		$computers = Computer::with(['store'])->get();
 		$pivots = ComputerPivot::all();
     $companies = Company::paginate();
     return view('companies.index')
@@ -682,6 +682,22 @@ class CompanyController extends AppBaseController
 	//Request de creacion (POST)
 	public function storeComputer(Company $company,Request $request)
 	{
+		if($request->code==null){
+			Flash::error('El campo "codigo" es requerido');
+			return redirect(url()->previous());
+		}
+		if($request->location==null){
+			Flash::error('El campo "Ubicacion" es requerido');
+			return redirect(url()->previous());
+		}
+		if($request->store_id==null){
+			Flash::error('El campo "Sucursal" es requerido');
+			return redirect(url()->previous());
+		}
+		if($request->type_id==null){
+			Flash::error('El campo "Tipo" es requerido');
+			return redirect(url()->previous());
+		}
 		$computers = Computer::where('code',$request->code)->get();
 		if($computers->count()!=0){
 			Flash::error('Este codigo ya ha sido asignado a otro computador.');
