@@ -17,6 +17,7 @@
 			<tr>
 				<th>Orden</th>
 				<th>Nombre Evento</th>
+				<th>Duración</th>
 				<th>Fecha Inicio</th>
 				<th>Fecha Termino</th>
 				<th>Acciones</th>
@@ -28,6 +29,7 @@
 			<tr>
 				<td>{{$assign->order}}</td>
 				<td>{{$assign->content->event->name}}</td>
+				<td>{{$assign->content->duration}}</td>
 				<td>{!! \Carbon\Carbon::parse($assign->content->event->initdate)->format('d-m-Y H:i') !!}</td>
 				<td>{!! \Carbon\Carbon::parse($assign->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 				<td>

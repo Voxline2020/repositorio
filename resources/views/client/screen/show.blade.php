@@ -6,18 +6,25 @@
             Pantalla: {!! $screen->name !!}
         </h1>
 
-    </section>
-    <div class="row my-lg-4 my-md-4 my-sm-1">
-        <div class="col-md-3">
-            <p><b>Sector:</b> {!! $screen->sector !!}</p>
-        </div>
-        <div class="col-md-3">
-            <p><b>Piso:</b> {!! $screen->floor !!}</p>
-        </div>
-        <div class="col-md-3">
-            <p><b>Tipo:</b> {!! $screen->type !!}</p>
+		</section>
+		<hr>
+    <div class="row">
+        <div class="col-md-4">
+            <p><b>Sucursal:</b> {!! $screen->computer->store->name !!}</p>
 				</div>
-        <div class="col-md-3">
+				<div class="col-md-4">
+					<p><b>Resolución: </b> {!! $screen->width !!}x{!! $screen->height !!}</p>
+				</div>
+				<div class="col-md-4">
+					<p><b>Version: </b>@if($screen->version==null) N/A @else{!! $screen->version !!}@endif</p>
+				</div>
+				<div class="col-md-4">
+					<p><b>Cant. de eventos: </b>{{ $eventAssigns->count() }}</p>
+				</div>
+				<div class="col-md-4">
+					<p><b>Duración total: </b>{{$totalduration}}</p>
+				</div>
+        <div class="col-md-4">
             {!! Form::model($screen, ['route' => ['screens.changeStatus', $screen->id], 'method' => 'put']) !!}
                 @if($screen->state==0)
                     {!! Form::hidden('state', 1) !!}
@@ -29,13 +36,8 @@
                 @endif
             {!! Form::close() !!}
 				</div>
-				<div class="col-md-3">
-					<p><b>Resolución: </b> {!! $screen->width !!}x{!! $screen->height !!}</p>
-			</div>
-			<div class="col-md-3">
-				<p><b>Version: </b>@if($screen->version==null) N/A @else{!! $screen->version !!}@endif</p>
 		</div>
-		</div>
+		<hr>
 		<div class="row">
 			<div class="col-md-12">
 				@include('flash::message')
