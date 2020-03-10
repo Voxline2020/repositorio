@@ -29,9 +29,7 @@
 				})->where('screen_id',$screen->id)->get();
 				@endphp
 				<td style="text-align:center;">{{$eventAssigns->count()}}</td>
-				<td>
-					{{$screen->computer->store->name}}
-				</td>
+				<td>{{$screen->computer->store->name}}</td>
 				<td>{{$screen->updated_at}}</td>
 				<td>
 					<div class='btn-group'>

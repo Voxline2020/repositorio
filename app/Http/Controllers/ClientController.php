@@ -34,7 +34,7 @@ class ClientController extends Controller
 		$events = Event::where('company_id', Auth::user()->company_id);
 		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
-		$eventsActive = $events->where('state',1)->get();
+		$eventsActive = $events->where('state',1)->where('enddate','>',$dateNow)->get();
 		$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->get();
 		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {

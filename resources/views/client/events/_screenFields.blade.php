@@ -3,9 +3,7 @@
 		<thead class="thead-dark">
 			<tr>
 				<th>nombre</th>
-				<th>sector</th>
-				<th>piso</th>
-				<th>tipo</th>
+				<th>Sucursal</th>
 				<th>estado</th>
 				<th>Acciones</th>
 			</tr>
@@ -15,9 +13,7 @@
 			@foreach($screens as $screen)
 			<tr>
 				<td>{!! $screen->name !!}</td>
-				<td>{!! $screen->sector !!}</td>
-				<td>{!! $screen->floor !!}</td>
-				<td>{!! $screen->type !!}</td>
+				<td>{!! $screen->computer->store->name !!}</td>
 				@if($screen->state==0)
 				<td style="color:#FF0000;">Inactivo</td>
 				@endif
