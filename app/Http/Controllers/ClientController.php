@@ -34,13 +34,13 @@ class ClientController extends Controller
 		$events = Event::where('company_id', Auth::user()->company_id);
 		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
-		$eventsActive = $events->where('state',1)->get();
+		$eventsActive = $events->where('state',1)->where('enddate','>',$dateNow)->get();
 		$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->get();
 		$screens = Screen::with(['computer','computer.store'])->whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
 			});
-		})->orderBy('state', 'asc')->paginate();
+		})->orderBy('state', 'ASC')->paginate();
 		$screensCount = Screen::whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
@@ -87,8 +87,23 @@ class ClientController extends Controller
 				$query->where('enddate','>=',$today);
 			});
 		})->where('screen_id',$id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
-
-		return view('client.screen.show')->with('screen',$screen)->with('events', $events)->with('eventAssigns', $eventAssigns)->with('eventInactives', $eventInactives);
+		//duracion total del contenido asignado
+		$horas=[];
+		foreach($eventAssigns as $assign){
+			array_push($horas,$assign->content->duration);
+		}
+		$total = 0;
+		foreach($horas as $h) {
+				$parts = explode(":", $h);
+				$total += $parts[2] + $parts[1]*60 + $parts[0]*3600;
+		}
+		$totalduration = Carbon::parse($total)->format("H:i:s");
+		return view('client.screen.show')
+		->with('screen',$screen)
+		->with('events', $events)
+		->with('eventAssigns', $eventAssigns)
+		->with('totalduration',$totalduration)
+		->with('eventInactives', $eventInactives);
 	}
 	public function filter_by_name(Request $request)
 	{
@@ -176,9 +191,11 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->get();
+		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		return view('client.index',compact('screens','screensCount'))
 		->with('eventsActive',$eventsActive)
-		->with('eventsInactive',$eventsInactive);
+		->with('eventsInactive',$eventsInactive)
+		->with('stores',$stores);
 	}
 	public function filter_inactive(Request $request)
 	{
@@ -434,7 +451,6 @@ class ClientController extends Controller
 		if($type != null){
 			$screens= Screen::where('type','LIKE',"%$type%")->orderBy('state', 'asc')->find($list);
 		}
-		// dd($screens->count());
 		if($screens->count()==0){
 			Flash::info('No se ha encontrado ningun resultado.');
 			return redirect(url()->previous());

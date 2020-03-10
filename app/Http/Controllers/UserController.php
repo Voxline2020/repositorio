@@ -5,17 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\Company;
 use App\Repositories\UserRepository;
-use Flash;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Response;
-use App\Models\User;
-use Mail;
-
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Http\Request;
+use App\Models\Company;
+use App\Models\User;
+use Response;
+use Flash;
+use Mail;
 
 class UserController extends AppBaseController
 {
@@ -38,7 +36,7 @@ class UserController extends AppBaseController
   public function index(Request $request)
   {
     $users = User::paginate();
-    $companies = Company::all();
+		$companies = Company::all();
     return view('users.index')
       ->with('users', $users)->with('companies', $companies);
   }
@@ -50,7 +48,9 @@ class UserController extends AppBaseController
    */
   public function create()
   {
-    return view('users.create');
+		$companies = Company::all();
+		$roles = Role::all();
+    return view('users.create')->with('companies', $companies)->with('roles', $roles);
   }
 
   /**
@@ -78,13 +78,32 @@ class UserController extends AppBaseController
 		if($request->lastname==null){
 			Flash::error('El campo "Apellido" es requerido.');
 		}
-		if($request->email!=null&&$request->pasword!=null&&$request->rut!=null&&$request->name!=null&&$request->lastname!=null){
+		if($request->company_id==null){
+			Flash::error('El campo "Empresa" es requerido.');
+		}
+		if($request->role_id==null){
+			Flash::error('El campo "Rol" es requerido.');
+		}
+		if($request->email!=null&&$request->password!=null&&$request->rut!=null&&$request->name!=null&&$request->lastname!=null){
+			//creacion de usuario a db
+			$request->merge(['password' => Hash::make($request['password'])]);
+			$input = $request->all();
+			$user = $this->userRepository->create($input);
+			if($request->company_id!=null){
+				$user->company_id = $request->company_id;
+				$user->save();
+			}
+			if($request->role_id!=null){
+				$role = Role::findById($request->role_id);
+				$user->assignRole($role);
+			}
 			//envio de notificacion email
 			$from = 'voxline.notification@gmail.com';
 			$fromName = 'Notificaciones VxCMS';
 			$subject = 'Creación de usuario exitoso.';
 			$for = $request->email;
 			$forName = ''.$request->name.' '.$request->lastname.'';
+			$request->merge(['password' => $request['password']]);
 			$data = $request->all();
 			Mail::send('layouts.notifycreateuser',$data,
 			function($message)
@@ -95,10 +114,6 @@ class UserController extends AppBaseController
 				$message->subject($subject);
 				$message->priority(3);
 			});
-			//creacion de usuario a db
-			$request->merge(['password' => Hash::make($request['password'])]);
-			$input = $request->all();
-			$user = $this->userRepository->create($input);
 			//envio de notificacion a la vista
 			Flash::success('Usuario guardado correctamente.');
 			return redirect(route('users.index'));
@@ -158,13 +173,13 @@ class UserController extends AppBaseController
     $user = $this->userRepository->find($id);
 
     if (empty($user)) {
-      Flash::error('User not found');
+      Flash::error('Usuario no encontrado.');
       return redirect(route('users.index'));
     }
 
     $user = $this->userRepository->update($request->all(), $id);
 
-    Flash::success('User updated successfully.');
+    Flash::success('Usuario Actualizado.');
 
     return redirect(route('users.index'));
   }
@@ -183,14 +198,14 @@ class UserController extends AppBaseController
     $user = $this->userRepository->find($id);
 
     if (empty($user)) {
-      Flash::error('User not found');
+      Flash::error('Usuario no encontrado.');
 
       return redirect(route('users.index'));
     }
 
     $this->userRepository->delete($id);
 
-    Flash::success('User deleted successfully.');
+    Flash::success('Usuario borrado.');
 
     return redirect(route('users.index'));
   }

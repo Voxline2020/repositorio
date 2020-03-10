@@ -4,6 +4,7 @@
 			<tr>
 				<th>Pantallas</th>
 				<th>Estado</th>
+				<th>Cant. de eventos</th>
 				<th>Sucursal</th>
 				<th>Ultimo chequeo</th>
 				<th>Acciones</th>
@@ -19,9 +20,16 @@
 				@if($screen->state==1)
 				<td style="color:#01DF01">Activo</td>
 				@endif
-				<td>
-					{{$screen->computer->store->name}}
-				</td>
+				@php
+				$today=date('Y-m-d H:i:s');
+				$eventAssigns = App\Models\EventAssignation::whereHas('content', function ($query) use ($today) {
+					$query->whereHas('event', function ($query) use ($today){
+						$query->where('enddate','>=',$today);
+					});
+				})->where('screen_id',$screen->id)->get();
+				@endphp
+				<td style="text-align:center;">{{$eventAssigns->count()}}</td>
+				<td>{{$screen->computer->store->name}}</td>
 				<td>{{$screen->updated_at}}</td>
 				<td>
 					<div class='btn-group'>
