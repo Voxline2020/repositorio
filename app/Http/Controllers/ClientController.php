@@ -40,7 +40,7 @@ class ClientController extends Controller
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
 			});
-		})->orderBy('state', 'ASC')->paginate();
+		})->orderBy('state', 'DESC')->paginate();
 		$screensCount = Screen::whereHas('computer', function ($query) {
 			$query->whereHas('store', function ($query) {
 				$query->where('company_id', Auth::user()->company_id);
