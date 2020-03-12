@@ -158,7 +158,7 @@
 		uploadMultiple: true,
 		maxFilezise: 8589934592,
 		maxFiles: 50,
-		parallelUploads: 10,
+		parallelUploads: 5,
 		upload_max_filesize: 42949672960,
 		addRemoveLinks: true,
 		dictDefaultMessage: "Suba los archivos aqui",
