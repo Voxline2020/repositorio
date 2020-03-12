@@ -156,10 +156,10 @@
 		autoDiscover: false,
 		autoProcessQueue: false,
 		uploadMultiple: true,
-		maxFilezise: 858993459,
+		maxFilezise: 8589934592,
 		maxFiles: 50,
 		parallelUploads: 10,
-		upload_max_filesize: 8589934592,
+		upload_max_filesize: 42949672960,
 		addRemoveLinks: true,
 		dictDefaultMessage: "Suba los archivos aqui",
 		headers: {
