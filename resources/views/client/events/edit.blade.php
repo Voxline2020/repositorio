@@ -152,10 +152,10 @@
 		autoDiscover: false,
 		autoProcessQueue: false,
 		uploadMultiple: true,
-		timeout: 300000,
+		timeout: 600000,
 		maxFilezise: 8589934592,
 		maxFiles: 50,
-		parallelUploads: 1,
+		parallelUploads: 5,
 		upload_max_filesize: 42949672960,
 		addRemoveLinks: true,
 		dictDefaultMessage: "Suba los archivos aqui",
@@ -166,8 +166,6 @@
 				var submitBtn = document.querySelector("#submit");
 				myDropzone = this;
 				submitBtn.addEventListener("click", function(e){
-						// e.preventDefault();
-						// e.stopPropagation();
 						myDropzone.processQueue();
 
 				});
