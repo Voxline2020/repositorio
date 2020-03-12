@@ -152,6 +152,7 @@
 		autoDiscover: false,
 		autoProcessQueue: false,
 		uploadMultiple: true,
+		timeout: 300000,
 		maxFilezise: 8589934592,
 		maxFiles: 50,
 		parallelUploads: 1,
