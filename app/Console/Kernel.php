@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
 				'App\Console\Commands\ActivateEvents',
 				'App\Console\Commands\DesactivateEvents',
 				'App\Console\Commands\ChangeAssigns',
+				'App\Console\Commands\NotifyOneDayLeft',
     ];
 
     /**
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
 			$schedule->command('activate:events')->everyMinute();
 			$schedule->command('desactivate:events')->everyMinute();
 			$schedule->command('change:assigns')->everyMinute();
+			$schedule->command('notify:onedayleft')->everyDay();
     }
 
     /**

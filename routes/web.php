@@ -90,6 +90,12 @@ Route::group(['prefix' => 'users'], function () {
 //filestore
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
+//email
+Route::group(['prefix' => 'email'], function () {
+	Route::post('/Notify/OneDayLeft', 'EmailController@NotifyOneDayLeft')->name('email.NotifyOneDayLeft');
+	Route::post('/Notify/CreateUser', 'EmailController@NotifyCreateUser')->name('email.NotifyCreateUser');
+});
+
 //SECTION Companies
 Route::resource('companies', 'CompanyController');
 Route::group(['prefix' => 'companies'], function () {
