@@ -86,6 +86,7 @@ class UserController extends AppBaseController
 		}
 		if($request->email!=null&&$request->password!=null&&$request->rut!=null&&$request->name!=null&&$request->lastname!=null){
 			//creacion de usuario a db
+			$password_temp = $request->password;
 			$request->merge(['password' => Hash::make($request['password'])]);
 			$input = $request->all();
 			$user = $this->userRepository->create($input);
@@ -103,7 +104,7 @@ class UserController extends AppBaseController
 			$subject = 'Creación de usuario exitoso.';
 			$for = $request->email;
 			$forName = ''.$request->name.' '.$request->lastname.'';
-			$request->merge(['password' => $request['password']]);
+			$request->password = $password_temp;
 			$data = $request->all();
 			Mail::send('layouts.notifycreateuser',$data,
 			function($message)
@@ -115,7 +116,7 @@ class UserController extends AppBaseController
 				$message->priority(3);
 			});
 			//envio de notificacion a la vista
-			Flash::success('Usuario guardado correctamente.');
+			Flash::success('Usuario creado correctamente.');
 			return redirect(route('users.index'));
 		}
 		return redirect(url()->previous());
@@ -150,14 +151,15 @@ class UserController extends AppBaseController
   public function edit($id)
   {
     $user = $this->userRepository->find($id);
-
+		$companies = Company::all();
+		$roles = Role::all();
     if (empty($user)) {
       Flash::error('User not found');
 
       return redirect(route('users.index'));
     }
 
-    return view('users.edit')->with('user', $user);
+    return view('users.edit')->with('user', $user)->with('companies',$companies)->with('roles',$roles);
   }
 
   /**
