@@ -13,6 +13,7 @@ use App\Models\Company;
 use App\Models\User;
 use Response;
 use Flash;
+use Auth;
 use Mail;
 
 class UserController extends AppBaseController
@@ -22,7 +23,8 @@ class UserController extends AppBaseController
 
   public function __construct(UserRepository $userRepo)
   {
-		$this->middleware('admin');
+		$this->middleware('auth');
+		$this->middleware('admin')->except('changePassword');
     $this->userRepository = $userRepo;
   }
 
@@ -211,7 +213,33 @@ class UserController extends AppBaseController
 
     return redirect(route('users.index'));
   }
-
+	public function changePassword(Request $request)
+  {
+		//validacion campo vacio
+		if($request->passOld==null&&$request->passNew==null&&$request->passNewVerify==null){
+			Flash::error('Error al cambiar la contraseña.');
+			return redirect(url()->previous());
+		}
+		//validacion contraseña antigua
+		if(!Hash::check($request->passOld, Auth::User()->password)){
+			Flash::error('Contraseña incorrecta.');
+			return redirect(url()->previous());
+		}
+		//validacion coincidencia contraseña nueva
+		if($request->passNew!=$request->passNewVerify){
+			Flash::error('Contraseñas no coinciden.');
+			return redirect(url()->previous());
+		}else{
+			//cambio de contraseña
+			$user = User::find(Auth::User()->id);
+			$user->password = Hash::make($request->passNew);
+			$user->save();
+			Flash::success('Contraseña cambiada.');
+			return redirect(url()->previous());
+		}
+		Flash::error('Error al cambiar la contraseña');
+		return redirect(url()->previous());
+  }
 	public function newRole($id)
 	{
 		$user = $this->userRepository->find($id);

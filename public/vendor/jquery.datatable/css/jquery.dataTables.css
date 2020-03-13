@@ -336,8 +336,9 @@ table.dataTable td {
   cursor: pointer;
   *cursor: hand;
   color: #333 !important;
-  border: 1px solid transparent;
-  border-radius: 2px;
+  border: 1px solid #979797;
+	border-radius: 2px;
+	background-color: white;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   color: #333 !important;
@@ -359,9 +360,9 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
   cursor: default;
   color: #666 !important;
-  border: 1px solid transparent;
-  background: transparent;
-  box-shadow: none;
+  border: 1px solid #979797;
+  background: white;
+	box-shadow: none;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
   color: white !important;

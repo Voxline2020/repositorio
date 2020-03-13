@@ -60,6 +60,7 @@ Route::group(['prefix' => 'pivot'], function () {
 Route::resource('users', 'UserController');
 Route::group(['prefix' => 'users'], function () {
 	Route::get('/filter/filter_by','UserController@filter_by')->name('users.filter_by');
+	Route::get('/password/change', 'UserController@changePassword')->name('users.changePassword');
 	//asignar role a usuario
 	Route::get('{user}/roles/new','UserController@newRole')->name('users.roles.new');
 	Route::put('{user}/roles/assign','UserController@assignRole')->name('users.roles.assign');
