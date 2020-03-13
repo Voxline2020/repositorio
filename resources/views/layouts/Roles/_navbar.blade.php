@@ -10,6 +10,7 @@
 	<div class="collapse navbar-collapse" id="navbarColor01">
 		<ul class="navbar-nav ml-auto">
 			@if(!Auth::user()->hasRole('Administrador'))
+			@if(!Auth::user()->hasRole('Terreno'))
 			<!--Alertas -->
 			<li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -47,6 +48,7 @@
 					{{-- Fin Footer --}}
       </li>
 			<!--/Fin Alertas -->
+			@endif
 			@endif
 			<li class="nav-item {{ Route::is('dash') ? 'active': null }}">
 				<a class="nav-link" href="{{route('dash') }}">Inicio</a>

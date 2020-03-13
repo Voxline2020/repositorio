@@ -18,6 +18,7 @@ use App\Models\Company;
 use App\Models\Screen;
 use App\Models\Store;
 use App\Models\Event;
+use App\Models\User;
 use Carbon\Carbon;
 use Flash;
 use Auth;
@@ -37,6 +38,9 @@ class CompanyController extends AppBaseController
   //mostrar compañias
   public function index(Request $request)
   {
+		if(Auth::user()->hasRole('Terreno')){
+			return redirect(route('companies.terreno.index'));
+		}
 		$computers = Computer::with(['store'])->get();
 		$pivots = ComputerPivot::all();
     $companies = Company::paginate();
@@ -285,8 +289,9 @@ class CompanyController extends AppBaseController
 		$events = $events->paginate();
 		if($events->count()==0){
 			Flash::info('No se encontro ningun resultado.');
+			return redirect(url()->previous());
 		}
-		return view('companies.events.index', compact('events', 'company'));
+		return view('companies.events.index', compact('events', 'company'))->with('old_check', $old_check);
 	}
 	public function view_old(Company $company,Request $request)
 	{
@@ -981,5 +986,20 @@ class CompanyController extends AppBaseController
 		EventAssignation::create($input);
 		Flash::success('Se ha clonado el elemento correctamente.');
 		return redirect(url()->previous());
+	}
+	//Terreno
+	public function indexTerreno(Request $request)
+	{
+		$computers = Computer::with(['store'])->get();
+		$pivots = ComputerPivot::all();
+		$verifyUser = User::where('email',Auth::user()->email)->get();
+		$list = [];
+		foreach($verifyUser AS $user){
+			ARRAY_PUSH($list,$user->company_id);
+		}
+		$companies = Company::find($list);
+    // $companies = Company::where('id', auth()->user()->company_id)->paginate();
+    return view('companies.terreno.index')
+      ->with('companies', $companies)->with('computers', $computers)->with('pivots', $pivots);
 	}
 }

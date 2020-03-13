@@ -20,6 +20,8 @@ class AdminMiddleware
 
 				if(auth()->check() && Auth::user()->hasRole('Administrador')){
 					return $next($request);
+				}else	if(auth()->check() && Auth::user()->hasRole('Terreno')){
+					return $next($request);
 				}else{
 				 	return redirect('/')->with('error', 'Debes ser administrador para acceder a esta sección.');
 				}
