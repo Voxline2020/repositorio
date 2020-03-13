@@ -11379,7 +11379,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sNext": ">",
+				"sNext": "Siguiente",
 
 
 				/**
@@ -11402,7 +11402,7 @@
 				 *      } );
 				 *    } );
 				 */
-				"sPrevious": "<"
+				"sPrevious": "Anterior"
 			},
 
 			/**
@@ -11500,7 +11500,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
 
 
 			/**
@@ -11642,7 +11642,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLoadingRecords": "Loading...",
+			"sLoadingRecords": "Cargando...",
 
 
 			/**
@@ -11663,7 +11663,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sProcessing": "Processing...",
+			"sProcessing": "Procesando...",
 
 
 			/**
@@ -11698,7 +11698,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Search:",
+			"sSearch": "",
 
 
 			/**
@@ -11709,7 +11709,7 @@
 			 *  @dtopt Language
 			 *  @name DataTable.defaults.language.searchPlaceholder
 			 */
-			"sSearchPlaceholder": "",
+			"sSearchPlaceholder": "Buscar",
 
 
 			/**

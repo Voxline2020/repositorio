@@ -10,6 +10,7 @@
 	<div class="collapse navbar-collapse" id="navbarColor01">
 		<ul class="navbar-nav ml-auto">
 			@if(!Auth::user()->hasRole('Administrador'))
+			@if(!Auth::user()->hasRole('Terreno'))
 			<!--Alertas -->
 			<li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -48,6 +49,7 @@
       </li>
 			<!--/Fin Alertas -->
 			@endif
+			@endif
 			<li class="nav-item {{ Route::is('dash') ? 'active': null }}">
 				<a class="nav-link" href="{{route('dash') }}">Inicio</a>
 			</li>
@@ -67,11 +69,53 @@
 					<a class="nav-link" href="{{ route('clients.events.index') }}">Eventos</a>
 				</li>
 			@endif
-			<li class="nav-item">
+			{{-- <li class="nav-item">
 				<a class="nav-link" href="{{ route('logout') }}">{{ __('Cerrar sesion') }}</a>
-			</li>
+			</li> --}}
+			<div class="nav-item dropdown">
+				<button class="btn nav-link dropdown-toggle" data-toggle="dropdown" >
+					<span class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
+					<img src="https://www.pngitem.com/pimgs/m/78-786420_icono-usuario-joven-transparent-user-png-png-download.png" width="25" height="25" class="rounded-circle">
+				</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Cambiar contraseña</a>
+					<div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{{ route('logout') }}">{{ __('Cerrar sesion') }}</a>
+				</div>
+			</div>
 		</ul>
 		</ul>
 	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				@php
+						$users =  App\Models\User::all();
+				@endphp
+				{{-- {!! Form::model($users, ['route' => ['users.changePassword'], 'method' => 'put']) !!} --}}
+				{{ Form::open(['route' =>['users.changePassword'], 'method' => 'GET']) }}
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					{!! Form::input('password','passOld',null, ['class' => 'form-control','placeholder'=>'Contraseña Actual', 'required'=>'required']) !!}
+					<hr>
+					{!! Form::input('password','passNew',null, ['class' => 'form-control','placeholder'=>'Contraseña Nueva','required'=>'required']) !!}
+					<br>
+					{!! Form::input('password','passNewVerify',null, ['class' => 'form-control','placeholder'=>'Repita la Contraseña Nueva','required'=>'required']) !!}
+				</div>
+				<div class="modal-footer">
+					{!! Form::submit('Cambiar', ['class' => 'btn btn-success']) !!}
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				</div>
+				{!! Form::close() !!}
+			</div>
+		</div>
+	</div>
+	<!-- Fin Modal -->
 </nav>
 @endauth

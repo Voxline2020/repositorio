@@ -60,6 +60,7 @@ Route::group(['prefix' => 'pivot'], function () {
 Route::resource('users', 'UserController');
 Route::group(['prefix' => 'users'], function () {
 	Route::get('/filter/filter_by','UserController@filter_by')->name('users.filter_by');
+	Route::get('/password/change', 'UserController@changePassword')->name('users.changePassword');
 	//asignar role a usuario
 	Route::get('{user}/roles/new','UserController@newRole')->name('users.roles.new');
 	Route::put('{user}/roles/assign','UserController@assignRole')->name('users.roles.assign');
@@ -90,12 +91,18 @@ Route::group(['prefix' => 'users'], function () {
 //filestore
 Route::post('events/fileStore', 'EventController@fileStore')->name('events.fileStore');
 
+//email
+Route::group(['prefix' => 'email'], function () {
+	Route::post('/Notify/OneDayLeft', 'EmailController@NotifyOneDayLeft')->name('email.NotifyOneDayLeft');
+	Route::post('/Notify/CreateUser', 'EmailController@NotifyCreateUser')->name('email.NotifyCreateUser');
+});
 
 //SECTION Companies
 Route::resource('companies', 'CompanyController');
 Route::group(['prefix' => 'companies'], function () {
 	Route::delete('/', 'CompanyController@destroy')->name('companies.destroy');
 	Route::get('/filter/filter_by', 'CompanyController@filter_by')->name('companies.filter_by');
+	Route::get('/terreno/inicio', 'CompanyController@indexTerreno')->name('companies.terreno.index');
 	//Events
 	Route::group(['prefix' => '{company}/events'], function () {
 		Route::get('/', 'CompanyController@indexEvent')->name('companies.events.index');
@@ -107,7 +114,6 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
 		Route::get('/filter/filter_by', "CompanyController@filterEvent_by")->name('companies.events.filterEvent_by');
 		Route::get('/view/old', 'CompanyController@view_old')->name('companies.events.view_old');
-
 	});
 	//pivots
 	Route::group(['prefix' => '{company}/pivots'], function () {
@@ -145,7 +151,6 @@ Route::group(['prefix' => 'companies'], function () {
 		//Computers/screens/Assign
 		Route::delete('/{computer}/ScreenAssign/{assign}/delete', 'CompanyController@destroyEventAssign')->name('companies.computers.destroyScreenAssign');
 	});
-
 	//Stores
 	Route::group(['prefix' => '{company}/stores'], function () {
 		//Indice de tiendas

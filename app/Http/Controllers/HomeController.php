@@ -29,6 +29,9 @@ class HomeController extends Controller
 			if(Auth::user()->hasRole('Administrador')){
 				return redirect(route('companies.index'))->with('error',$error);
 			}
+			if(Auth::user()->hasRole('Terreno')){
+				return redirect(route('companies.terreno.index'))->with('error',$error);
+			}
 			else if(Auth::user()->hasRole('Cliente')){
 				return redirect(route('clients.index'))->with('error',$error);
 			}
