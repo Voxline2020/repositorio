@@ -3,10 +3,10 @@
 		<thead class="thead-dark">
 			<tr>
 				<th>Codigo</th>
-				<th>Ubicacion</th>
+				<th>IP</th>
 				<th>Tipo de acceso</th>
 				<th>Tienda/Sucursal</th>
-				<th>Acciones</th>
+				<th colspan="1">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -14,10 +14,10 @@
 			@foreach($computers as $computer)
 			<tr>
 				<td>{!! $computer->code !!}</td>
-				<td>{!! $computer->location !!}</td>
+				<td>{!! $computer->ip !!}</td>
 				<td>{{ $computer->type->name}}</td>
 				<td>{{ $computer->store->name}}</td>
-				<td>
+				<td colspan="1">
 					{!! Form::open(['route' => ['companies.computers.destroy', $company,$computer], 'method' => 'delete']) !!}
 					<div class='btn-group'>
 						<a href="{{route('companies.computers.show',['company'=>$company,'computer'=>$computer]) }}" class='btn btn-primary btn-xs'><i class="fas fa-eye"></i></a>
