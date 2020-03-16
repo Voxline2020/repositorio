@@ -54,9 +54,6 @@
 				<a class="nav-link" href="{{route('dash') }}">Inicio</a>
 			</li>
 			@if (Auth::user()->hasRole('Administrador'))
-				{{-- <li class="nav-item {{ Route::is('clients.index') ? 'active': null }}">
-					<a class="nav-link" href="{{ route('clients.index') }}">Cliente</a>
-				</li> --}}
 				<li class="nav-item {{ Route::is('users.index') ? 'active': null }}">
 					<a class="nav-link" href="{{ route('users.index') }}">Usuarios</a>
 				</li>
@@ -69,13 +66,10 @@
 					<a class="nav-link" href="{{ route('clients.events.index') }}">Eventos</a>
 				</li>
 			@endif
-			{{-- <li class="nav-item">
-				<a class="nav-link" href="{{ route('logout') }}">{{ __('Cerrar sesion') }}</a>
-			</li> --}}
 			<div class="nav-item dropdown">
 				<button class="btn nav-link dropdown-toggle" data-toggle="dropdown" >
 					<span class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
-					<img src="https://www.pngitem.com/pimgs/m/78-786420_icono-usuario-joven-transparent-user-png-png-download.png" width="25" height="25" class="rounded-circle">
+					<img src="{{ asset('assets/user.png') }}" width="25" height="25" class="rounded-circle">
 				</button>
 				<div class="dropdown-menu">
 					<a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Cambiar contraseña</a>
@@ -93,7 +87,6 @@
 				@php
 						$users =  App\Models\User::all();
 				@endphp
-				{{-- {!! Form::model($users, ['route' => ['users.changePassword'], 'method' => 'put']) !!} --}}
 				{{ Form::open(['route' =>['users.changePassword'], 'method' => 'GET']) }}
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Cambiar contraseña</h5>
