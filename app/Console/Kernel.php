@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
 			$schedule->command('activate:events')->everyMinute();
 			$schedule->command('desactivate:events')->everyMinute();
 			$schedule->command('change:assigns')->everyMinute();
-			$schedule->command('notify:onedayleft')->everyDay();
+			$schedule->command('notify:onedayleft')->daily();
     }
 
     /**
