@@ -113,6 +113,7 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::get('/{event}', 'CompanyController@showEvent')->name('companies.events.show');
 		Route::delete('/{event}', 'CompanyController@destroyEvent')->name('companies.events.destroy');
 		Route::get('/filter/filter_by', "CompanyController@filterEvent_by")->name('companies.events.filterEvent_by');
+		Route::get('/filter/filter_device','CompanyController@filter_device')->name('companies.events.filter_device');
 		Route::get('/view/old', 'CompanyController@view_old')->name('companies.events.view_old');
 	});
 	//pivots
@@ -138,18 +139,19 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::put('/{computer}','CompanyController@updateComputer')->name('companies.computers.update');
 		Route::delete('/{computer}', 'CompanyController@destroyComputer')->name('companies.computers.destroy');
 		Route::get('filter/filter_computers', 'CompanyController@filter_computers')->name('companies.computers.filter_computers');
-		//Computers/screens
-		Route::post('/{computer}/screens', 'CompanyController@storeScreen')->name('companies.storeScreen');
-		Route::get('/{computer}/screens/{screen}','CompanyController@showScreen')->name('companies.computers.showScreen');
-		Route::get('/{computer}/screens/{screen}/edit','CompanyController@editScreen')->name('companies.computers.editScreen');
-		Route::put('/{computer}/screens', 'CompanyController@updateScreen')->name('companies.computers.updateScreen');
-		Route::delete('/{computer}/screens/{screen}', 'CompanyController@destroyScreen')->name('companies.computers.destroyScreen');
-		Route::put('/{computer}/screens/{screen}/status','CompanyController@changeStatusScreen')->name('companies.computers.changeStatusScreen');
-		Route::post('/{computer}/screens/{screen}/assign','CompanyController@eventAssignScreen')->name('companies.computers.eventAssignScreen');
-		Route::put('/{computer}/screens/{screen}/clone','CompanyController@cloneEventScreen')->name('companies.computers.cloneEventScreen');
-		Route::put('/{computer}/screens/{screen}/change','CompanyController@changeOrderScreen')->name('companies.computers.changeOrderScreen');
-		//Computers/screens/Assign
-		Route::delete('/{computer}/ScreenAssign/{assign}/delete', 'CompanyController@destroyEventAssign')->name('companies.computers.destroyScreenAssign');
+		//Computers/devices
+		Route::post('/{computer}/devices', 'CompanyController@storeDevice')->name('companies.storeDevice');
+		Route::get('/{computer}/devices/{device}','CompanyController@showDevice')->name('companies.computers.showDevice');
+		Route::get('/{computer}/devices/{device}/edit','CompanyController@editDevice')->name('companies.computers.editDevice');
+		Route::put('/{computer}/devices', 'CompanyController@updateDevice')->name('companies.computers.updateDevice');
+		Route::delete('/{computer}/devices/{device}', 'CompanyController@destroyDevice')->name('companies.computers.destroyDevice');
+		Route::put('/{computer}/devices/{device}/status','CompanyController@changeStatusDevice')->name('companies.computers.changeStatusDevice');
+		Route::post('/{computer}/devices/{device}/assign','CompanyController@eventAssignDevice')->name('companies.computers.eventAssignDevice');
+		Route::put('/{computer}/devices/{device}/clone','CompanyController@cloneEventDevice')->name('companies.computers.cloneEventDevice');
+		Route::put('/{computer}/devices/{device}/change','CompanyController@changeOrderDevice')->name('companies.computers.changeOrderDevice');
+		//Computers/devices/Assign
+		Route::delete('/{computer}/DevicesAssign/{assign}/delete', 'CompanyController@destroyEventAssign')->name('companies.computers.destroyDeviceAssign');
+		
 	});
 	//Stores
 	Route::group(['prefix' => '{company}/stores'], function () {
