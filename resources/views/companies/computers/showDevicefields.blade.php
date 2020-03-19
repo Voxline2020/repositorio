@@ -35,16 +35,16 @@
 						<a href="{!! route('companies.events.show', [ $company,$assign->content->event]) !!}" class='btn btn-info'><i
 								class="fas fa-eye"></i></a>
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
-						data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
-						{!! Form::model($screen,['route' => ['companies.computers.cloneEventScreen',$company,$computer,$screen], 'method' => 'put']) !!}
+						data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
+						{!! Form::model($device,['route' => ['companies.computers.cloneEventDevice',$company,$computer,$device], 'method' => 'put']) !!}
 						{!! Form::hidden('content_id',$assign->content->id) !!}
-						{!! Form::hidden('screen_id',$screen->id) !!}
+						{!! Form::hidden('device_id',$device->id) !!}
 						{!! Form::hidden('order',$assign->order) !!}
 						{!! Form::hidden('user_id',$assign->user_id) !!}
 						{!! Form::hidden('state',$assign->state) !!}
 						<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 						{!! Form::close() !!}
-						{{ Form::open(['route' => ['companies.computers.destroyScreenAssign','company'=>$company,'computer'=>$computer,'assign'=>$assign], 'method' => 'delete']) }}
+						{{ Form::open(['route' => ['companies.computers.destroyDeviceAssign','company'=>$company,'computer'=>$computer,'assign'=>$assign], 'method' => 'delete']) }}
 						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 							'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
 						{!! Form::close() !!}
@@ -90,16 +90,16 @@
 						<div class='btn-group'>
 							<a href="{!! route('companies.events.show', [ $company,$inactive->content->event]) !!}" class='btn btn-info'><i class="fas fa-eye"></i></a>
 							<a class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
-							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
-							{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+							data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
+							{!! Form::model($device,['route' => ['companies.computers.cloneEventDevice'], 'method' => 'put']) !!}
 							{!! Form::hidden('content_id',$inactive->content->id) !!}
-							{!! Form::hidden('screen_id',$screen->id) !!}
+							{!! Form::hidden('device_id',$device->id) !!}
 							{!! Form::hidden('order',$inactive->order) !!}
 							{!! Form::hidden('user_id',$inactive->user_id) !!}
 							{!! Form::hidden('state',$inactive->state) !!}
 							<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 							{!! Form::close() !!}
-							{{ Form::open(['route' => ['companies.computers.destroyScreenAssign','company'=>$company,'computer'=>$computer,'assign'=>$inactive], 'method' => 'delete']) }}
+							{{ Form::open(['route' => ['companies.computers.destroyDeviceAssign','company'=>$company,'computer'=>$computer,'assign'=>$inactive], 'method' => 'delete']) }}
 							{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 								'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}
 							{!! Form::close() !!}
@@ -132,10 +132,10 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				{!! Form::model($eventAssigns, ['route' => ['companies.computers.changeOrderScreen',$company,$computer,$screen], 'method' => 'put']) !!}
+				{!! Form::model($eventAssigns, ['route' => ['companies.computers.changeOrderDevice',$company,$computer,$device], 'method' => 'put']) !!}
 				<div class="modal-body">
 					{!! Form::hidden('id') !!}
-					{!! Form::hidden('screen') !!}
+					{!! Form::hidden('device') !!}
 					{!! Form::label('neworder','Nuevo Nº Orden') !!}
 					{!! Form::number('neworder','',['min'=>'0']) !!}
 				</div>
@@ -154,13 +154,13 @@
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="assignEventLabel">Asignar Evento a Pantalla: "{{$screen->name}}"</h5>
+					<h5 class="modal-title" id="assignEventLabel">Asignar Evento a Pantalla: "{{$device->name}}"</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					{!! Form::model($screen, ['route' => ['companies.computers.eventAssignScreen','company'=>$company,'computer'=>$computer,'screen'=>$screen], 'method' => 'post']) !!}
+					{!! Form::model($device, ['route' => ['companies.computers.eventAssignDevice','company'=>$company,'computer'=>$computer,'device'=>$device], 'method' => 'post']) !!}
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead class="thead-dark">

@@ -37,7 +37,7 @@ class EventAssignation extends Model
 
     public $fillable = [
         'content_id',
-        'screen_id',
+        'device_id',
         'order',
         'user_id',
         'state'
@@ -50,15 +50,15 @@ class EventAssignation extends Model
      */
     protected $casts = [
         'content_id' => 'int',
-        'screen_id' => 'int',
+        'device_id' => 'int',
         'order' => 'int',
         'user_id' => 'int',
         'state' => 'int'
 		];
 
 		protected $attributes = [
-				'content_id' => "",
-        'screen_id' => "",
+        'content_id' => "",
+        'device_id' => "",
         'order' => "",
         'user_id' => "",
         'state' => ""
@@ -72,7 +72,7 @@ class EventAssignation extends Model
    */
   public static $rules = [
 		'content_id' => 'required',
-		'screen_id'=> 'required',
+		'device_id'=> 'required',
 		'user_id'=> 'required'
 
   ];
@@ -84,10 +84,10 @@ class EventAssignation extends Model
     public function content()
     {
         return $this->belongsTo(\App\Models\Content::class);
-		}
-		public function screen()
+    }
+    public function device()
     {
-        return $this->belongsTo(\App\Models\Screen::class);
+        return $this->belongsTo(\App\Models\Device::class);
     }
 
 }

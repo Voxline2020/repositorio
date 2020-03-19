@@ -1,30 +1,30 @@
 <div class="table-responsive">
-	<table class="table table-hover" id="screens-table">
+	<table class="table table-hover" id="devices-table">
 		<thead class="thead-dark">
 			<tr>
 				<th>nombre</th>
-				<th>sector</th>
-				<th>piso</th>
-				<th>tipo</th>
+				<th>Sucursal</th>
+				<th>Resolución</th>
+				<th>Tipo</th>
 				<th>estado</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
-			@if($screens->count()!=0)
-			@foreach($screens as $screen)
+			@if($devices->count()!=0)
+			@foreach($devices as $device)
 			<tr>
-				<td>{!! $screen->name !!}</td>
-				<td>{!! $screen->sector !!}</td>
-				<td>{!! $screen->floor !!}</td>
-				<td>{!! $screen->type !!}</td>
-				@if($screen->state==0)
+				<td>{!! $device->name !!}</td>
+				<td>{!! $device->computer->store->name !!}</td>
+				<td>{!! $device->width !!}x{!! $device->height !!}</td>
+				<td>{!! $device->type->name !!}</td>
+				@if($device->state==0)
 				<td style="color:#FF0000;">Inactivo</td>
 				@endif
-				@if($screen->state==1)
+				@if($device->state==1)
 				<td style="color:#01DF01;">Activo</td>
 				@endif
-				<td><a href="{{ route('companies.computers.showScreen',[$company,$screen->computer,$screen]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a></td>
+				<td><a href="{{ route('companies.computers.showDevice',[$company,$device->computer,$device]) }}" class="btn btn-info"><i class="fas fa-eye"></i></a></td>
 			</tr>
 			@endforeach
 			@else

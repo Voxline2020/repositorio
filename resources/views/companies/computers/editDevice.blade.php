@@ -8,13 +8,15 @@
 		</div>
 		<div class="col-sm-12">
 			<h2>
-				Editar Pantalla: {{$screen->name}}
+				Editar dispositivo: {{$device->name}}
 			</h2>
 		</div>
 		<div class="col-sm-12">
-				{!! Form::model($computer, ['route' => ['companies.computers.updateScreen',$company,$computer], 'method' => 'put']) !!}
+				{!! Form::model($computer, ['route' => ['companies.computers.updateDevice',$company,$computer], 'method' => 'put']) !!}
 				<div class="row">
-						@include('companies.computers.editScreenfields')
+					<div class="col-sm-12">
+						@include('companies.computers.editDevicefields')
+					</div>
 				</div>
 			 {!! Form::close() !!}
 		</div>
