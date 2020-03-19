@@ -204,6 +204,7 @@ Route::group(['prefix' => 'stores'], function () {
 //SECTION Screen
 Route::resource('screens', 'ScreenController');
 Route::group(['prefix' => 'screens'], function () {
+	Route::get('screens/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 	Route::get('filter_by_name/{id}','ScreenController@filter_by_name')->name('screens.filter_by_name');
 	Route::get('/create','ScreenController@create')->name('screens.createOneParam');
 	Route::get('AssignContent/{id}', "ScreenController@AssignContent")->name('screens.AssignContent');
@@ -215,23 +216,17 @@ Route::group(['prefix' => 'screens'], function () {
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 // Route::resource('clients', 'ClientController');
 Route::group(['prefix' => 'clients'], function () {
-
-	// Route::put('screen/changeUp/{id}','ClientController@changeUp')->name('clients.changeUp');
-	// Route::put('screen/changeDown/{id}','ClientController@changeDown')->name('clients.changeDown');
-	// Route::put('screen/changeJump','ClientController@changeJump')->name('clients.changeJump');
-	// Route::put('screen/clone','ClientController@clone')->name('clients.clone');
-	Route::put('screen/assign/{id}','ScreenController@eventAssign')->name('screens.eventAssign');
-	Route::put('screen/clone','ScreenController@cloneEvent')->name('screens.cloneEvent');
-	Route::put('screen/change','ScreenController@changeOrder')->name('screens.changeOrder');
-	// Route::get('screen/{id}/show', 'ScreenController@show')->name('screens.show');
+	Route::put('device/assign/{id}','ClientController@eventAssign')->name('clients.devices.eventAssign');
+	Route::put('device/clone','ClientController@cloneEvent')->name('clients.devices.cloneEvent');
+	Route::put('device/change','ClientController@changeOrder')->name('clients.devices.changeOrder');
 	Route::get('filter_by_name','ClientController@filter_by_name')->name('clients.filter_by_name');
 	Route::get('filter_active','ClientController@filter_active')->name('clients.filter_active');
 	Route::get('filter_inactive','ClientController@filter_inactive')->name('clients.filter_inactive');
-	//client/screens
-	Route::get('filter_screen','ClientController@filter_screen')->name('clients.filter_screen');
-	Route::put('screen/status/{id}','ScreenController@changeStatus')->name('screens.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
-	Route::get('screen/editTwoParam/{id}/{computer_id}','ScreenController@edit')->name('screens.editTwoParam'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
-	Route::get('screen/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
+	//client/device
+	Route::get('filter_device','ClientController@filter_device')->name('clients.filter_device');
+	Route::put('device/status/{id}','ClientController@changeStatus')->name('clients.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
+	
+	Route::get('device/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
 	//event
 	Route::group(['prefix' => 'events'], function () {
 		Route::get('/', "ClientController@indexEvent")->name('clients.events.index');
