@@ -9,7 +9,7 @@
 		<a class="btn btn-secondary w-100" href="{!! route('companies.computers.show',['company'=>$company,'computer'=>$computer])!!}">Limpiar</a>
 	</div>
 	<div class="col-md-2">
-		<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#addScreen">Nueva Pantalla</a>
+		<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#addDevice">Nuevo Dispositivo</a>
 	</div>
 	<div class="col-md-2">
 		<a class="btn btn-outline-primary w-100" href="{!! route('companies.computers.index',$company)!!}">Atras</a>
@@ -44,37 +44,46 @@
 		</div>
 	</div>
 </div>
-<!-- Modal Add screen-->
-<div class="modal fade" id="addScreen" tabindex="-1" role="dialog" aria-labelledby="addScreenLabel"
+<!-- Modal Add device-->
+<div class="modal fade" id="addDevice" tabindex="-1" role="dialog" aria-labelledby="addDeviceLabel"
 aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h4 class="modal-title" id="addScreenLabel">Crear nueva pantalla para computador: {{$computer->code}}</h4>
+			<h4 class="modal-title" id="addDeviceLabel">Crear nuevo dispositivo</h4>
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
 		<div class="modal-body">
-			{{ Form::open(['route' =>['companies.storeScreen',$company,$computer]]) }}
+			{{ Form::open(['route' =>['companies.storeDevice',$company,$computer]]) }}
 			<div class="content">
 					<div class="box box-primary">
 							<div class="box-body">
 									<div class="row">
-											<div class="form-group col-sm-4">
-												{!! Form::label('name', 'Nombre de la pantalla:') !!}
-												{!! Form::text('name', null, ['class' => 'form-control','required']) !!}
+											<div class="form-group col-sm-12">
+												{!! Form::input('text','name', null, ['class' => 'form-control','placeholder' => 'Nombre','required']) !!}
 											</div>
-											<div class="form-group col-sm-4">
-												{!! Form::label('width', 'Ingrese ancho:') !!}
-												{!! Form::input('number','width', null, ['class' => 'form-control','required']) !!}
+											<div class="form-group col-sm-12">
+												{!! Form::input('number','width', null, ['class' => 'form-control','placeholder' => 'Ancho','required']) !!}
 											</div>
-											<div class="form-group col-sm-4">
-												{!! Form::label('height', 'Ingrese alto:') !!}
-												{!! Form::input('number','height', null, ['class' => 'form-control','required']) !!}
+											<div class="form-group col-sm-12">
+												{!! Form::input('number','height', null, ['class' => 'form-control','placeholder' => 'Alto','required']) !!}
 											</div>
-											{!! Form::hidden('version',0)!!}
-											<input type="hidden" id="computer_id" name="computer_id" value="{{$computer->id}}">
+											<div class="form-group col-sm-12">
+												<select name="type_id" id="type_id" class="form-control">
+													<option value="" selected disabled required>Tipo</option>
+													@foreach ($types as $type)
+													<option value="{{$type->id}}">{{$type->name}}</option>
+													@endforeach
+												</select>
+											</div>
+											<div class="form-group col-sm-12">
+												{!! Form::input('text','imei', null, ['class' => 'form-control','placeholder' => 'IMEI','id'=>'imei','required']) !!}
+											</div>
+												{!! Form::hidden('version',0)!!}
+												{!! Form::hidden('computer_id',$computer->id)!!}
+											<!-- <input type="hidden" id="computer_id" name="computer_id" value="{{$computer->id}}"> -->
 									</div>
 							</div>
 					</div>
@@ -88,6 +97,20 @@ aria-hidden="true">
 	</div>
 </div>
 </div>
-<!-- FIN Modal Add screen-->
+<!-- FIN Modal Add device-->
 @endsection
+@section('script')
+<script>
+$("#type_id").change(function(){
+	var selected = $(this).children("option:selected").text();
+	if(selected=='Pantalla'){
+		$("#imei").val("N/A");
+	}
+	if(selected=='MagicInfo'){
+		$("#imei").val("N/A");
+	}
+});
+</script>
+@endsection
+
 

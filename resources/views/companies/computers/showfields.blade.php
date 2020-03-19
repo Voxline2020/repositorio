@@ -4,11 +4,13 @@
 
 </div>
 <div class="table-responsive">
-<table class="table table-hover" id="screens-table">
+<table class="table table-hover" id="devices-table">
 <thead class="thead-dark">
 <tr>
 	<th>ID</th>
-	<th>Pantallas</th>
+	<th>Nombre</th>
+	<th>Tipo</th>
+	<th>IMEI</th>
 	<th>Estado</th>
 	<th>Resolución</th>
 	<th> Acciones </th>
@@ -16,30 +18,32 @@
 </tr>
 </thead>
 <tbody>
-@if($screens->count()!=0)
-	@foreach($screens as $screen)
+@if($devices->count()!=0)
+	@foreach($devices as $device)
 	<tr>
-		<td>{!! $screen->id !!}</td>
-		<td>{!! $screen->name !!}</td>
+		<td>{!! $device->id !!}</td>
+		<td>{!! $device->name !!}</td>
+		<td>{!! $device->type->name !!}</td>
+		<td>{!! $device->imei !!}</td>
 		<td>
-		{!! Form::model($screen, ['route' => ['companies.computers.changeStatusScreen', 'company'=>$company,'computer'=>$computer,'screen'=>$screen], 'method' => 'put', 'id' => 'changestatus']) !!}
-			@if($screen->state==0)
+		{!! Form::model($device, ['route' => ['companies.computers.changeStatusDevice', 'company'=>$company,'computer'=>$computer,'device'=>$device], 'method' => 'put', 'id' => 'changestatus']) !!}
+			@if($device->state==0)
 					{!! Form::hidden('state', 1) !!}
 					{!! Form::submit('Inactivo', ['class' => 'btn btn-outline-danger']) !!}
 			@endif
-			@if($screen->state==1)
+			@if($device->state==1)
 					{!! Form::hidden('state', 0) !!}
 					{!! Form::submit('Activo', ['class' => 'btn btn-outline-success']) !!}
 			@endif
 		{!! Form::close() !!}
 		</td>
-		<td>{!! $screen->width !!}x{!! $screen->height !!}</td>
+		<td>{!! $device->width !!}x{!! $device->height !!}</td>
 		<td>
-			{!! Form::open(['route' => ['companies.computers.destroyScreen',$company, $computer, $screen], 'method' => 'delete']) !!}
+			{!! Form::open(['route' => ['companies.computers.destroyDevice',$company, $computer, $device], 'method' => 'delete']) !!}
 			<div class='btn-group'>
-				<a href="{{ route('companies.computers.showScreen',['company'=>$company,'computer'=>$computer,'screen'=>$screen]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
-				<a href="{{ route('companies.computers.editScreen',['company'=>$company,'screen'=>$screen,'computer'=>$computer]) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-				{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger','onclick' => "return confirm('¿Seguro que desea eliminar?')"]) !!}
+				<a href="{{ route('companies.computers.showDevice',['company'=>$company,'computer'=>$computer,'device'=>$device]) }}" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+				<a href="{{ route('companies.computers.editDevice',['company'=>$company,'device'=>$device,'computer'=>$computer]) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+				{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger','onclick' => "return confirm('¿Seguro que desea eliminar este dispositivo?')"]) !!}
 			</div>
 
 			{!! Form::close() !!}
