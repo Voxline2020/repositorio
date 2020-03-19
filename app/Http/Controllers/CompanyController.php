@@ -7,15 +7,16 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Repositories\CompanyRepository;
 use Illuminate\Support\Str as Str;
-use Illuminate\Http\Request;
 use App\Models\EventAssignation;
 use App\Models\ComputerOnPivot;
 use App\Models\ComputerPivot;
+use Illuminate\Http\Request;
 use App\Models\AccessType;
+use App\Models\DeviceType;
 use App\Models\Computer;
 use App\Models\Content;
 use App\Models\Company;
-use App\Models\Screen;
+use App\Models\Device;
 use App\Models\Store;
 use App\Models\Event;
 use App\Models\User;
@@ -150,25 +151,43 @@ class CompanyController extends AppBaseController
   {
 		//comprobamos que el evento tenga contenido
 		if($event->contents->count()!=0){
-			//obtenemos los contenidos del evento
-			$contentsList = [];
-			foreach ($event->contents AS $content) {
-				array_push($contentsList, $content->id);
-			};
-			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
-			$eventAssigns = EventAssignation::where('content_id',$contentsList)->get();
-			//extraemos las pantallas de los contenidos asignados
-			$list = [];
-			foreach ($eventAssigns AS $asign) {
-				array_push($list, $asign->screen_id);
-			};
-			//extraemos las pantallas
-			$screens= Screen::find($list);
-			return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))->with('screens',$screens);
-		}else{
-			$screens= $event->contents;
-			return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))->with('screens',$screens);
-		}
+		//obtenemos los contenidos del evento
+		$contentsList = [];
+		foreach ($event->contents AS $content) {
+			array_push($contentsList, $content->id);
+		};
+		//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+		$assignsList = [];
+		foreach ($contentsList AS $id) {
+			$eas = EventAssignation::where('content_id',$id)->get();
+			foreach($eas as $ea){
+				array_push($assignsList, $ea->id);
+			}
+		};
+		$eventAssigns = EventAssignation::find($assignsList);
+		//extraemos las pantallas de los contenidos asignados
+		$list = [];
+		foreach ($eventAssigns AS $asign) {
+			array_push($list, $asign->device_id);
+		};
+		//extraemos las pantallas
+		$devices= Device::find($list);
+		//stores y types
+		$stores = Store::where('company_id',$company->id)->get();
+		$types = DeviceType::all();
+		return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))
+		->with('stores',$stores)
+		->with('types',$types)
+		->with('devices',$devices);
+	}else{
+		$stores = Store::where('company_id',$company->id)->get();
+		$types = DeviceType::all();
+		$devices= $event->contents;
+		return view('companies.events.show',['company' => $company,'event'=>$event], compact('company','event'))
+		->with('stores',$stores)
+		->with('types',$types)
+		->with('devices',$devices);
+	}
   }
   public function createEvent(Company $company)
   {
@@ -230,8 +249,8 @@ class CompanyController extends AppBaseController
 		foreach ($event->contents as $content) {
 			foreach ($content->eventAssignations as $eventAssignation) {
 				if($event->state == 1){
-					$eventAssignation->screen->version = $eventAssignation->screen->version+1;
-					$eventAssignation->screen->save();
+					$eventAssignation->device->version = $eventAssignation->device->version+1;
+					$eventAssignation->device->save();
 				}
 				$eventAssignation->delete();
 			}
@@ -259,10 +278,10 @@ class CompanyController extends AppBaseController
   {
     $assign->delete();
 		Flash::success('Evento desasignado.');
-		$screen = Screen::find($assign->screen_id);
-		$screen->version = $screen->version+1;
-		$screen->save();
-    return redirect()->route('companies.computers.showScreen', ['company'=>$company,'computer'=>$computer,'screen'=>$screen]);
+		$device = Device::find($assign->device_id);
+		$device->version = $device->version+1;
+		$device->save();
+    return redirect()->route('companies.computers.showDevice', ['company'=>$company,'computer'=>$computer,'device'=>$device]);
 	}
 	public function filterEvent_by(Company $company,Request $request)
   {
@@ -305,14 +324,14 @@ class CompanyController extends AppBaseController
   //ANCHOR Sucursales Compañia
   public function indexStore(Company $company, Request $request)
   {
-    $stores = Store::with(['computers','computers.screens'])->where('company_id', $company->id)->get();
+    $stores = Store::with(['computers','computers.devices'])->where('company_id', $company->id)->get();
     return view('companies.stores.index', compact('company', 'stores'));
 	}
 	public function filterStore(Company $company, Request $request)
   {
-		$stores = Store::with(['computers','computers.screens'])->where('company_id', $company->id);
+		$stores = Store::with(['computers','computers.devices'])->where('company_id', $company->id);
 		if($request->nameFilter==null&&$request->addressFilter==null){
-			$stores = Store::with(['computers','computers.screens'])->where('company_id', $company->id)->get();
+			$stores = Store::with(['computers','computers.devices'])->where('company_id', $company->id)->get();
 			Flash::error('Debes ingresar almenos un filtro para la busqueda.');
 			return view('companies.stores.index', compact('company', 'stores'));
 		}
@@ -679,8 +698,12 @@ class CompanyController extends AppBaseController
 	public function showComputer(Company $company,Computer $computer)
 	{
 		// $computers = Computer::where('store_id', $id)->paginate();
-		$screens = Screen::where('computer_id',$computer->id)->get();
-		return view('companies.computers.show',['company' => $company])->with('computer',$computer)->with('screens',$screens);
+		$types = DeviceType::all();
+		$devices = Device::where('computer_id',$computer->id)->get();
+		return view('companies.computers.show',['company' => $company])
+		->with('computer',$computer)
+		->with('devices',$devices)
+		->with('types',$types);
 	}
 	public function createComputer(Company $company)
 	{
@@ -793,9 +816,10 @@ class CompanyController extends AppBaseController
 		}
 		return view('companies.computers.index',['company' => $company], compact('companies', 'stores', 'lists', 'types'))->with('computers', $computers);
 	}
-	//Screens///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public function storeScreen(Company $company,Computer $computer,Request $request)
+	//Devices///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public function storeDevice(Company $company,Computer $computer,Request $request)
 	{
+		// dd($request);
 		if($request->name==null){
 			Flash::error('El campo "nombre" es requerido.');
 		}
@@ -805,24 +829,33 @@ class CompanyController extends AppBaseController
 		if($request->height==null){
 			Flash::error('El campo "alto" es requerido.');
 		}
+		if($request->type_id==null){
+			Flash::error('El campo "tipo" es requerido.');
+		}
+		if($request->imei==null){
+			Flash::error('El campo "imei" es requerido.');
+		}
 		if($request->name!=null&&$request->width!=null&&$request->height!=null){
 			$input = $request->all();
-			Screen::create($input);
-			Flash::success('Pantalla agregada correctamente.');
+			Device::create($input);
+			Flash::success('Dispositivo agregado correctamente.');
 			return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
 		}
 		return redirect(url()->previous());
 	}
-	public function editScreen(Company $company,Computer $computer, Screen $screen)
+	public function editDevice(Company $company,Computer $computer, Device $device)
 	{
-		return view('companies.computers.editScreen',['company' => $company,'computer'=>$computer])->with('screen',$screen);
+		$types = DeviceType::all();
+		return view('companies.computers.editDevice',['company' => $company,'computer'=>$computer])
+		->with('device',$device)
+		->with('types',$types);
 	}
-	public function showScreen(Company $company,Computer $computer, Screen $screen)
+	public function showDevice(Company $company,Computer $computer, Device $device)
 	{
 		//buscamos los eventos compatibles con la pantalla
 		$contents = Content::whereHas('event', function ($query) use($company) {
 			$query->where('company_id', $company->id)->where('enddate','>=',\Carbon\Carbon::now());
-		})->where('width',$screen->width)->where('height',$screen->height)->get();
+		})->where('width',$device->width)->where('height',$device->height)->get();
 
 		$list=[];
 		foreach($contents as $content){
@@ -835,82 +868,83 @@ class CompanyController extends AppBaseController
 			$query->whereHas('event', function ($query) {
 				 $query->where('enddate','>=',\Carbon\Carbon::now());
 			});
-		})->where('screen_id',$screen->id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
+		})->where('device_id',$device->id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
 		//eventos asignados inactivos
 		$eventInactives = EventAssignation::whereHas('content', function ($query) {
 			$query->whereHas('event', function ($query) {
 				$query->where('enddate','>=',\Carbon\Carbon::now());
 			});
-		})->where('screen_id',$screen->id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
-		return view('companies.computers.showScreen',['company' => $company,'computer'=>$computer])
-		->with('screen',$screen)->with('events', $events)->with('eventAssigns', $eventAssigns)
+		})->where('device_id',$device->id)->where('state',0)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
+		return view('companies.computers.showDevice',['company' => $company,'computer'=>$computer])
+		->with('device',$device)->with('events', $events)->with('eventAssigns', $eventAssigns)
 		->with('eventInactives', $eventInactives);
 	}
-	public function updateScreen(Company $company,Computer $computer, Request $request)
+	public function updateDevice(Company $company,Computer $computer, Request $request)
 	{
-		$screen = Screen::find($request->id);
-		if (empty($screen)) {
-			Flash::error('Pantalla no encontrada.');
+		$device = Device::find($request->id);
+		if (empty($device)) {
+			Flash::error('Dispositivo no encontrado.');
 			return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
 		}
-		$screen->update($request->all());
-		Flash::success('Pantalla editada correctamente.');
+		$device->update($request->all());
+		Flash::success('Dispositivo editado correctamente.');
 		return redirect(route('companies.computers.show',['company' => $company,'computer'=>$computer]));
 	}
-	public function destroyScreen(Company $company,Computer $computer, Screen $screen)
+	public function destroyDevice(Company $company,Computer $computer, Device $device)
 	{
-		$screenDelete = Screen::find($screen->id);
-		$screenDelete->delete();
-		Flash::success('Pantalla borrada.');
+		$deviceDelete = Device::find($device->id);
+		$deviceDelete->delete();
+		Flash::success('Dispositivo borrado.');
 		return redirect(url()->previous());
 	}
-	public function changeStatusScreen(Company $company,Computer $computer, Screen $screen,Request $request)
+	public function changeStatusDevice(Company $company,Computer $computer, Device $device,Request $request)
 	{
-		$screen->state = $request['state'];
+		$device->state = $request['state'];
 		if (empty($request)) {
 			Flash::error('Error');
 			return redirect(url()->previous());
 		}
-		$screen->save();
+		$device->state = $request['state'];
+		$device->save();
 		Flash::success('Estado actualizado');
-		return redirect(url()->previous($screen));
+		return redirect(url()->previous($device));
 	}
-	public function eventAssignScreen(Company $company,Computer $computer, Screen $screen, Request $request)
+	public function eventAssignDevice(Company $company,Computer $computer, Device $device, Request $request)
 	{
 		$request->merge(['slug' => Str::slug($request['name'])]);
 		$events = Event::find($request->event_id);
 
 		foreach($events AS $event){
 			$contents = Content::where('event_id',$event->id)
-			->where('width',$screen->width)
-			->where('height',$screen->height)
+			->where('width',$device->width)
+			->where('height',$device->height)
 			->get();
 			// if($contents->count()!=1){
 			foreach($contents AS $content){
-				$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
+				$count_assigns = EventAssignation::where('device_id',$device->id)->where('state',1)->count()+1;
 				$request->merge([
-				"screen_id"=> $screen->id,
+				"device_id"=> $device->id,
 				"state"=>$event->state,
 				"content_id"=>$content->id,
 				"order"=>$count_assigns,
 				]);
-				$screen->version=$screen->version+1;
-				$screen->save();
+				$device->version=$device->version+1;
+				$device->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
 			Flash::success('Evento "'.$event->name.'" asignado exitosamente');
 		}
-		return redirect(url()->previous($screen));
+		return redirect(url()->previous($device));
 	}
-	public function changeOrderScreen(Company $company,Computer $computer, Screen $screen,Request $request)
+	public function changeOrderDevice(Company $company,Computer $computer, Device $device,Request $request)
 	{
 		// validaciones
 		if($request->neworder==null){
 			Flash::error('Debes ingresar un nuevo Nº de orden.');
 			return redirect(url()->previous());
 		}
-		if($request->screen==null){
+		if($request->device==null){
 			Flash::error('No se ha podido realizar la operación.');
 			return redirect(url()->previous());
 		}
@@ -926,7 +960,7 @@ class CompanyController extends AppBaseController
 			return redirect(url()->previous());
 		}
 		//si la nueva posicion excede el rango de elementos
-		$countObjs = EventAssignation::where('screen_id',$screen->id)->get();
+		$countObjs = EventAssignation::where('device_id',$device->id)->get();
 		if ($countObjs->count() < $request->neworder) {
 			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
 			return redirect(url()->previous());
@@ -938,14 +972,14 @@ class CompanyController extends AppBaseController
 		}
 		//llamado coleccion de objs intermedios
 		if($objIni->order < $request->neworder){
-			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			$listobjs = EventAssignation::where('device_id',$device->id)
 			->where('order','<=',$request->neworder)
 			->where('order','>',$objIni->order)
 			->orderby('order','ASC')
 			->where('state',1)
 			->get();
 		}else if($objIni->order > $request->neworder){
-			$listobjs = EventAssignation::where('screen_id',$screen->id)
+			$listobjs = EventAssignation::where('device_id',$device->id)
 			->where('order','>=',$request->neworder)
 			->where('order','<',$objIni->order)
 			->orderby('order','ASC')
@@ -970,24 +1004,91 @@ class CompanyController extends AppBaseController
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
-	public function cloneEventScreen(Company $company,Computer $computer, Screen $screen,Request $request)
+	public function cloneEventDevice(Company $company,Computer $computer, Device $device,Request $request)
 	{
 		//asignamos el order para el clon
-		$count_assigns = EventAssignation::where('screen_id',$screen->id)->where('state',1)->count()+1;
+		$count_assigns = EventAssignation::where('device_id',$device->id)->where('state',1)->count()+1;
 		$request->merge([
 			"order"=>$count_assigns,
 		]);
 		// extraemos los datos del elemento original
 		$input = $request->all();
 		//cambiamos version en pantalla
-		$screen->version = $screen->version+1;
-		$screen->save();
+		$device->version = $device->version+1;
+		$device->save();
 		//creamos el nuevo elemento clonado
 		EventAssignation::create($input);
 		Flash::success('Se ha clonado el elemento correctamente.');
 		return redirect(url()->previous());
 	}
-	//Terreno
+	public function filter_device(Company $company,Request $request)
+	{
+		$event_id = $request->event_id;
+		$name = $request->nameFiltrar;
+		$store = $request->store_id;
+		$state = $request->state;
+		$type = $request->type_id;
+		if($name==null && $state==null && $store==null && $type==null){
+			Flash::error('Debe ingresar almenos un filtro para la busqueda.');
+			return redirect(url()->previous());
+		}
+		//comprobamos que el evento tenga contenido
+		$event = Event::find($event_id);
+		if($event->contents->count()!=0){
+			//obtenemos los contenidos del evento
+			$contentsList = [];
+			foreach ($event->contents AS $content) {
+				array_push($contentsList, $content->id);
+			};
+			//traemos las asignaciones de eventos que coincidan con los contenidos del evento que estamos revisando
+			$assignsList = [];
+			foreach ($contentsList AS $id) {
+				$eas = EventAssignation::where('content_id',$id)->get();
+				foreach($eas as $ea){
+					array_push($assignsList, $ea->id);
+				}
+			};
+			$eventAssigns = EventAssignation::find($assignsList);
+			//extraemos los id de dispositivo de los contenidos asignados
+			$list = [];
+			foreach ($eventAssigns AS $asign) {
+				array_push($list, $asign->device_id);
+			};
+		}
+		//filtros
+		if($name != null){
+			$devices = Device::where('name','LIKE',"%$name%")->find($list);
+		}
+		if($state != null){
+			$devices = Device::whereHas('computer', function ($query) use ($company) {
+				$query->whereHas('store', function ($query) use ($company){
+					$query->where('company_id', $company->id);
+				});
+			})->where('state', $state )->find($list);
+		}
+		if($store != null){
+			$devices = Device::whereHas('computer', function ($query) use ($store) {
+				$query->whereHas('store', function ($query) use ($store){
+					$query->where('id', $store);
+				});
+			})->find($list);
+		}
+		if($type != null){
+			$devices = Device::where('type_id',$type)->find($list);
+		}
+		if($devices->count()==0){
+			Flash::info('No se ha encontrado ningun resultado.');
+			return redirect(url()->previous());
+		}
+		$stores = Store::where('company_id',$company->id)->get();
+		$types = DeviceType::all();
+		return view('companies.events.show',['company'=>$company])
+		->with('devices',$devices)
+		->with('stores',$stores)
+		->with('types',$types)
+		->with('event',$event);
+	}
+	//Terreno///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function indexTerreno(Request $request)
 	{
 		$computers = Computer::with(['store'])->get();
