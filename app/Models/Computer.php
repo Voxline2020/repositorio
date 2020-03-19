@@ -94,8 +94,8 @@ class Computer extends Model
 		return $this->hasMany(\App\Models\ComputerPivot::class);
 	}
 
-	public function screens()
+	public function devices()
 	{
-		return $this->hasMany(\App\Models\Screen::class);
+		return $this->hasMany(\App\Models\Device::class);
 	}
 }
