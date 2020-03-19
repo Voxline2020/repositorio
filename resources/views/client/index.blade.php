@@ -2,8 +2,8 @@
 
 @section('content')
 @php
-		$screenActive = $screensCount->where('state', 1)->count();
-		$screenInactive = $screensCount->where('state', 0)->count();
+		$deviceActive = $devicesCount->where('state', 1)->count();
+		$deviceInactive = $devicesCount->where('state', 0)->count();
 		$mytime = Carbon\Carbon::now()
 @endphp
 <div class="container">
@@ -124,7 +124,7 @@
 			<hr>
 		</div>
 		<div class="col-sm-12">
-				@include('client.tableScreen')
+				@include('client.tableDevice')
 		</div>
 	</div>
 </div>
@@ -238,8 +238,8 @@
 		data.addColumn('string', 'Topping');
 		data.addColumn('number', 'Slices');
 		data.addRows([
-			['activa(s)', {{ $screenActive }}],
-			['inactiva(s)', {{ $screenInactive }}],
+			['activa(s)', {{ $deviceActive }}],
+			['inactiva(s)', {{ $deviceInactive }}],
 		]);
 
 		// Set chart options

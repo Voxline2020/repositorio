@@ -37,10 +37,10 @@
 						<a href="{!! route('clients.events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
 								class="fas fa-eye"></i></a>
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
-						data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
-						{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+						data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
+						{!! Form::model($device,['route' => ['clients.devices.cloneEvent'], 'method' => 'put']) !!}
 						{!! Form::hidden('content_id',$assign->content->id) !!}
-						{!! Form::hidden('screen_id',$screen->id) !!}
+						{!! Form::hidden('device_id',$device->id) !!}
 						{!! Form::hidden('order',$assign->order) !!}
 						{!! Form::hidden('user_id',$assign->user_id) !!}
 						{!! Form::hidden('state',$assign->state) !!}
@@ -93,10 +93,10 @@
 							<a href="{!! route('clients.events.show', [ $inactive->content->event->id]) !!}" class='btn btn-info'><i
 									class="fas fa-eye"></i></a>
 							<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
-							data-screen="{{$screen->id}}"><i class="fas fa-sync"></i></a>
-							{!! Form::model($screen,['route' => ['screens.cloneEvent'], 'method' => 'put']) !!}
+							data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
+							{!! Form::model($device,['route' => ['clients.devices.cloneEvent'], 'method' => 'put']) !!}
 							{!! Form::hidden('content_id',$inactive->content->id) !!}
-							{!! Form::hidden('screen_id',$screen->id) !!}
+							{!! Form::hidden('device_id',$device->id) !!}
 							{!! Form::hidden('order',$inactive->order) !!}
 							{!! Form::hidden('user_id',$inactive->user_id) !!}
 							{!! Form::hidden('state',$inactive->state) !!}
@@ -135,10 +135,10 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				{!! Form::model($eventAssigns, ['route' => ['screens.changeOrder'], 'method' => 'put']) !!}
+				{!! Form::model($eventAssigns, ['route' => ['clients.devices.changeOrder'], 'method' => 'put']) !!}
 				<div class="modal-body">
 					{!! Form::hidden('id') !!}
-					{!! Form::hidden('screen') !!}
+					{!! Form::hidden('device') !!}
 					{!! Form::label('neworder','Nuevo Nº Orden') !!}
 					{!! Form::number('neworder','',['min'=>'0']) !!}
 				</div>
@@ -157,13 +157,13 @@
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="assignEventLabel">Asignar Evento a Pantalla: "{{$screen->name}}"</h5>
+					<h5 class="modal-title" id="assignEventLabel">Asignar Evento a Pantalla: "{{$device->name}}"</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					{!! Form::model($screen, ['route' => ['screens.eventAssign', $screen->id], 'method' => 'put']) !!}
+					{!! Form::model($device, ['route' => ['clients.devices.eventAssign', $device->id], 'method' => 'put']) !!}
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead class="thead-dark">

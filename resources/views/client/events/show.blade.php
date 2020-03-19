@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container">
-	@include('flash::message')
 	<div class="row">
 		<div class="col-md-6">
 			<h2 class=font-weight-bold>{{$event->name}} &#x1F4C6;</h2>
@@ -31,72 +30,42 @@
 		</div>
 	</div>
 </div>
+<div class="row">
+		<div class="col-md-12">
+			@include('flash::message')
+		</div>
+	</div>
 <hr>
-{{ Form::open(['route' =>['clients.filter_screen'], 'method' => 'GET']) }}
-@php
-$totalscreen = App\Models\Screen::all();
-$listsectors=[];
-$listfloors=[];
-$listtypes=[];
-foreach($totalscreen AS $screen){
-	array_push($listsectors,$screen->sector);
-}
-foreach($totalscreen AS $screen){
-	array_push($listfloors,$screen->floor);
-}
-foreach($totalscreen AS $screen){
-	array_push($listtypes,$screen->type);
-}
-$sectors=array_unique($listsectors);
-$floors=array_unique($listfloors);
-$types=array_unique($listtypes);
-@endphp
+{{ Form::open(['route' =>['clients.filter_device'], 'method' => 'GET']) }}
 <div class="row">
 	<div class="col-md-3">
-		<select name="sector" id="sector" class="form-control">
-			<option null selected disabled>Sector</option>
-			@foreach ($sectors as $sector)
-				@if($sector!=null)
-				<option value="{{$sector}}">{{$sector}}</option>
-				@endif
+		{!! Form::hidden('event_id',$event->id)!!}
+		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'Nombre']) !!}
+	</div>
+	<div class="col-md-3">
+		<select name="store_id" id="store_id" class="form-control">
+			<option null selected disabled>Tienda/Sucursal</option>
+			@foreach ($stores as $store)
+				<option value="{{$store->id}}">{{$store->name}}</option>
 			@endforeach
 		</select>
 	</div>
-	<div class="col-md-3">
-		<select name="floor" id="floor" class="form-control">
-			<option null selected disabled>Piso</option>
-			@foreach ($floors as $floor)
-				@if($floor!=null)
-				<option value="{{$floor}}">{{$floor}}</option>
-				@endif
-			@endforeach
-		</select>
-	</div>
-	<div class="col-md-3">
-		<select name="type" id="type" class="form-control">
+	<div class="col-md-2">
+		<select name="type_id" id="type_id" class="form-control">
 			<option null selected disabled>Tipo</option>
 			@foreach ($types as $type)
-				@if($type!=null)
-				<option value="{{$type}}">{{$type}}</option>
-				@endif
+				<option value="{{$type->id}}">{{$type->name}}</option>
 			@endforeach
 		</select>
 	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<select name="state" id="state" class="form-control">
 			<option null selected disabled>Estado</option>
 			<option value="0">Inactivo</option>
 			<option value="1">Activo</option>
 		</select>
 	</div>
-</div>
-<br>
-<div class="row">
-	<div class="col-md-9">
-		{!! Form::hidden('event_id',$event->id)!!}
-		{!! Form::text('nameFiltrar',null, ['class'=> 'form-control', 'placeholder' => 'buscar pantalla']) !!}
-	</div>
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<button type="submit" class="btn btn-primary w-100">Buscar </button>
 	</div>
 </div>

@@ -53,10 +53,10 @@
 	$('#changeOrder').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget)
 		var id = button.data('id')
-		var screen = button.data('screen')
+		var device = button.data('device')
 		var modal = $(this)
 		modal.find('input[name="id"]').val(id)
-		modal.find('input[name="screen"]').val(screen)
+		modal.find('input[name="device"]').val(device)
 	})
 </script>
 	@yield('script')
