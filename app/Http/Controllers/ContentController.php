@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Response;
+use Carbon\Carbon as Carbon;
 
 class ContentController extends Controller
 {
@@ -157,7 +158,7 @@ class ContentController extends Controller
 	public function downloadUrl(Content $content)
 	{
 		if (Storage::disk('videos')->exists($content->location)) {
-			return Storage::disk('videos')->url($content->location, $content->name . '.' . $content->filetype);
+			return Storage::disk('videos')->temporaryUrl($content->location, $content->name . '.' . $content->filetype, now()->addMinutes(10));
 		} else {
 			return response()->json([
 				'error' => 'Not found',
