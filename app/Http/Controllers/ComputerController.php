@@ -16,6 +16,9 @@ use Flash;
 use Response;
 use Illuminate\Support\Arr;
 
+use App\Models\Event;
+use Carbon\Carbon;
+
 
 class ComputerController extends AppBaseController
 {
@@ -24,8 +27,8 @@ class ComputerController extends AppBaseController
 
 	public function __construct(ComputerRepository $computerRepo)
 	{
-		$this->middleware('auth');
-		$this->middleware('admin');
+		$this->middleware('auth')->except(['getInfo','getInfoCode']);
+		$this->middleware('admin')->except(['getInfo','getInfoCode']);
 		$this->computerRepository = $computerRepo;
 	}
 	//mostrar computadores
@@ -123,29 +126,36 @@ class ComputerController extends AppBaseController
 	}
 
 	//mostrar computadores con id en especifico
-	public function getInfo(Computer $computer, $key)
+	public function getInfo(Request $request, Computer $computer, $key)
 	{
-
 		if($key == "voxline55"){
 			//$computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
 			$jsonResponse = [];
 			$jsonResponse['code'] = $computer->code;
-			foreach ($computer->screens as $screen) {
-				$jsonResponse['screens']['id'] = $screen->id;
-				$jsonResponse['screens']['name'] = $screen->name;
-				$jsonResponse['screens']['width'] = $screen->width;
-				$jsonResponse['screens']['height'] = $screen->height;
-				// foreach ($screen->playlist->versionPlaylists as $versionPlaylist) {
-				// 	if($versionPlaylist->state == 1){
-				// 		$jsonResponse['screens']['playlist']['version'] = $versionPlaylist->version;
-				// 		foreach ($versionPlaylist->versionPlaylistDetails as $key => $vPlaylistDetail) {
-				// 			$jsonResponse['screens']['playlist'][$key]['name'] = $vPlaylistDetail->content->name;
-				// 			$jsonResponse['screens']['playlist'][$key]['width'] = $vPlaylistDetail->content->width;
-				// 			$jsonResponse['screens']['playlist'][$key]['height'] = $vPlaylistDetail->content->height;
-				// 			$jsonResponse['screens']['playlist'][$key]['download'] = route('contents.download',$vPlaylistDetail->content->id);
-				// 		}
-				// 	}
-				// }
+			foreach ($computer->devices as $key2 => $device) {
+				$jsonResponse['screens'][$key2]['code'] = $device->id;
+				$jsonResponse['screens'][$key2]['name'] = $device->name;
+				$jsonResponse['screens'][$key2]['width'] = $device->width;
+				$jsonResponse['screens'][$key2]['height'] = $device->height;
+				$jsonResponse['screens'][$key2]['state'] = $device->state;
+				$jsonResponse['screens'][$key2]['version'] = $device->version;
+				$jsonResponse['screens'][$key2]['type'] = $device->type->name;
+
+				$aux_eventAssignations = $device->eventAssignations->where('state', 1);
+				$i = 0;
+				foreach ($aux_eventAssignations as $eventAsignation) {
+					$event = Event::find($eventAsignation->content->event_id);
+					$jsonResponse['screens'][$key2]['playlist'][$i]['defOrder'] = $eventAsignation->order;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['originalID'] = $eventAsignation->content->id;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['name'] = $eventAsignation->content->name;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['width'] = $eventAsignation->content->width;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['height'] = $eventAsignation->content->height;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['initdate'] = Carbon::parse($event->initdate)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['enddate'] = Carbon::parse($event->enddate)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['deleted'] = empty($eventAsignation->content->deleted_at) ? null : Carbon::parse($eventAsignation->content->deleted_at)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['download'] = route('contents.download', $eventAsignation->content->id);
+					$i++;
+				}
 			}
 			return response()->json($jsonResponse);
 		}
@@ -154,7 +164,47 @@ class ComputerController extends AppBaseController
 		}
 	}
 
+	//mostrar computadores con id en especifico
+	public function getInfoCode(Request $request, $code, $key)
+	{
+		$computer = Computer::where('code', $code)->get()->first();
+		if($key == "voxline55" && !empty($computer)){
+			//$computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
+			$jsonResponse = [];
+			$jsonResponse['id'] = $computer->id;
+			$jsonResponse['code'] = $computer->code;
+			foreach ($computer->devices as $key2 => $device) {
+				$jsonResponse['screens'][$key2]['code'] = $device->id;
+				$jsonResponse['screens'][$key2]['code_pl'] = $device->code;
+				$jsonResponse['screens'][$key2]['name'] = $device->name;
+				$jsonResponse['screens'][$key2]['width'] = $device->width;
+				$jsonResponse['screens'][$key2]['height'] = $device->height;
+				$jsonResponse['screens'][$key2]['state'] = $device->state;
+				$jsonResponse['screens'][$key2]['version'] = $device->version;
+				$jsonResponse['screens'][$key2]['type'] = $device->type->name;
 
+				$aux_eventAssignations = $device->eventAssignations->where('state', 1);
+				$i = 0;
+				foreach ($aux_eventAssignations as $eventAsignation) {
+					$event = Event::find($eventAsignation->content->event_id);
+					$jsonResponse['screens'][$key2]['playlist'][$i]['defOrder'] = $eventAsignation->order;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['originalID'] = $eventAsignation->content->id;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['name'] = $eventAsignation->content->name;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['width'] = $eventAsignation->content->width;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['height'] = $eventAsignation->content->height;
+					$jsonResponse['screens'][$key2]['playlist'][$i]['initdate'] = Carbon::parse($event->initdate)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['enddate'] = Carbon::parse($event->enddate)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['deleted'] = empty($eventAsignation->content->deleted_at) ? null : Carbon::parse($eventAsignation->content->deleted_at)->format('d/m/Y H:i');
+					$jsonResponse['screens'][$key2]['playlist'][$i]['download'] = route('contents.download', $eventAsignation->content->id);
+					$i++;
+				}
+			}
+			return response()->json($jsonResponse);
+		}
+		else {
+			return abort(404);
+		}
+	}
 
 	// filtros y otros.
 	//llenado de select dinamico
@@ -204,4 +254,5 @@ class ComputerController extends AppBaseController
 
 		return view('computers.index', compact('companies', 'stores', 'lists', 'types'))->with('computers', $computer);
 	}
+
 }

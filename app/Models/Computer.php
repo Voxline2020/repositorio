@@ -26,7 +26,6 @@ class Computer extends Model
 		'ip',
 		'store_id',
 		'type_id'
-
   ];
 
 
