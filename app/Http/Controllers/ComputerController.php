@@ -126,8 +126,9 @@ class ComputerController extends AppBaseController
 	}
 
 	//mostrar computadores con id en especifico
-	public function getInfo(Request $request, Computer $computer, $key)
+	public function getInfo(Request $request, $code, $key)
 	{
+		$computer = Computer::where('code', $code)->get()->first();
 		if($key == "voxline55"){
 			//$computer = Computer::with('screens.playlist.versionPlaylists.versionPlaylistDetails.content')->where('id', $computer->id)->get();
 			$jsonResponse = [];
