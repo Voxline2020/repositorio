@@ -26,6 +26,7 @@ Route::group(['prefix' => 'contents'], function () {
 	Route::get('editTwoParam/{id}/{event_id}','ContentController@edit')->name('contents.editTwoParam');
 	Route::get('{id}/view','ContentController@ScreenView')->name('contents.ScreenView');
 	Route::get('{content}/d','ContentController@download')->name('contents.download');
+	Route::get('{content}/url','ContentController@downloadUrl')->name('contents.downloadUrl');
 });
 
 // //SECTION Computers

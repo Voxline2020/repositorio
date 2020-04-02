@@ -154,6 +154,17 @@ class ContentController extends Controller
     }
   }
 
+	public function downloadUrl(Content $content)
+	{
+		if (Storage::disk('videos')->exists($content->location)) {
+			return Storage::disk('videos')->url($content->location, $content->name . '.' . $content->filetype);
+		} else {
+			return response()->json([
+				'error' => 'Not found',
+			]);
+		}
+	}
+
   public function ScreenView($id)
   {
     $content = Content::where('id', $id)->first();

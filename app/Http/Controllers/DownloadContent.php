@@ -12,6 +12,5 @@ class DownloadContent extends Controller
     public function download($id){
 			$content= Content::find($id);
 			return response()->download($content->location.'/'.$content->original_name.'.mp4');
-
 		}
 }
