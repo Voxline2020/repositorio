@@ -23,7 +23,8 @@ class Device extends Model
 		'imei',
 		'type_id',
 		'state',
-		'version'
+		'version',
+		'code'
   ];
 
 
@@ -36,12 +37,15 @@ class Device extends Model
     'name' => 'string',
 	'height'=> 'integer',
 	'width'=> 'integer',
+	'code' => 'string'
   ];
 
 	protected $attributes = [
 			'name' => "",
 			'height'=> "",
 			'width'=> "",
+		'code'=> "",
+
 	];
 
   /**

@@ -36,7 +36,10 @@ Route::group(['prefix' => 'contents'], function () {
 // 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 // 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
-// 	Route::get('{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
+Route::get('computers/{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo');
+Route::get('computers/{code}/get2/{pass}','ComputerController@getInfoCode')->name('computers.getInfoCode');
+
+//ruta para hacer select dinamico con compañia y sucursal.
 // });
 Route::group(['prefix' => 'pivot'], function () {
 	Route::get('{code}/get/{key}','ComputerPivotController@getInfo')->name('pivot.getInfo'); //ruta para hacer select dinamico con compañia y sucursal.
@@ -151,7 +154,7 @@ Route::group(['prefix' => 'companies'], function () {
 		Route::put('/{computer}/devices/{device}/change','CompanyController@changeOrderDevice')->name('companies.computers.changeOrderDevice');
 		//Computers/devices/Assign
 		Route::delete('/{computer}/DevicesAssign/{assign}/delete', 'CompanyController@destroyEventAssign')->name('companies.computers.destroyDeviceAssign');
-		
+
 	});
 	//Stores
 	Route::group(['prefix' => '{company}/stores'], function () {
@@ -212,6 +215,7 @@ Route::group(['prefix' => 'screens'], function () {
 	Route::get('{code}/j','ScreenJson@json')->name('screens.screen');
 });
 
+
 //SECTION Clients
 Route::get('clients','ClientController@index')->name('clients.index'); //ruta para recoger 2 parametros(id de la sucursal,id de la compañia)
 // Route::resource('clients', 'ClientController');
@@ -223,9 +227,9 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::get('filter_active','ClientController@filter_active')->name('clients.filter_active');
 	Route::get('filter_inactive','ClientController@filter_inactive')->name('clients.filter_inactive');
 	//client/device
-	Route::get('filter_device','ClientController@filter_device')->name('clients.filter_device');
+	// Route::get('filter_device','ClientController@filter_device')->name('clients.filter_device');
 	Route::put('device/status/{id}','ClientController@changeStatus')->name('clients.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
-	
+
 	Route::get('device/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
 	//event
 	Route::group(['prefix' => 'events'], function () {
