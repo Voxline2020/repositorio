@@ -36,7 +36,7 @@ Route::group(['prefix' => 'contents'], function () {
 // 	Route::get('editTwoParam/{id}/{store_id}','ComputerController@edit')->name('computers.editTwoParam');//ruta para recoger 2 parametros(id de la sucursal,id del computador).
 // 	Route::get('store2/','ComputerController@getStores')->name('computers.store_id'); //ruta para hacer select dinamico con compañia y sucursal.
 
-Route::get('computers/{computer}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo');
+Route::get('computers/{code}/get/{pass}','ComputerController@getInfo')->name('computers.getInfo');
 Route::get('computers/{code}/get2/{pass}','ComputerController@getInfoCode')->name('computers.getInfoCode');
 
 //ruta para hacer select dinamico con compañia y sucursal.
