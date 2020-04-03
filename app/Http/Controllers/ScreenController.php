@@ -307,7 +307,9 @@ class ScreenController extends AppBaseController
 			$device->computer_id = $request['computer_id'];
 			$device->state = $request['state'];
 			$device->type_id = $request['type_id'];
-			$device->version = $request['version'];
+			if(isset($request['version']) && !empty($request['version'])){
+				$device->version = $request['version'];
+			}
 			$device->code = $request['code'];
 			if($device->save()){
 				$jsonResponse = [];
@@ -339,7 +341,9 @@ class ScreenController extends AppBaseController
 		$device->computer_id = $request['computer_id'];
 		$device->state = $request['state'];
 		$device->type_id = $request['type_id'];
-		$device->version = $request['version'];
+		if(isset($request['version']) && !empty($request['version'])){
+			$device->version = $request['version'];
+		}
 		$device->code = $request['code'];
 		if($device->save()){
 			$jsonResponse = [];
