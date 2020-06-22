@@ -17,10 +17,14 @@
 								<td>{!! $store->name !!}</td>
 								<td>{!! $store->address !!}</td>
 
+
+
 								@php
+
 										$screensQty = 0;
+
 										foreach ($store->computers as $computer) {
-											$screensQty += $computer->screens->count();
+											$screensQty += $computer->devices->count();
 										}
 								@endphp
 								<td>{!! $screensQty !!}</td>

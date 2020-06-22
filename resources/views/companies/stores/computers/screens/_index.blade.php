@@ -45,16 +45,16 @@
 		</thead>
 		<tbody>
 			@foreach ($store->computers as $computer)
-					@foreach ($computer->screens as $screen)
+					@foreach ($computer->devices as $device)
 					<tr>
-						<td>{!! $screen->name !!}</td>
-						<td>{!! $screen->height !!}</td>
-						<td>{!! $screen->width !!}</td>
+						<td>{!! $device->name !!}</td>
+						<td>{!! $device->height !!}</td>
+						<td>{!! $device->width !!}</td>
 						<td>
-							{!! Form::open(['route' => ['screens.destroy', $screen->id], 'method' => 'delete']) !!}
+							{!! Form::open(['route' => ['screens.destroy', $device->id], 'method' => 'delete']) !!}
 							<div class='btn-group'>
 								<a>
-									<a href="{{ route('screens.editTwoParam',[$screen->id, $screen->computer_id]) }}"
+									<a href="{{ route('screens.editTwoParam',[$device->id, $device->computer_id]) }}"
 										class="btn btn-warning"><i class="fas fa-edit"></i></a>
 									{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger
 									btn-xs',
