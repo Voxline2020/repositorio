@@ -228,7 +228,7 @@ Route::group(['prefix' => 'clients'], function () {
 	Route::get('filter_active','ClientController@filter_active')->name('clients.filter_active');
 	Route::get('filter_inactive','ClientController@filter_inactive')->name('clients.filter_inactive');
 	//client/device
-	// Route::get('filter_device','ClientController@filter_device')->name('clients.filter_device');
+ Route::get('filter_device','ClientController@filter_device')->name('clients.filter_device');
 	Route::put('device/status/{id}','ClientController@changeStatus')->name('clients.changeStatus');//envia el id de la pantalla junto con el estado (0 o 1) para realizar el cambio
 
 	Route::get('device/{id}','ClientController@show')->name('clients.show'); // ruta para mostrar contenido de la pantalla
