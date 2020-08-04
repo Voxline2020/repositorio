@@ -38,7 +38,7 @@ class ClientStoreController extends Controller
 		 
 		 //$events = Event::where("company_id","=",$company_id)->where("state","=",1)->get();
 		 
-		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  events.company_id = ".$company_id." && events.deleted_at IS NULL ORDER BY 'NAME' ASC ") );
+		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  events.company_id = :idcp && events.deleted_at IS NULL ORDER BY 'events.name' ASC "),["idcp" => $company_id] );
 		 
 		
 		return view('client.clientStoresScreens')
@@ -69,10 +69,10 @@ class ClientStoreController extends Controller
 		 $company_id = Auth::user()->company_id;
 
 		 //devices por computador
-		 $devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = '$idSucursal' && devices.computer_id  = computers.id && devices.state > 0") );
+		$devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.computer_id  = computers.id && devices.state > 0"),['idsuc' =>$idSucursal] );
 		 
 		//eventos en la lista del modal
-		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = '$company_id' && deleted_at IS NULL ") );
+		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
 
 		
 
