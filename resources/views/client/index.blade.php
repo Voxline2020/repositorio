@@ -20,7 +20,7 @@
 			<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
 		</div>
 		<div class="col-md-12">
-			<h4 > Estado reproductores </h4>
+			<h4 > Estado reproductores desarrollo3 </h4>
 			@include('flash::message')
 		</div>
 		<div class="col-sm-12 col-md-12">
