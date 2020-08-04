@@ -91,7 +91,7 @@
 							<a href="{!! route('companies.events.show', [ $company,$inactive->content->event]) !!}" class='btn btn-info'><i class="fas fa-eye"></i></a>
 							<a class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$inactive->id}}"
 							data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
-							{!! Form::model($device,['route' => ['companies.computers.cloneEventDevice'], 'method' => 'put']) !!}
+							{!! Form::model($device,['route' => ['companies.computers.cloneEventDevice',$company,$computer,$device], 'method' => 'put']) !!}
 							{!! Form::hidden('content_id',$inactive->content->id) !!}
 							{!! Form::hidden('device_id',$device->id) !!}
 							{!! Form::hidden('order',$inactive->order) !!}
