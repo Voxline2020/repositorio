@@ -32,9 +32,12 @@
   
     display: inline-block;
     position: flex;
-    float : left;
     margin-left: 10px;
     margin-bottom: 10px;
+}
+
+#device img{
+  margin-right: 20px;
 }
 #device td{
   text-align: right;
