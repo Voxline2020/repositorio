@@ -600,6 +600,7 @@ pre code {
 
 .clientcontainer2{
    margin-right: 10px;
+   background-color: orange;
 }
 
 
@@ -608,7 +609,7 @@ pre code {
   padding-left: 0px;
   margin-right: 0;
   margin-left: 0;
-  background-color: #616161;
+  background-color: black;
   
 }
 
