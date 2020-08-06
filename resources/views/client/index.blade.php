@@ -38,7 +38,7 @@
 					
 			</div>
 			
-			<div class="row2" id="devices" style="background-color: blue">	
+			<div class="row2" id="devices">	
 			
 			
 				{{-- <div class="col-sm-12 col-md-6">
