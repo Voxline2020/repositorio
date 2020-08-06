@@ -12,14 +12,14 @@
 			<!--<hr>
 			<label href="/clients">  <strong> Inicio </strong> </label> -->
 			<hr>
-			<label onclick="indexStore();"><strong> Stores </strong></label> 			
+			<a href="#" onclick="indexStore();"> <strong> Sucursales </strong>  </a> 			
 			
 			<div id="liststores" style="display: none;">	
 				<ul>
 				@foreach ($stores as $store)										      
 				<hr>
 				    <div style="margin-left: 0px">
-					  <li>  <span onclick="openStore('{{$store->id}}');" class="user-name"> <strong>{{$store->name}}</strong> </span></li>
+					  <li>  <a href="#" onclick="openStore('{{$store->id}}');" class="user-name"> <strong>{{$store->name}}</strong> </a> </li>
 					    <!--<span class="user-role">{{$store->address}}</span>	-->          
 				    </div>
 			    @endforeach
@@ -28,16 +28,14 @@
 		    <hr>
 		    
 							
-			@if (Auth::user()->hasRole('Administrador'))
-					<label href="{{ route('users.index') }}"> <strong>Eventos</strong></label>									
+			@if (Auth::user()->hasRole('Administrador'))					
+					<a href="{{ route('users.index') }}"> <strong> Eventos </strong> </a> 								
 			@elseif(Auth::user()->hasRole('Cliente'))
 				
-					<label href="{{ route('clients.events.index') }}"> <strong>Eventos</strong></label>
+					<a href="{{ route('clients.events.index') }}"> <strong> Eventos </strong> </a> 
 				
-			@elseif(Auth::user()->hasRole('Supervisor'))
-				
-					<label href="{{ route('clients.events.index') }}"> <strong>Eventos</strong></label>
-				
+			@elseif(Auth::user()->hasRole('Supervisor'))				
+					<a href="{{ route('clients.events.index') }}"> <strong> Eventos </strong> </a> 
 			@endif
 
 		    <hr>

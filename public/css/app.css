@@ -612,6 +612,10 @@ pre code {
   
 }
 
+.lateralcontainer a{
+  color : black;
+}
+
 
 @media (min-width: 576px) {
   .container {
