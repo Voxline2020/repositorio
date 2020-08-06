@@ -9,6 +9,8 @@
 <div class="clientcontainer2" id="clientcontainer2">
 	<div class = row>
 		<div class="lateralcontainer col-md-2" id="lateralcontainer">
+			<!--<hr>
+			<label href="/clients">  <strong> Inicio </strong> </label> -->
 			<hr>
 			<label onclick="indexStore();"><strong> Stores </strong></label> 			
 			
@@ -24,7 +26,20 @@
 			    <ul>
 		    </div>		    
 		    <hr>
-		    <label><strong>Events</strong></label>
+		    
+							
+			@if (Auth::user()->hasRole('Administrador'))
+					<label href="{{ route('users.index') }}"> <strong>Eventos</strong></label>									
+			@elseif(Auth::user()->hasRole('Cliente'))
+				
+					<label href="{{ route('clients.events.index') }}"> <strong>Eventos</strong></label>
+				
+			@elseif(Auth::user()->hasRole('Supervisor'))
+				
+					<label href="{{ route('clients.events.index') }}"> <strong>Eventos</strong></label>
+				
+			@endif
+
 		    <hr>
 		</div> <!-- fin contenedor lateral -->
 		<div class= "col-md-10">

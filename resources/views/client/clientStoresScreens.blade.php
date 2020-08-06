@@ -125,6 +125,7 @@
 	<div id = "titulo">
 		<h3>Seleccione una sucursal en el menu de la izquierda</h3>
 	</div>
+	<a  style="display: none;" id="btnback" type="button" class="btn btn-outline-primary w-100" href="/clients ">Atras</a>
 	<div id ="contenedor_ajax" class="container">
 		<div class="row" id="devices">							
 				
@@ -147,15 +148,17 @@
 
 <!-- modal -->
 	<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">		
-		  <div class="modal-dialog" role="document">
+		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
-		      <div class="modal-header col-12">
-		      	<h4 class="modal-title" id="myModalLabel">Cargar contenido</h4>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
+		    	<!-- modal header -->
+		      	<div class="modal-header col-12">
+		      		<h4 class="modal-title" id="myModalLabel">Cargar contenido</h4>
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          		<span aria-hidden="true">&times;</span>
+		        	</button>
 		        
-		      </div>
+		      	</div><!-- fin header -->
+
 			    <div class="modal-body">
 			      	<form action="/asignarContenido" id="asignarContenido" method="post" enctype="multipart/form-data">
 						<div id="form-group" >
@@ -173,7 +176,7 @@
 								</div>
 								<div class="col-1">
 								</div>
-							</div>
+							</div> <!-- fin row -->
 							<hr>
 							<div class="row align-items-center">
 								<div class="col-1">
@@ -194,7 +197,7 @@
 								</div>
 								<div class="col-1">
 								</div>
-							</div>
+							</div> <!-- fin row -->
 							<hr>
 							<div class="row align-items-center">
 								<div class="col-1">
@@ -212,7 +215,7 @@
 								                    
 								<div class="col-1">
 								</div>
-							</div>
+							</div> <!-- fin row-->
 							<br>
 							<div class="row align-items-center">
 								<div class="col-1">
@@ -229,7 +232,7 @@
 								</div>
 								<div class="col-1">
 								</div>
-							</div>						  	
+							</div>	<!-- fin row -->					  	
 							<hr>	                    	
 			      		</div> <!-- final form group -->
 			      		<div class="row align-items-center">
@@ -241,10 +244,10 @@
 								<div class="col-2">
 									<button type="button" class="btn btn-danger " data-dismiss="modal" aria-label="Close">Cerrar </button>
 								</div>
-							</div>
-			      		
-			      		
+						</div> <!-- final row -->
 			      	</form> <!-- final form -->
 			    </div> <!-- final modal body -->
-	
+			</div> <!-- fin modal content -->
+		</div> <!-- fin mdal dialog -->
+	</div> <!-- fin modal -->
 </body>

@@ -69,7 +69,7 @@ class ClientStoreController extends Controller
 		 $company_id = Auth::user()->company_id;
 
 		 //devices por computador
-		$devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.computer_id  = computers.id && devices.state > 0"),['idsuc' =>$idSucursal] );
+		 $devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.computer_id  = computers.id && devices.state > 0"),['idsuc' =>$idSucursal] );
 		 
 		//eventos en la lista del modal
 		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
@@ -105,15 +105,6 @@ class ClientStoreController extends Controller
 	//luego crea el contenido para finalmente assignar el evento con su contenido al device
 	public function guardarAsignar(Request $request)
 	{
-		/*$today = Carbon::now()->toDateTimeString();	
-		if($request->initdate < $today)
-		{
-			dd('inactivo');
-		}else
-		{
-			dd('activo');
-		}
-		dd($request->initdate);*/
 
 		//comprovamos que el nombre del evento no este vacio
 		if($request->event_name != '')
@@ -177,18 +168,9 @@ class ClientStoreController extends Controller
 						if($filetype == 'mp4')
 						{
 							
-							//Extraemos la informacion del video subido
-							//nombre original
-							//$nombreOriginal = str_replace(' ','-',$file->getClientOriginalName());	
-							//$nombreOriginal = strtolower($nombreOriginal);
-
-							//tamaño
-							//$size = $file->getClientSize();
-							//mime
-							//$mime = $file->getClientmimeType();							
 							//creamos una nueva instancia de la libreria getID3
-							////Analizar Video
 							$getID3 = new \getID3;
+							////Analizar Video
 							$fileX = $getID3->analyze($file);
 							$filetype = $file->getClientOriginalExtension();
 							$mime = $file->getClientMimeType();
@@ -201,41 +183,9 @@ class ClientStoreController extends Controller
 							//$duracion en hh:mm:ss
 							$duration = gmdate("H:i:s", $duracion);
 
-							//Nombre archivo
-							
-							//$name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-							//$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
-							//$slug = Str::slug($name);
-
-							//Guardar archivos
-							//$path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
-
-							//$getID3 = new \getID3;				
-							//analizamos el video utilizando la libreria
-							//$file2 = $getID3->analyze($file);
-
-							//obtenemos la informacion del analizis del archivo suvido											
-							//ancho								
-							//$width = $file2['video']["resolution_x"];
-							//alto
-							//$height = $file2['video']["resolution_y"];
-
-							//duracion en segundos
-							//$duracion = $file2['playtime_seconds'];
-							//duracion en hh:mm:ss
-							//$duracion = gmdate("H:i:s", $duracion);
-							//id usuario
-							//$user_id = Auth::user()->id;
-
-							//nombre nuevo
-							//$name = $nombreOriginal;
 							
 							//creamos un nuevo objeto contenido y lo llenamos
-							$content = new Content;								
-							//$content->name = $name;
-							//$content->original_name = $original_name;
-							//$slug = str_replace(' ', '-' , $name).'-'.$width.'x'.$height;			
-							//$content->slug = $slug;
+							$content = new Content;															
 							$content->filetype = $filetype;							
 							$content->user_id = $user_id;
 							$content->size = $size;
@@ -388,7 +338,7 @@ class ClientStoreController extends Controller
 																	$device->version = $device->version+1;
 																	# Y guardamos ;)
 																	$device->save();								
-        															return redirect('clientStore')->with('success', 'Contenido asignado');  
+        															return redirect('clients')->with('success', 'Contenido asignado');  
         														}else{
         															return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se pudo asignar el evento a la pantalla');  
         														}//fin guardar evento asignado

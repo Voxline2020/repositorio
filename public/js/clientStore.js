@@ -1,4 +1,4 @@
-	//modifica los datapickers del modal
+		//modifica los datapickers del modal
 		 $(function () {                
                 $('#initdate').datetimepicker({                	                	
                 	locale: 'es'
@@ -418,9 +418,7 @@
 				  	btn_back  = document.getElementById("btnback");
 					  if (btn_back.style.display === "none") {
 					    btn_back.style.display = "block";
-					  } else {
-					    btn_back.style.display = "none";
-					  }
+					  } 
 				  	$("#devices").html(output2);
 
 				  	console.log(divDinamico());

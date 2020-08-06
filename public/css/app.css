@@ -584,9 +584,9 @@ pre code {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
-  margin-left: auto;
-}
+  margin-left: auto;  
 
+}
 
 .clientcontainer {
 
@@ -600,7 +600,6 @@ pre code {
 
 .clientcontainer2{
    margin-right: 10px;
-   background-color: orange;
 }
 
 
@@ -609,7 +608,7 @@ pre code {
   padding-left: 0px;
   margin-right: 0;
   margin-left: 0;
-  background-color: black;
+  background-color: #616161;
   
 }
 
@@ -619,6 +618,8 @@ pre code {
     max-width: 540px;
   }
 }
+
+
 
 @media (min-width: 768px) {
   .container {
@@ -631,6 +632,7 @@ pre code {
     max-width: 960px;
   }
 }
+
 
 @media (min-width: 1200px) {
   .container {
@@ -658,8 +660,7 @@ pre code {
   display: flex;
   flex-wrap: wrap;
   margin-right: 0px;
-  margin-left: 0px;
-  
+  margin-left: 0px;  
 }
 
 .no-gutters {
