@@ -32,6 +32,7 @@ class ClientStoreController extends Controller
     public function index(Request $request)
 	{
 
+
 		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 
 		 $company_id = Auth::user()->company_id;
@@ -253,14 +254,27 @@ class ClientStoreController extends Controller
 													return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No existe el video ???  ');  
 												}
 
-												//cargamos el video al servido y obtenemos la location
-												//guardamos en una carpeta con el nombre del evento
-												//$url = str_replace(' ' , '-', $request->event_name);
-												//$url = $url.'/'.$nombreOriginal;
-												//$url = $evento->slug . "/" . $name;
-												//$url = strtolower($url);
-												//comprobar contenido de = resolucion
-												//$location = $request->file('contenido')->store($url);
+												//comprovamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
+												//comprovamos si es un evento existente
+												if(!(is_null($request->event_id)) )
+												{
+													
+													//si el evento existe traemos los contenidos asociados al evento
+													$contents = Content::where('event_id',$request->event_id)->get();
+
+													foreach ($contents as $comparecontent) {
+														if(($comparecontent->height == $height ) || ($comparecontent->width == $width))
+														{
+															return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido   ');  
+														}
+																			
+													}//fin foreach
+															
+													
+												}//fin comprovar evento = resolucion
+
+
+												//cargamos el video al servido y obtenemos la location	
 												$location = Storage::disk('videos')->put($evento->slug . "/" . $name, $file);
 												if($location == '')
 												{
@@ -292,12 +306,7 @@ class ClientStoreController extends Controller
 													}
 													
 													
-												}else
-												{
-													//si el evento ya existia 
-													//asignamos el id recivido al evento			$evento->id = $event_id;
-													
-												}												
+												}									
 												if($event_id != '')								
 													{														
 														//terminamos cargamos event_id al objeto contenido
@@ -337,9 +346,10 @@ class ClientStoreController extends Controller
 																	# Los nuevos datos
 																	$device->version = $device->version+1;
 																	# Y guardamos ;)
-																	$device->save();								
-        															Flash::success('Evento asignado correctamente.');
+																	$device->save();				
+																	Flash::success('Evento asignado correctamente.');
 																	return redirect(url()->previous());
+        															/*return redirect('clients/device/'.$device_id)->with('sucess', 'Contenido asignado');  */
         														}else{
         															return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se pudo asignar el evento a la pantalla');  
         														}//fin guardar evento asignado
