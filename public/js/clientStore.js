@@ -1,3 +1,15 @@
+	//modifica los datapickers del modal
+		 $(function () {                
+                $('#initdate').datetimepicker({                	                	
+                	locale: 'es'
+                });
+
+                $('#enddate').datetimepicker({
+                    locale: 'es'
+                });
+
+            });
+		 				
 
 		//funcion drop
 		function drop(ev , $device_id , $width , $height) {
@@ -77,16 +89,10 @@
 		}//fin crear zona de drop
 
 
-		//funcion que abre el modal.
-		$('img').on('show.bs.modal', function (event) {
-			var button = $(event.relatedTarget)
-			var id = button.data('id')
-			var device = button.data('device')
-			var modal = $(this)
-			modal.find('input[name="id"]').val(id)
-			modal.find('input[name="device"]').val(device)
-		})
+		
 
+
+		//buncion que comprueba si el evento seleccionado se encuentra ya creado
 		function buscarEvento($events , $input ){
 			var encontro = false;
 			var fecha_inicio = "";
@@ -163,16 +169,6 @@
 			return [encontro, fecha_inicio , fecha_termino , event_id];
 		} //fin buscarEvento
 	
-		 //modifica los datapickers del modal
-		 $(function () {                
-                $('#initdate').datetimepicker({                	                	
-                	locale: 'es'
-                });
-
-                $('#enddate').datetimepicker({
-                    locale: 'es'
-                });
-            });
 		 
 				
 		//agrega contenido a los inputs ocultos en el modal;
@@ -252,26 +248,69 @@
 
 		}
 
-		//buscador barra lateral
-		
-		
-
-		//se ejecuta cuando se hace click en una tienda
-		function openStore($idsucursal){
-			funcionAjax($idsucursal);
-			$('#mensaje').hide();
+		//funcion para el menu lateral dropdown
+		function indexStore(){
+			var x = document.getElementById("liststores");
+			  if (x.style.display === "none") {
+			    x.style.display = "block";
+			  } else {
+			    x.style.display = "none";
+			  }
+			  
 			//alert($idsucursal);
 			//mostrarPantallas($sucursal);				
 		} 
 
-		function mostrarPantallas($sucursal){			  
-			 alert('mostrar pantallas ?')
-			  document.getElementById('screens').innerHTML = 
-			  "<h1>"+ $sucursal[id] +"</h1>";
-		}			
+		function divDinamico(){	
+
+					console.log("en el dinamico");
+				  	var altura_tienda = $("#liststores").height();
+				  	var altura_contenido = $("#devices").height();
+				  	var masaltura = 0;
+
+				  	console.log("sucursales : "+ altura_tienda);
+				  	console.log("pantallas : "+ altura_contenido);
+
+				  	if(altura_tienda > 600 || altura_contenido > 600 )
+				  	{
+				  		console.log("mayor que 600")
+				  		if(altura_tienda > altura_contenido)
+				  		{	
+				  			masaltura = altura_tienda + 200;				  	
+					  		$("#clientcontainer2").height(masaltura);	
+					  		$("#lateralcontainer").height(masaltura);
+					  		var string =  'sucursales mas altura : '+ masaltura;				  	
+					  		return string;
+				  		}else
+				  		{
+				  			masaltura = altura_contenido + 200;				  			
+					  		$("#clientcontainer2").height(masaltura);	
+					  		$("#lateralcontainer").height(masaltura );
+					  		var string =  'pantallas mas altura : '+ masaltura;				  	
+					  		return string;
+				  		}
+				  	}else
+				  	{
+				  		console.log('else');
+				  		$("#clientcontainer2").height('100vh');
+				  		$("#lateralcontainer").height('100vh');
+				  	}
+		}
 
 
 
+		//se ejecuta cuando se hace click en una tienda
+		function openStore($idsucursal){
+			funcionAjax($idsucursal);
+			console.log("open store");
+			$('#mensaje').hide();
+
+			//alert($idsucursal);
+			//mostrarPantallas($sucursal);				
+		} 
+
+
+		//funcion ajax se activa al hacer click en una sucursal
 		function funcionAjax($idsucursal) {
 			//alert("en la funcion ajax"+ $idsucursal);           
                $.ajax({
@@ -308,11 +347,11 @@
 				        state = "activo";
 				    }
 
-				    output2 += '<div id="device"  ondrop="drop(event , '+device_id+','+width+','+height+')" ondragover="allowDrop(event)">';
+				    output2 += '<div id="device" onclick="seleccionarDevice('+device_id+','+width+','+height+');"  ondrop="drop(event , '+device_id+','+width+','+height+')" ondragover="allowDrop(event)">';
 					    output2 +='<table>';
 					     	output2 +='<tr >';
 					      		output2 +='<td>';
-					       			output2 += '<img onclick="seleccionarDevice('+device_id+','+width+','+height+');"   src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
+					       			output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
 					      		output2 +='</td>';
 					      		output2 +='<td>';
 					       			output2 +='<table>';
@@ -376,9 +415,21 @@
 				
 				  	//$("#response-container").html(output);
 				  	$("#titulo").html(titulo);
+				  	btn_back  = document.getElementById("btnback");
+					  if (btn_back.style.display === "none") {
+					    btn_back.style.display = "block";
+					  } else {
+					    btn_back.style.display = "none";
+					  }
 				  	$("#devices").html(output2);
+
+				  	console.log(divDinamico());
+
 				  	
 
+				  	//comprovamos la altura del contenido 
+				  					  					  	
+				 
 				  /*	document.getElementById('msg').innerHTML = 
 				  	data.mensaje; */
 
