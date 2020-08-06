@@ -587,6 +587,34 @@ pre code {
   margin-left: auto;
 }
 
+
+.clientcontainer {
+
+  margin-top: -8.2px;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;  
+  background-color: black;
+}
+
+.clientcontainer2{
+   background-color: orange;   
+   margin-right: 10px;
+}
+
+
+.lateralcontainer{
+  width: 100%;
+  padding-left: 0px;
+  margin-right: 0;
+  margin-left: 0;
+  background-color: #616161;
+  
+}
+
+
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
@@ -624,6 +652,15 @@ pre code {
   flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
+}
+
+.row2 {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 0px;
+  margin-left: 0px;
+  
 }
 
 .no-gutters {
