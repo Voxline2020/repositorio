@@ -34,6 +34,7 @@ class ClientController extends Controller
 	{
 		$events = Event::where('company_id', Auth::user()->company_id);
 		$stores = Store::where('company_id', Auth::user()->company_id)->get();
+		$eventsmenu = $events->get();
 		$dateNow = \Carbon\Carbon::now()->format('Y-m-d\TH:i:s');
 		$eventsActive = $events->where('state',1)->where('enddate','>',$dateNow)->get();
 		$eventsInactive = $events->where('state',0)->where('initdate','>',$dateNow)->get();
@@ -54,7 +55,8 @@ class ClientController extends Controller
 		return view('client.index',compact('devices','events','devicesCount'))
 		->with('eventsActive',$eventsActive)
 		->with('eventsInactive',$eventsInactive)
-		->with('stores',$stores);
+		->with('stores',$stores)
+		->with('eventsmenu', $eventsmenu);;
 	}
 	public function show($id)
 	{

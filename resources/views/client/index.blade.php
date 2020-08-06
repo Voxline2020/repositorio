@@ -220,7 +220,7 @@
 
 									<input list="event_name" name="event_name" type="text"  id="list_events" >
 									<datalist id="event_name">										
-										<?php foreach ($events as $event): ?>
+										<?php foreach ($eventsmenu as $event): ?>
 											<option value="{{$event->name}}"></option>	
 										<?php endforeach ?>
 									    									    
