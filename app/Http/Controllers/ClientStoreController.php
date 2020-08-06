@@ -338,7 +338,8 @@ class ClientStoreController extends Controller
 																	$device->version = $device->version+1;
 																	# Y guardamos ;)
 																	$device->save();								
-        															return redirect('clients')->with('success', 'Contenido asignado');  
+        															Flash::success('Evento asignado correctamente.');
+																	return redirect(url()->previous());
         														}else{
         															return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se pudo asignar el evento a la pantalla');  
         														}//fin guardar evento asignado
