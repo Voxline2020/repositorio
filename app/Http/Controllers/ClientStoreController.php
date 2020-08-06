@@ -265,7 +265,7 @@ class ClientStoreController extends Controller
 													foreach ($contents as $comparecontent) {
 														if(($comparecontent->height == $height ) || ($comparecontent->width == $width))
 														{
-															return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido   ');  
+															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');
 														}
 																			
 													}//fin foreach
