@@ -174,12 +174,14 @@
 		//agrega contenido a los inputs ocultos en el modal;
 		function seleccionarDevice($device_id , $width , $height)
 		{
-				
-			//limpiamos los campos
-			//$("#initdate").find("input").val("");
-			//$("#enddate").find("input").val("");
-			//$("#contenido").find("input").val("");
-			//abrimos el modal
+			$('#initdate').datetimepicker({                	                	
+                locale: 'es'
+            });
+
+            $('#enddate').datetimepicker({
+                locale: 'es'
+            });
+			
 			$('#miModal').modal('show');				
 
 			$("#contenido").change(function(e){
