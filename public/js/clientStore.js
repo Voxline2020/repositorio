@@ -6,9 +6,13 @@
 
                 $('#enddate').datetimepicker({
                     locale: 'es'
-                });
+                });  
 
             });
+
+		    $("#myModal").on("hidden.bs.modal", function () {
+			    console.log("cerro el modal");
+			});
 		 				
 
 		//funcion drop
@@ -169,8 +173,29 @@
 			return [encontro, fecha_inicio , fecha_termino , event_id];
 		} //fin buscarEvento
 
-		//cuando se hace click en un dispositivo 
-		function openModal( $device_id , $width , $height)
+
+		//funcion para abrir el gift cuando al hacer click en guardar en el modal
+		function openGift(){
+			var event_name = $('#list_events').val();
+			var init_date = $("#initdate").find("input").val();
+			var end_date = $("#enddate").find("input").val();			
+			var file = $("#contenido").val();
+
+			console.log('open gif');
+			console.log(init_date);
+			console.log(end_date);
+
+			if( event_name != '' && init_date != '' && end_date != '' && file != '')
+			{
+				//console.log("abre gift");
+				$('#miModal').modal('hide');
+				$('#giftModal').modal('show');
+			}
+			
+		}
+		
+		 //cuando se hace click en un dispositivo
+		 function openModal( $device_id , $width , $height)
 		 {
 		 	$('#list_events').val("");
 		 	$('#textinitdate').prop('readonly', false);
@@ -178,14 +203,13 @@
 			$("#event_id").val("");
 			$('#miModal').modal('show');										
 		 	seleccionarDevice($device_id , $width , $height);
-
 		 }
-		
-		 
 				
 		//agrega contenido a los inputs ocultos en el modal;
 		function seleccionarDevice($device_id , $width , $height)
 		{
+			$('#miModal').modal('show');
+
 			$('#initdate').datetimepicker({                	                	
                 locale: 'es'
             });
@@ -194,8 +218,6 @@
                 locale: 'es'
             });
 
-            
-			$('#miModal').modal('show');							
 			
 			$("#contenido").change(function(e){
 				var file_name = e.target.files[0].name;            	
