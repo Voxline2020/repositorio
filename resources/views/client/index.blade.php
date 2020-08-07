@@ -181,7 +181,7 @@
 
 
 <!-- modal -->
-<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">		
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"> 		
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		    	<!-- modal header -->
@@ -287,7 +287,7 @@
 
 
 <!-- modal gif -->
-<div class="modal fade" tabindex="-1" role="dialog" id="giftModal"> <!-- modal gift cargando -->
+<div class="modal fade" tabindex="-1" role="dialog" id="giftModal" data-backdrop="static" data-keyboard="false"> <!-- modal gift cargando -->
   <div class="modal-dialog" role="document" >
     <div class="modal-content" style="background-color: rgba(0,0,0,.0001); border: 0;" >
       
