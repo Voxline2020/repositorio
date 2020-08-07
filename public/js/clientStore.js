@@ -8,12 +8,7 @@
 	                    locale: 'es'
 	                });  
 
-	            });
-
-			    $("#myModal").on("hidden.bs.modal", function () {
-				    console.log("cerro el modal");
-				});
-			 				
+	        });
 
 			//funcion drop
 			function drop(ev , $device_id , $width , $height) {
@@ -330,8 +325,6 @@
 					  	}
 			}
 
-
-
 			//se ejecuta cuando se hace click en una tienda
 			function openStore($idsucursal){
 				funcionAjax($idsucursal);
@@ -341,9 +334,6 @@
 				//alert($idsucursal);
 				//mostrarPantallas($sucursal);				
 			} 
-
-
-
 
 			//funcion ajax se activa al hacer click en una sucursal
 			function funcionAjax($idsucursal) {
