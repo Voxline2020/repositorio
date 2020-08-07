@@ -140,6 +140,7 @@
 					@include('client.tableInactivo')
 					<hr>
 				</div>
+				<!--
 				<div class="col-md-12">
 					<br>
 						{!! Form::open(['route' =>['clients.filter_by_name'], 'method' => 'GET']) !!}
@@ -172,6 +173,7 @@
 				<div class="col-sm-12">
 						@include('client.tableDevice')
 				</div>
+				-->
 			</div><!-- fin row 2 -->
 		</div>
 	</div>

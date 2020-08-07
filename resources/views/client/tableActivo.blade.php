@@ -1,4 +1,4 @@
-<div class="table-responsive" style="height:150px;overflow-y:scroll">
+<div class="table-responsive" style="height:400px;overflow-y:scroll">
 	{{-- <div class="table-responsive"> --}}
 	<table class="table table-hover">
 		<thead class="table-dark">
