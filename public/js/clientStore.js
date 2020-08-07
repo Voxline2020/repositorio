@@ -169,8 +169,17 @@
 			return [encontro, fecha_inicio , fecha_termino , event_id];
 		} //fin buscarEvento
 
-		
-		
+		//cuando se hace click en un dispositivo 
+		function openModal( $device_id , $width , $height)
+		 {
+		 	$('#list_events').val("");
+		 	$('#textinitdate').prop('readonly', false);
+			$('#textenddate').prop('readonly', false);
+			$("#event_id").val("");
+			$('#miModal').modal('show');										
+		 	seleccionarDevice($device_id , $width , $height);
+
+		 }
 		
 		 
 				
@@ -357,7 +366,7 @@
 
 				    output2 += '<div id="device"   ondrop="drop(event , '+device_id+','+width+','+height+')" ondragover="allowDrop(event)">';
 					    output2 +='<table>';
-					     	output2 +='<tr onclick="seleccionarDevice('+device_id+','+width+','+height+');">';
+					     	output2 +='<tr onclick="openModal('+device_id+','+width+','+height+');">';
 					      		output2 +='<td>';
 					       			output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
 					      		output2 +='</td>';
