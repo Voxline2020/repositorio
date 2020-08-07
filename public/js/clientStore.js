@@ -168,7 +168,10 @@
 				 }); //fin for	
 			return [encontro, fecha_inicio , fecha_termino , event_id];
 		} //fin buscarEvento
-	
+
+		
+		
+		
 		 
 				
 		//agrega contenido a los inputs ocultos en el modal;
@@ -313,6 +316,8 @@
 		} 
 
 
+
+
 		//funcion ajax se activa al hacer click en una sucursal
 		function funcionAjax($idsucursal) {
 			//alert("en la funcion ajax"+ $idsucursal);           
@@ -350,14 +355,14 @@
 				        state = "activo";
 				    }
 
-				    output2 += '<div id="device" onclick="seleccionarDevice('+device_id+','+width+','+height+');"  ondrop="drop(event , '+device_id+','+width+','+height+')" ondragover="allowDrop(event)">';
+				    output2 += '<div id="device"   ondrop="drop(event , '+device_id+','+width+','+height+')" ondragover="allowDrop(event)">';
 					    output2 +='<table>';
 					     	output2 +='<tr >';
 					      		output2 +='<td>';
 					       			output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
 					      		output2 +='</td>';
 					      		output2 +='<td>';
-					       			output2 +='<table>';
+					       			output2 +='<table onclick="seleccionarDevice('+device_id+','+width+','+height+');">';
 					        			output2 +='<tr>';
 					         				output2 +='<td>';
 					          					output2 += '<strong> Nombre :  </strong>';
@@ -396,13 +401,22 @@
 					                    	output2 +='<tr>';
 					                    		output2 +='<td>';					
 					                    		output2 +='</td>';
-					                    		output2 +='<td>';
-					                    			output2 += '<a href="clients/device/'+value.id+'" class="btn btn-info btn-xxs"><i class="fas fa-eye"></i></a>' ;
+					                    		output2 +='<td id="tdbutondevice" onclick="close_modal()">';
+					                    			
 					                    		output2 +='</td>';
 					                    	output2 +='</tr>';					
 					                    output2 +='</table>';
 					                output2 +='</td>';
 					            output2 +='</tr>';
+					            output2 +='<tr>';
+					            	output2 +='<td>';
+					            	output2 +='</td>';
+					            	output2 +='<td>';
+					            		output2 += '<a href="clients/device/'+value.id+'" class="btn btn-info btn-xxs"><i class="fas fa-eye"></i></a>' ;
+					            	output2 +='</td>';
+					            output2 +='</tr>';
+					            output2 +='<br>';
+					                    			
 					        output2 +='</table>';	
 						output2 += "</div>";
 
