@@ -9,36 +9,8 @@
 <div class="clientcontainer2" id="clientcontainer2">
 	<div class = row>
 		<div class="lateralcontainer col-md-2" id="lateralcontainer">
-			<!--<hr>
-			<label href="/clients">  <strong> Inicio </strong> </label> -->
-			<hr>
-			<a href="#" onclick="indexStore();"> <strong> Sucursales </strong>  </a> 			
+			@include('client.menuLateral')
 			
-			<div id="liststores" style="display: none;">	
-				<ul>
-				@foreach ($stores as $store)										      
-				<hr>
-				    <div style="margin-left: 0px">
-					  <li>  <a href="#" onclick="openStore('{{$store->id}}');" class="user-name"> <strong>{{$store->name}}</strong> </a> </li>
-					    <!--<span class="user-role">{{$store->address}}</span>	-->          
-				    </div>
-			    @endforeach
-			    <ul>
-		    </div>		    
-		    <hr>
-		    
-							
-			@if (Auth::user()->hasRole('Administrador'))					
-					<a href="{{ route('users.index') }}"> <strong> Eventos </strong> </a> 								
-			@elseif(Auth::user()->hasRole('Cliente'))
-				
-					<a href="{{ route('clients.events.index') }}"> <strong> Eventos </strong> </a> 
-				
-			@elseif(Auth::user()->hasRole('Supervisor'))				
-					<a href="{{ route('clients.events.index') }}"> <strong> Eventos </strong> </a> 
-			@endif
-
-		    <hr>
 		</div> <!-- fin contenedor lateral -->
 		<div class= "col-md-10">
 			<div class = "row" style="margin-top : 10px ">
@@ -65,8 +37,8 @@
 				<div class="col-sm-12 col-md-6">
 					<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
 				</div>
-				<div class="col-md-12">
-					<!--	<h4 > Estado reproductores </h4>  -->
+				 <div class="col-md-12">
+				<!--	<h4 > Estado reproductores </h4>  -->
 					@include('flash::message')
 				</div>
 				<div class="col-sm-12 col-md-12">
@@ -169,7 +141,7 @@
 						</div>
 						{!! Form::close() !!}
 					<hr>
-				</div>
+				</div> 
 				<div class="col-sm-12">
 						@include('client.tableDevice')
 				</div>
@@ -181,7 +153,7 @@
 
 
 <!-- modal -->
-<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"> 		
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"  data-backdrop="static" data-keyboard="false">		
 		 <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		    	<!-- modal header -->
@@ -222,8 +194,7 @@
 									<!--<input type="text" class="form-control" id="event_name" name = "event_name" required> -->
 
 									<input list="event_name" name="event_name" type="text"  id="list_events" required>
-									<datalist id="event_name">										
-									<?php foreach ($eventsmenu as $event): ?>
+									<datalist id="event_name">										<?php foreach ($eventsmenu as $event): ?>
 											<option value="{{$event->name}}"></option>	
 									<?php endforeach ?>
 									    									    
