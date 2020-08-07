@@ -363,6 +363,14 @@
 					    var width = value.width;
 					    var alto = value.height / 10;
 					    var ancho = value.width / 10;
+						if(alto <70)
+					    {
+					    	alto = 70;
+					    }
+					    if (ancho < 70)
+					    {
+					    	ancho = 70;
+					    }
 					    var resolucion = ""+value.width+" x "+value.height
 					    var state = value.state;	                    
 					    var device_id = value.id;
