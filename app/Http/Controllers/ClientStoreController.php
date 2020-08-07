@@ -23,6 +23,7 @@ class ClientStoreController extends Controller
 {
 	private $eventRepository;
 
+	//funcion encargada de verificar que el usuario este autenticado.
 	public function __construct(EventRepository $eventRepo)
 	{
 		$this->middleware('auth');
@@ -72,30 +73,18 @@ class ClientStoreController extends Controller
 		 //devices por computador
 		 $devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.computer_id  = computers.id && devices.state > 0"),['idsuc' =>$idSucursal] );
 		 
-		//eventos en la lista del modal
-		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
+		 //eventos en la lista del modal
+		 $events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
 
 		
 
-		 //id de la compañia del usuario en sesion
-		 //$company_id = Auth::user()->company_id;
-
-		 //EVENTS
-		 //eventos por compañia
-		 //$events = Event::where('company_id' , Auth::user()->company_id)->get();		 
-
-		 //generando el array json
-		 //$jsondata['data'] = $data;
-		 $jsondata['sucess'] = "true";
-		 //$jsondata['screens'] = $screens;
+		 //generando el array json		
+		 $jsondata['sucess'] = "true";		 
 		 $jsondata['devices'] = $devices;
-		 $jsondata['sucursal'] = $nombreSucrusal;
-		 //$jsondata['company_id'] = $company_id;
-		 $jsondata['events'] = $events;
-		 //$jsondata['eventsAssigns'] = $eventAssigns;
-		 //$jsondata['duracion'] = $totalduration;
+		 $jsondata['sucursal'] = $nombreSucrusal;		 
+		 $jsondata['events'] = $events;		 		 
 		 
-		//retornamos la informacion en un json  con un echo
+		 //retornamos la informacion en un json  con un echo
 		 echo json_encode($jsondata);		 
 		 exit();
 		
@@ -162,7 +151,7 @@ class ClientStoreController extends Controller
 					$file = $request->contenido;
 					if(!(is_null($file)))
 					{	
-						
+						//obtenemos la extension del archivo()				
 						$filetype = $file->extension();
 						
 						//SOLO PERMITE MP4
@@ -208,8 +197,7 @@ class ClientStoreController extends Controller
 									//comprobamos que tenemos el device_id , el alto y ancho
 									if($device_id != '' && $device_width != '' && $device_height != '')
 									{
-										//comprovamos las dimenciones de la pantalla con el video
-										//si las dimenciones del contenido son mayores que las dimensiones de la pantalla
+										//comprovamos las dimenciones de la pantalla con el video si las dimenciones del contenido son mayores que las dimensiones de la pantalla
 										if($content->height >= $device_height && $content->width >= $device_width)
 										{											
 											$company_id = Auth::user()->company_id;					
@@ -265,7 +253,7 @@ class ClientStoreController extends Controller
 													foreach ($contents as $comparecontent) {
 														if(($comparecontent->height == $height ) || ($comparecontent->width == $width))
 														{
-															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');
+															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
 														}
 																			
 													}//fin foreach
@@ -412,9 +400,6 @@ class ClientStoreController extends Controller
 			 return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *El campo nombre es obligatorio');  
 		}; //fin comprobar nombre
 		//extraccion y fomateo de fechas
-		
-		
-
 		
 	} //Final guardar asignar
 
