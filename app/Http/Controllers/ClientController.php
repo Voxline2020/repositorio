@@ -56,7 +56,7 @@ class ClientController extends Controller
 		->with('eventsActive',$eventsActive)
 		->with('eventsInactive',$eventsInactive)
 		->with('stores',$stores)
-		->with('eventsmenu', $eventsmenu);;
+		->with('eventsmenu', $eventsmenu);
 	}
 	public function show($id)
 	{

@@ -220,9 +220,10 @@
 									<!--<input type="text" class="form-control" id="event_name" name = "event_name" required> -->
 
 									<input list="event_name" name="event_name" type="text"  id="list_events" required>
-									<datalist id="event_name">										<?php foreach ($events as $event): ?>
+									<datalist id="event_name">										
+									<?php foreach ($eventsmenu as $event): ?>
 											<option value="{{$event->name}}"></option>	
-										<?php endforeach ?>
+									<?php endforeach ?>
 									    									    
 									</datalist>
 								</div>
