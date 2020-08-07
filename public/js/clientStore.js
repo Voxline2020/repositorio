@@ -181,9 +181,10 @@
             $('#enddate').datetimepicker({
                 locale: 'es'
             });
-			
-			$('#miModal').modal('show');				
 
+            
+			$('#miModal').modal('show');							
+			
 			$("#contenido").change(function(e){
 				var file_name = e.target.files[0].name;            	
 				//file_name = file_name.replace(''++'/'g,'-');
