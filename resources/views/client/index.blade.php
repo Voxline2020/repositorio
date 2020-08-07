@@ -268,12 +268,12 @@
 							<hr>	                    	
 			      		</div> <!-- final form group -->
 			      		<div class="row align-items-center" >
-								<div class="col-8" >
+								<div class="col-7" >
 								</div>								
-								<div class="col-2" onclick="openGift();">
+								<div class="col-2" onclick="openGift();" style="margin-right:5px">
 									<button type="submit" class="btn btn-primary">Guardar</button>
 								</div>
-								<div class="col-2">
+								<div class="col-2" style="margin-left:5px">
 									<button type="button" class="btn btn-danger " data-dismiss="modal" aria-label="Close">Cerrar </button>
 								</div>
 						</div> <!-- final row -->
