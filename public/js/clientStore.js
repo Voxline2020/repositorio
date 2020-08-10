@@ -387,7 +387,7 @@
 						       			output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
 						      		output2 +='</td>';
 						      		output2 +='<td>';
-						       			output2 +='<table>';
+						       			output2 +='<table id = "info_device">';
 						        			output2 +='<tr>';
 						         				output2 +='<td>';
 						          					output2 += '<strong> Nombre :  </strong>';

@@ -25,19 +25,23 @@
 
 #device{    
     border-radius: 15px;
-    background: #e5e5e5;
+    background: #616161;
     padding: 20px;
     margin-top: 10px;
     display: inline-block;
     position: flex;
     float : left;
-    margin-left: 10px;
+}
+
+#info_device{
+  margin-left: 20px;
 }
 
 
 #device td{
-  text-align: right;
+  text-align: left;
 }
+
 
 .response-container{
   position: absolute;

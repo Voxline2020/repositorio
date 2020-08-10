@@ -1,5 +1,5 @@
 @auth
-<nav class="navbar navbar-expand-lg navbar-dark grey darken-2 mb-2">
+<nav class="navbar navbar-expand-lg mb-2" style="background-color: #353535">
 	<a class="navbar-brand" href="{{ route('dash') }}">
 		<img src="{{ asset('assets/logo.png') }}" alt="" height="40" width="auto">
 	</a>
