@@ -390,34 +390,34 @@
 						       			output2 +='<table id = "info_device">';
 						        			output2 +='<tr>';
 						         				output2 +='<td>';
-						          					output2 += '<strong> Nombre :  </strong>';
+						          					output2 += 'Nombre:';
 						         				output2 +='</td>';
 						         				output2 +='<td>';
-						          					output2 += '<strong>'+value.name +'</strong>';
-						         				output2 +='</td>';
-						        			output2 +='</tr>';
-						        			output2 +='<tr>';
-						         				output2 +='<td>';
-						          					output2 += '<strong> Resolucion :  </strong>';
-						         				output2 +='</td>';
-						         				output2 +='<td>';
-						          					output2 += '<strong>'+resolucion+'</strong>' ;
+						          					output2 += value.name ;
 						         				output2 +='</td>';
 						        			output2 +='</tr>';
 						        			output2 +='<tr>';
 						         				output2 +='<td>';
-						          					output2 += ' <strong> Estado :  </strong>'
+						          					output2 += 'Resolucion:';
 						         				output2 +='</td>';
 						         				output2 +='<td>';
-						                    		output2 += '<strong>'+ state + '</strong>';
+						          					output2 += resolucion ;
+						         				output2 +='</td>';
+						        			output2 +='</tr>';
+						        			output2 +='<tr>';
+						         				output2 +='<td>';
+						          					output2 += 'Estado:'
+						         				output2 +='</td>';
+						         				output2 +='<td>';
+						                    		output2 += state;
 						                    	output2 +='</td>';
 						                    output2 +='</tr>'
 						                    output2 +='<tr>';
 						                    	output2 +='<td>';
-						                    		output2 += ' <strong> Tipo :  </strong>'
+						                    		output2 += 'Tipo:'
 						                    	output2 +='</td>';
 						                    	output2 +='<td>';
-						                    		output2 +='<strong>'+ value.type_id + '</strong>';
+						                    		output2 += value.type_id ;
 						                    	output2 +='</td>';
 						                    	output2 +='<tr>';
 						                    		output2 +='<td></td>';					
@@ -436,14 +436,14 @@
 						            output2 +='<tr>';
 						            	output2 +='<td>';
 						            	output2 +='</td>';
-						            	output2 +='<td>';
-						            		output2 += '<a href="clients/device/'+value.id+'" class="btn btn-info btn-xxs"><i class="fas fa-eye"></i></a>' ;
+						            	output2 +='<td id="tdbtneye">';
+						            		output2 += '<a href="clients/device/'+value.id+'" id="btnorange" class="btn btn-xxs"><i class="fas fa-eye"></i></a>' ;
 						            	output2 +='</td>';
 						            output2 +='</tr>';
 						            output2 +='<br>';
 						                    			
-						        output2 +='</table>';	
-							output2 += "</div>";
+						    output2 +='</table>';	
+						output2 += "</div>";
 
 
 						}); // fin del foreach
