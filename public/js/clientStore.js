@@ -398,7 +398,7 @@
 						        			output2 +='</tr>';
 						        			output2 +='<tr>';
 						         				output2 +='<td>';
-						          					output2 += 'Resolucion:';
+						          					output2 += 'Resolucion: &nbsp;';
 						         				output2 +='</td>';
 						         				output2 +='<td>';
 						          					output2 += resolucion ;
