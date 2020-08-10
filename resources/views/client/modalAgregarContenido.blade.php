@@ -38,7 +38,7 @@
 								<div class="col-6">
 									<!--<input type="text" class="form-control" id="event_name" name = "event_name" required> -->
 
-									<input list="event_name" name="event_name" type="text"  id="list_events" required>
+									<input list="event_name" name="event_name" type="text"  id="list_events" autocomplete="off" required>
 									<datalist id="event_name">										<?php foreach ($eventsmenu as $event): ?>
 											<option value="{{$event->name}}"></option>	
 									<?php endforeach ?>
