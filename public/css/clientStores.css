@@ -25,16 +25,18 @@
 
 #device{    
     border-radius: 15px;
-    background: #616161;
+    background: #353535;
     padding: 20px;
     margin-top: 10px;
     display: inline-block;
     position: flex;
     float : left;
+    margin-left: 10px
 }
 
 #info_device{
   margin-left: 20px;
+  color: white;
 }
 
 
