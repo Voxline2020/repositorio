@@ -68,7 +68,7 @@
 			@endif
 			<div class="nav-item dropdown">
 				<button class="btn nav-link dropdown-toggle" data-toggle="dropdown" >
-					<span id="spanname class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
+					<span id="spanname" class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
 					<img src="{{ asset('assets/user.png') }}" width="25" height="25" class="rounded-circle">
 				</button>
 				<div class="dropdown-menu">
