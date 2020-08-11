@@ -1,4 +1,22 @@
 
+.btnoutlineorange {
+  border-radius: 5px;
+  border: 1px solid ;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: none;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-color: #ec6424;
+  color: #ec6424;  
+}
+
+.btnoutlineorange:hover {
+  background: #ec6424;
+  color: white;
+}
+
 #spanname{
   color: white;
 }

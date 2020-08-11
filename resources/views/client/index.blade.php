@@ -17,7 +17,7 @@
 					<div id="titulo" style="margin-left : 0px "> </div>		
 				</div>
 				<div class= "col-sm-6 col-md-2" >
-					<a  style="display: none;" id="btnback" type="button"  class="btn btn-outline-primary w-100" href="/clients ">Atras</a>
+					<a  style="text-decoration:none; display: none;" id="btnback" type="button"  class="btnoutlineorange" href="/clients ">Atras</a>
 				</div>
 					
 			</div>
