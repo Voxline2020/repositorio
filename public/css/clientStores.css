@@ -1,10 +1,20 @@
+#tableorange{
+  background-color: #ec6424;      
+  color: white;
+}
+
+#btndark{
+    background-color: #353535;
+    color : white;
+}
+
 #btnorange{
   background-color: #e26328;
+  color : white;
 }
 
 #tdbtneye{
   text-align: right !important;
-
 }
 
 #mensaje{

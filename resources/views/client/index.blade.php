@@ -10,7 +10,6 @@
 	<div class = row>
 		<div class="lateralcontainer col-md-2" id="lateralcontainer">
 			@include('client.menuLateral')
-			
 		</div> <!-- fin contenedor lateral -->
 		<div class= "col-md-10">
 			<div class = "row" style="margin-top : 10px ">
@@ -18,7 +17,7 @@
 					<div id="titulo" style="margin-left : 0px "> </div>		
 				</div>
 				<div class= "col-sm-6 col-md-2" >
-					<a  style="display: none;" id="btnback" type="button" class="btn btn-outline-primary w-100" href="/clients ">Atras</a>
+					<a  style="display: none;" id="btnback" type="button"  class="btn btn-outline-primary w-100" href="/clients ">Atras</a>
 				</div>
 					
 			</div>
@@ -48,7 +47,7 @@
 							<h4>Eventos actuales &#x1F4C6;</h4>
 						</div>
 						<div class="col-sm-3">
-							<button type="button" class="btn btn-secondary w-100" onclick="location.href='/clients'">Limpiar Busquedas</button>
+							<button type="button" id="btndark" class="btn  w-100" onclick="location.href='/clients'">Limpiar Busquedas</button>
 						</div>
 					</div>
 					<br>
@@ -74,7 +73,7 @@
 								</div>
 							</div>
 							<div class="col-md-3">
-								{!! Form::submit('Buscar',['class'=>'btn btn-primary w-100']) !!}
+								{!! Form::submit('Buscar',['id' => 'btnorange', 'class'=>'btn  w-100']) !!}
 							</div>
 						</div>
 						{!! Form::close() !!}
@@ -104,7 +103,7 @@
 								</div>
 							</div>
 							<div class="col-md-3">
-								{!! Form::submit('Buscar',['class'=>'btn btn-primary w-100']) !!}
+								{!! Form::submit('Buscar',['id' => 'btnorange','class'=>'btn  w-100']) !!}
 							</div>
 						</div>
 						{!! Form::close() !!}

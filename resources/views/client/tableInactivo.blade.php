@@ -1,13 +1,13 @@
-{{-- <div class="table-responsive" style="height:150px;overflow-y:scroll"> --}}
-	<div class="table-responsive">
+ <div class="table-responsive" style="height:300px;overflow-y:scroll">
+	{{-- <div class="table-responsive"> --}}
 	<table class="table table-hover">
-		<thead class="table-dark">
+		<thead id="tableorange">
 			<tr>
 
-				<th>Nombre</th>
-				<th>Fecha Inicio</th>
-				<th>Fecha Termino</th>
-				<th colspan="3">Acciones</th>
+				<td>Nombre</td>
+				<td>Fecha Inicio</td>
+				<td>Fecha Termino</td>
+				<td colspan="3">Acciones</td>
 			</tr>
 		</thead>
 		<tbody>
@@ -18,7 +18,7 @@
 				<td>{!! \Carbon\Carbon::parse($event->initdate)->format('d-m-Y H:i')!!}</td>
 				<td>{!! \Carbon\Carbon::parse($event->enddate)->format('d-m-Y H:i')!!}</td>
 				<td>
-					<a href="{{route('clients.events.show',[$event->id]) }}" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
+					<a  href="{{route('clients.events.show',[$event->id]) }}" id="btndark" class='btn btn-info btn-xs'><i class="fas fa-eye"></i></a>
 				</td>
 			</tr>
 			@endforeach
