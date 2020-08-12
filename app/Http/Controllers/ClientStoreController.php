@@ -71,7 +71,7 @@ class ClientStoreController extends Controller
 		 $company_id = Auth::user()->company_id;
 
 		 //devices por computador
-		$devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.deleted_at IS NULL  && devices.computer_id  = computers.id && devices.state > 0"),['idsuc' =>$idSucursal] );
+		$devices = DB::select( DB::raw("SELECT devices.* FROM computers , devices WHERE computers.store_id = :idsuc && devices.deleted_at IS NULL  && devices.computer_id  = computers.id && devices.state = 1 && computers.deleted_at IS null"),['idsuc' =>$idSucursal] );
 		 
 		 //eventos en la lista del modal
 		 $events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
