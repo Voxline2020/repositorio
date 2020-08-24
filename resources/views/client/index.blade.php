@@ -31,7 +31,7 @@
 				</div> --}}
 
 				<div class="col-sm-12 col-md-6">
-					<h4 class=font-weight-bold> Bienvenido Cambio Git {{ Auth::user()->name }} </h4>			
+					<h4 class=font-weight-bold> Bienvenido{{ Auth::user()->name }} </h4>			
 				</div>
 				<div class="col-sm-12 col-md-6">
 					<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
