@@ -417,7 +417,7 @@
 						                    		output2 += 'Tipo:'
 						                    	output2 +='</td>';
 						                    	output2 +='<td>';
-						                    		output2 += value.type_id ;
+						                    		output2 += value.tipo_pantalla ;
 						                    	output2 +='</td>';
 						                    	output2 +='<tr>';
 						                    		output2 +='<td></td>';					
