@@ -96,14 +96,14 @@ class ClientStoreController extends Controller
 	public function guardarAsignar(Request $request)
 	{
 
-		//comprovamos que el nombre del evento no este vacio
+		//bamos que el nombre del evento no este vacio
 		if($request->event_name != '')
 		{
-			//comprovamos que las fechas no esten vacias
+			//comprobamos que las fechas no esten vacias
 			if($request->initdate != '' && $request->enddate != '' )
 			{
 
-				//Compravamos el largo del string fecha
+				//Comprobamos el largo del string fecha
 				$digitos = strlen($request->initdate);
 				
 				if($digitos == 19)
@@ -124,7 +124,7 @@ class ClientStoreController extends Controller
 					return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Ingrese un formato valido de fecha ');  
 				} 
 
-				//comprovamos cuantos digitos trae la fecha
+				//comprobamos cuantos digitos trae la fecha
 				$digitos = strlen($request->enddate);
 				
 				if($digitos == 19)
@@ -144,10 +144,10 @@ class ClientStoreController extends Controller
 					return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Ingrese un formato valido de fecha ');  
 				} 
 				
-				//comprovamos que la fecha de inicio sea menor que la de termino
+				//comprobamos que la fecha de inicio sea menor que la de termino
 				if($initdate < $enddate){
 
-					//comprovamos se este cargando un archivo
+					//comprobamos se este cargando un archivo
 					$file = $request->contenido;
 					if(!(is_null($file)))
 					{	
@@ -186,7 +186,7 @@ class ClientStoreController extends Controller
 							//
 							$content->mime = $mime;	
 
-							//comprovamos que ningun campo del contenido este vacio exepto location que se obtiene al guardar el video
+							//comprobamos que ningun campo del contenido este vacio exepto location que se obtiene al guardar el video
 							if($content->filetype != '' && $content->user_id != '' && $content->size != '' && $content->width != '' && $content->height != '' && $content->duration != '' && $content->mime != '')
 								{
 									//extraemos los datos del request
@@ -197,7 +197,7 @@ class ClientStoreController extends Controller
 									//comprobamos que tenemos el device_id , el alto y ancho
 									if($device_id != '' && $device_width != '' && $device_height != '')
 									{
-										//comprovamos las dimenciones de la pantalla con el video si las dimenciones del contenido son mayores que las dimensiones de la pantalla
+										//comprobamos las dimenciones de la pantalla con el video si las dimenciones del contenido son mayores que las dimensiones de la pantalla
 										if($content->height >= $device_height && $content->width >= $device_width)
 										{											
 											$company_id = Auth::user()->company_id;					
@@ -232,34 +232,34 @@ class ClientStoreController extends Controller
 											$content->slug = $slug;
 
 											
-											//comprovamos los datos del objeto evento
+											//comprobamos los datos del objeto evento
 											if($evento->name != '' && $evento->initdate != '' && $evento->enddate != '' &&  $evento->slug != '' && $evento->company_id != '' ){
 
-												//comprovamos que el archivo se suba al servidor antes de crear el nuevo evento al cual estara asociado el contenido 
-												//comprovamos que exista el contenido
+												//comprobamos que el archivo se suba al servidor antes de crear el nuevo evento al cual estara asociado el contenido 
+												//comprobamos que exista el contenido
 												if($request->file('contenido') == '')
 												{
 													return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No existe el video ???  ');  
-												}
+												}												
 
-												//comprovamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
-												//comprovamos si es un evento existente
-												if(!(is_null($request->event_id)) )
-												{
+												//comprobamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
+												//comprobamos si es un evento existente
+												//if(!(is_null($request->event_id)) )
+												//{
 													
 													//si el evento existe traemos los contenidos asociados al evento
-													$contents = Content::where('event_id',$request->event_id)->get();
+													//$contents = Content::where('event_id',$request->event_id)->get();
 
-													foreach ($contents as $comparecontent) {
-														if(($comparecontent->height == $height ) && ($comparecontent->width == $width))
-														{
-															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
-														}
+													//foreach ($contents as $comparecontent) {
+														//if(($comparecontent->height == $height ) && ($comparecontent->width == $width))
+														//{
+															//return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
+														//}
 																			
-													}//fin foreach
+													//}//fin foreach
 															
 													
-												}//fin comprovar evento = resolucion
+												//}//fin comprobar evento = resolucion
 
 
 												//cargamos el video al servido y obtenemos la location	
@@ -355,20 +355,20 @@ class ClientStoreController extends Controller
 													}else
 													{
 														return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se encontro el ultimo evento guardado');  
-													}//fin comprovar ultimo evento guardado
+													}//fin ar ultimo evento guardado
 											
 											}else
 											{
-												return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Hubo un error al extraer la informacion el video  ');  
-											}//fin comprovar datos evento
+												return redirect()-b>back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Hubo un error al extraer la informacion el video  ');  
+											}//fin comprobar datos evento
 										}else
 										{
 											return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se permite cargar un video de menor resolucion que la pantalla  ');  
-										}//fin comprovar tamaño video >= tamaño pantalla
+										}//fin comprobar tamaño video >= tamaño pantalla
 									}else
 									{
 										return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No selecciono una pantalla como llego hasta aca?  ');  
-									}//fin comprovar informacion del device
+									}//fin comprobar informacion del device
 									
 									
 								}else
