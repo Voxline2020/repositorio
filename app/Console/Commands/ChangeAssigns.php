@@ -7,6 +7,8 @@ use App\Models\Event;
 use App\Models\EventAssignation;
 use App\Models\Screen;
 
+use App\Models\Device;
+
 class ChangeAssigns extends Command
 {
     /**
@@ -49,9 +51,15 @@ class ChangeAssigns extends Command
 							if($assignation->state!=$content->event->state){
 								$assignation->state = $content->event->state;
 								$assignation->save();
-								$device = Device::find($assignation->screen_id);
-								$device->version = $device->version+1;
-								$device->save();
+                                
+								 // obtenemos el id del dispositivo
+                                $deviceid = $assignation->device_id;
+                                // buscamos el dispositivo por id                                                                                          
+                                $device = Device::find($deviceid);
+                                // se agrega +1 a la version el dispositivo                                                                
+                                $device->version = $device->version+1;
+                                //se guarda el dispositivo con los cambios
+                                $device->save();
 							}
 						}
 					}
