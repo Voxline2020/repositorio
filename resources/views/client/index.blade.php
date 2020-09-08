@@ -128,18 +128,6 @@
 		</div>
 	</div>
 </div>
-
-<!-- modal agregar contenido-->
-	@include('client.modalAgregarContenido')
-<!-- fin modal agegar contenido-->
-
-
-<!-- modal gif -->
-	@include('client.modalGifCargando')
-<!-- fin modal gif -->
-
-
-
 @endsection
 @section('script')
 <script>
@@ -232,7 +220,6 @@
 		});
 	});
 </script>
-<script src="{{ asset('js/clientStore.js') }}"></script> 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 	// Load the Visualization API and the piechart package.
