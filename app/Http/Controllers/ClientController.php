@@ -592,6 +592,9 @@ class ClientController extends Controller
 			$objs->save();
 		}
 		$objIni->save();
+		//+1 a la version de la playlist
+		$device->version = $device->version + 1;
+		$device->save();
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
