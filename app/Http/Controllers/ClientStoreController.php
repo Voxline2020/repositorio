@@ -247,24 +247,22 @@ class ClientStoreController extends Controller
 
 												//comprovamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
 												//comprovamos si es un evento existente
-												if(!(is_null($request->event_id)) )
+											/*	if(!(is_null($request->event_id)) )
 												{
 													
 													//si el evento existe traemos los contenidos asociados al evento
 													$contents = Content::where('event_id',$request->event_id)->get();
 
-													
-
-													foreach ($contents as $comparecontent) {
+													/*foreach ($contents as $comparecontent) {
 														if(($comparecontent->height == $height ) && ($comparecontent->width == $width))
 														{
 															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
 														}
 																			
-													}//fin foreach
+													}//fin foreach */
 															
 													
-												}//fin comprovar evento = resolucion
+												//}//fin comprovar evento = resolucion 
 
 
 												//cargamos el video al servido y obtenemos la location	
