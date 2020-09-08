@@ -10,7 +10,7 @@
 	<div class = row>
 		<div class="lateralcontainer col-md-2" id="lateralcontainer">
 			@include('client.menuLateral')
-		</div> <!-- fin contenedor lateral -->
+		</div> <!-- fin contenedor lateral  -->
 		<div class= "col-md-10">
 			<div class = "row" style="margin-top : 10px ">
 				<div class= "col-sm-6 col-md-10" >
