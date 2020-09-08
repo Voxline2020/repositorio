@@ -584,14 +584,62 @@ pre code {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
-  margin-left: auto;
+  margin-left: auto;  
+
 }
+
+.clientcontainer {
+
+  margin-top: -8.2px;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;  
+}
+
+.clientcontainer2{
+   margin-right: 10px;
+}
+
+
+.lateralcontainer{
+  width: 100%;
+  padding-left: 0px;
+  margin-right: 0;
+  margin-left: 0;
+  background-color: #353535;  
+}
+
+.lateralcontainer hr{
+  background-color: #eb6424;
+}
+
+.lateralcontainer ul{
+  list-style: none; /* Remove default bullets */
+}
+
+.lateralcontainer ul li::before {
+  content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+  color: #eb6424; /* Change the color */
+  font-weight: bold; /* If you want it to be bold */
+  display: inline-block; /* Needed to add space between the bullet and the text */
+  width: 1em; /* Also needed for space (tweak if needed) */
+  margin-left: -1em; /* Also needed for space (tweak if needed) */
+}
+
+.lateralcontainer a{
+  color : white;
+}
+
 
 @media (min-width: 576px) {
   .container {
     max-width: 540px;
   }
 }
+
+
 
 @media (min-width: 768px) {
   .container {
@@ -604,6 +652,7 @@ pre code {
     max-width: 960px;
   }
 }
+
 
 @media (min-width: 1200px) {
   .container {
@@ -624,6 +673,14 @@ pre code {
   flex-wrap: wrap;
   margin-right: -15px;
   margin-left: -15px;
+}
+
+.row2 {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 0px;
+  margin-left: 0px;  
 }
 
 .no-gutters {
@@ -4352,6 +4409,11 @@ input[type=button].btn-block {
   justify-content: space-between;
   padding: 0.5rem 1rem;
 }
+
+.navbar a{
+  color: #f4fbfb;
+}
+
 
 .navbar > .container,
 .navbar > .container-fluid {

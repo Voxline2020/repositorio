@@ -1,0 +1,116 @@
+.optionEvent{
+  column : red;
+}
+
+.btnoutlineorange {
+  border-radius: 5px;
+  border: 1px solid ;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: none;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-color: #ec6424;
+  color: #ec6424;  
+}
+
+.btnoutlineorange:hover {
+  background: #ec6424;
+  color: white;
+}
+
+
+#spanname{
+  color: white;
+}
+
+
+#tableorange{
+  background-color: #ec6424;      
+  color: white;
+}
+
+#btndark{
+    background-color: #353535;
+    color : white;
+}
+
+#btnorange{
+  background-color: #e26328;
+  color : white;
+}
+
+#tdbtneye{
+  text-align: right !important;
+}
+
+#mensaje{
+    margin-left: 270px;
+    width: 79%;
+}
+
+#titulo{
+    margin-left: 270px;    
+}
+
+.drop_zone{
+    margin-left: 270px;
+    width: 79%;
+    position: block;    
+}
+
+
+#contenedor_ajax{
+  position: block;
+  width: 79%;
+  margin-left: 273px; 
+  display: inline-block;  
+  height: 480px;
+  overflow-y: scroll;
+}
+
+#device{    
+    border-radius: 15px;
+    background: #353535;
+    padding: 20px;
+    margin-top: 10px;
+    display: inline-block;
+    position: flex;
+    float : left;
+    margin-left: 10px
+}
+
+#info_device{
+  margin-left: 20px;
+  color: white;
+}
+
+
+#device td{
+  text-align: left;
+}
+
+.response-container{
+  position: absolute;
+  margin-left: 270px;
+}
+.
+
+.contenedor-modal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.contenedor-modal button {
+  position: relative;
+  top: 40%;
+}
+
+.contenido{
+	background-color: blue;
+	display: inline;
+}
+
