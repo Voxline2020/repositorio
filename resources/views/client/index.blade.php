@@ -1,4 +1,4 @@
-@extends('layouts.principalmenu')
+@extends('layouts.principal')
 
 @section('content')
 @php
