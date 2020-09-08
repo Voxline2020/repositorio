@@ -1,5 +1,5 @@
 @auth
-<nav class="navbar navbar-expand-lg navbar-dark grey darken-2 mb-2">
+<nav class="navbar navbar-expand-lg mb-2" style="background-color: #353535" >
 	<a class="navbar-brand" href="{{ route('dash') }}">
 		<img src="{{ asset('assets/logo.png') }}" alt="" height="40" width="auto">
 	</a>
@@ -68,7 +68,7 @@
 			@endif
 			<div class="nav-item dropdown">
 				<button class="btn nav-link dropdown-toggle" data-toggle="dropdown" >
-					<span class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
+					<span id="spanname" class="hidden-xs">{{Auth::User()->name.' '.Auth::User()->lastname}}</span>
 					<img src="{{ asset('assets/user.png') }}" width="25" height="25" class="rounded-circle">
 				</button>
 				<div class="dropdown-menu">
