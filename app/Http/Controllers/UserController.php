@@ -181,7 +181,13 @@ class UserController extends AppBaseController
       return redirect(route('users.index'));
     }
 
-    $user = $this->userRepository->update($request->all(), $id);
+    //capturamos el request
+	$request = $request->all();
+	//encriptamos la pasword
+	$request['password'] = Hash::make($request['password']);
+
+    //agregar codigo brandom merge
+    $user = $this->userRepository->update($request, $id);
 
     Flash::success('Usuario Actualizado.');
 

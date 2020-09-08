@@ -246,7 +246,11 @@
 		  		 		 event_id = buscar[3];
 
 					 	console.log("encontro");
+<<<<<<< HEAD
 					 	console.log("event_id");
+=======
+					 	console.log(event_id);
+>>>>>>> arreglo2
 					 		alert("Selecciono un evento existente.");
 					 		
 					 		//le asignamos los valores del evento al formulario

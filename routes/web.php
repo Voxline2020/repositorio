@@ -260,7 +260,17 @@ Route::get('pdf/{id}','ReportController@generate')->name('pdf.generate');
 //SECTION Generar PDF de ??
 Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent');
 
+<<<<<<< HEAD
 //Route::get('clientStore','ClientStoreController@index');
 Route::post('/verScreens','ClientStoreController@funcionAjax');
 Route::post('/asignarContenido','ClientStoreController@guardarAsignar' ); 
 
+=======
+
+
+//Rutas nuevas de prueba gustavo
+//Route::get('clientStore','ClientStoreController@index');
+Route::post('/verScreens','ClientStoreController@funcionAjax');
+Route::post('/asignarContenido','ClientStoreController@guardarAsignar' );
+Route::get('vista','ClientStoreController@vista_previa' );
+>>>>>>> arreglo2

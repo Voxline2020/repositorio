@@ -152,8 +152,13 @@ class EventController extends Controller
 				// //validar si ya existe la resulcion y guardar
 				$content = Content::where('name',$name)->get();
 				$contentValidate = $content->count();
+<<<<<<< HEAD
         //anular la validacion
         $contentValidate = 0;
+=======
+				 //anular 
+				$contentValidate = 0;
+>>>>>>> arreglo2
 				if($contentValidate!=0){
 					Flash::error('Esta resolucion ya esta asignada al evento.');
 				}else{

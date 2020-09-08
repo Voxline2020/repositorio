@@ -39,10 +39,21 @@
 									<!--<input type="text" class="form-control" id="event_name" name = "event_name" required> -->
 
 									<input list="event_name" name="event_name" type="text"  id="list_events" autocomplete="off" required>
+<<<<<<< HEAD
 									<datalist id="event_name">										<?php foreach ($eventsmenu as $event): ?>
 											<option value="{{$event->name}}"></option>	
 									<?php endforeach ?>
 									    									    
+=======
+									<datalist id="event_name">											<?php foreach ($eventsmenu as $event): ?>
+											<?php if ($event->state == '1'): ?>
+												<option class="optionEvent" value="{{$event->name}}"></option>	
+											<?php else: ?>
+												<option value="{{$event->name}}"></option>	
+											<?php endif ?>
+												
+										<?php endforeach ?>
+>>>>>>> arreglo2
 									</datalist>
 								</div>
 								<div class="col-1">

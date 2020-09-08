@@ -74,7 +74,11 @@ class ClientStoreController extends Controller
 		$devices = DB::select( DB::raw("SELECT devices.  *,device_types.name AS tipo_pantalla FROM device_types , computers , devices WHERE computers.store_id = :idsuc && devices.deleted_at IS NULL  && devices.computer_id  = computers.id && devices.state = 1 && computers.deleted_at IS null && device_types.id = devices.type_id"),['idsuc' =>$idSucursal] );
 		 
 		 //eventos en la lista del modal
+<<<<<<< HEAD
 		 $events = DB::select( DB::raw("SELECT events.* FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
+=======
+		 $events = DB::select( DB::raw("SELECT events.*  FROM events WHERE  company_id = :cpid && deleted_at IS NULL "),['cpid' => $company_id] );
+>>>>>>> arreglo2
 
 		
 
@@ -96,6 +100,7 @@ class ClientStoreController extends Controller
 	public function guardarAsignar(Request $request)
 	{
 
+<<<<<<< HEAD
 		//bamos que el nombre del evento no este vacio
 		if($request->event_name != '')
 		{
@@ -104,6 +109,16 @@ class ClientStoreController extends Controller
 			{
 
 				//Comprobamos el largo del string fecha
+=======
+		//comprovamos que el nombre del evento no este vacio
+		if($request->event_name != '')
+		{
+			//comprovamos que las fechas no esten vacias
+			if($request->initdate != '' && $request->enddate != '' )
+			{
+
+				//Compravamos el largo del string fecha
+>>>>>>> arreglo2
 				$digitos = strlen($request->initdate);
 				
 				if($digitos == 19)
@@ -124,7 +139,11 @@ class ClientStoreController extends Controller
 					return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Ingrese un formato valido de fecha ');  
 				} 
 
+<<<<<<< HEAD
 				//comprobamos cuantos digitos trae la fecha
+=======
+				//comprovamos cuantos digitos trae la fecha
+>>>>>>> arreglo2
 				$digitos = strlen($request->enddate);
 				
 				if($digitos == 19)
@@ -144,10 +163,17 @@ class ClientStoreController extends Controller
 					return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Ingrese un formato valido de fecha ');  
 				} 
 				
+<<<<<<< HEAD
 				//comprobamos que la fecha de inicio sea menor que la de termino
 				if($initdate < $enddate){
 
 					//comprobamos se este cargando un archivo
+=======
+				//comprovamos que la fecha de inicio sea menor que la de termino
+				if($initdate < $enddate){
+
+					//comprovamos se este cargando un archivo
+>>>>>>> arreglo2
 					$file = $request->contenido;
 					if(!(is_null($file)))
 					{	
@@ -186,7 +212,11 @@ class ClientStoreController extends Controller
 							//
 							$content->mime = $mime;	
 
+<<<<<<< HEAD
 							//comprobamos que ningun campo del contenido este vacio exepto location que se obtiene al guardar el video
+=======
+							//comprovamos que ningun campo del contenido este vacio exepto location que se obtiene al guardar el video
+>>>>>>> arreglo2
 							if($content->filetype != '' && $content->user_id != '' && $content->size != '' && $content->width != '' && $content->height != '' && $content->duration != '' && $content->mime != '')
 								{
 									//extraemos los datos del request
@@ -197,7 +227,14 @@ class ClientStoreController extends Controller
 									//comprobamos que tenemos el device_id , el alto y ancho
 									if($device_id != '' && $device_width != '' && $device_height != '')
 									{
+<<<<<<< HEAD
 										//comprobamos las dimenciones de la pantalla con el video si las dimenciones del contenido son mayores que las dimensiones de la pantalla
+=======
+										//comprovamos las dimenciones de la pantalla con el video si las dimenciones del contenido son mayores que las dimensiones de la pantalla
+										
+										
+
+>>>>>>> arreglo2
 										if($content->height >= $device_height && $content->width >= $device_width)
 										{											
 											$company_id = Auth::user()->company_id;					
@@ -232,6 +269,7 @@ class ClientStoreController extends Controller
 											$content->slug = $slug;
 
 											
+<<<<<<< HEAD
 											//comprobamos los datos del objeto evento
 											if($evento->name != '' && $evento->initdate != '' && $evento->enddate != '' &&  $evento->slug != '' && $evento->company_id != '' ){
 
@@ -260,6 +298,36 @@ class ClientStoreController extends Controller
 															
 													
 												//}//fin comprobar evento = resolucion
+=======
+											//comprovamos los datos del objeto evento
+											if($evento->name != '' && $evento->initdate != '' && $evento->enddate != '' &&  $evento->slug != '' && $evento->company_id != '' ){
+
+												//comprovamos que el archivo se suba al servidor antes de crear el nuevo evento al cual estara asociado el contenido 
+												//comprovamos que exista el contenido
+												if($request->file('contenido') == '')
+												{
+													return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No existe el video ???  ');  
+												}
+
+												//comprovamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
+												//comprovamos si es un evento existente
+											/*	if(!(is_null($request->event_id)) )
+												{
+													
+													//si el evento existe traemos los contenidos asociados al evento
+													$contents = Content::where('event_id',$request->event_id)->get();
+
+													/*foreach ($contents as $comparecontent) {
+														if(($comparecontent->height == $height ) && ($comparecontent->width == $width))
+														{
+															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
+														}
+																			
+													}//fin foreach */
+															
+													
+												//}//fin comprovar evento = resolucion 
+>>>>>>> arreglo2
 
 
 												//cargamos el video al servido y obtenemos la location	
@@ -355,6 +423,7 @@ class ClientStoreController extends Controller
 													}else
 													{
 														return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se encontro el ultimo evento guardado');  
+<<<<<<< HEAD
 													}//fin ar ultimo evento guardado
 											
 											}else
@@ -369,6 +438,22 @@ class ClientStoreController extends Controller
 									{
 										return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No selecciono una pantalla como llego hasta aca?  ');  
 									}//fin comprobar informacion del device
+=======
+													}//fin comprovar ultimo evento guardado
+											
+											}else
+											{
+												return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *Hubo un error al extraer la informacion el video  ');  
+											}//fin comprovar datos evento
+										}else
+										{
+											return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No se permite cargar un video de menor resolucion que la pantalla  ');  
+										}//fin comprovar tamaño video >= tamaño pantalla
+									}else
+									{
+										return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No selecciono una pantalla como llego hasta aca?  ');  
+									}//fin comprovar informacion del device
+>>>>>>> arreglo2
 									
 									
 								}else

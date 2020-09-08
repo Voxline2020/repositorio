@@ -26,12 +26,21 @@
 			
 			
 				{{-- <div class="col-sm-12 col-md-6">
+<<<<<<< HEAD
 					<h4>Estado Reproductore</h4>
 					<div id="chart_div" style="width:650; height:500"></div>
 				</div>    --}}
 
 				<div class="col-sm-12 col-md-6">
 					<h4 class=font-weight-bold> Bienvenido{{ Auth::user()->name }} </h4>			
+=======
+					<h4>Estado Reproductores</h4>
+					<div id="chart_div" style="width:650; height:500"></div>
+				</div> --}}
+
+				<div class="col-sm-12 col-md-6">
+					<h4 class=font-weight-bold> Bienvenido {{ Auth::user()->name }} </h4>			
+>>>>>>> arreglo2
 				</div>
 				<div class="col-sm-12 col-md-6">
 					<h4 class=font-weight-bold> Fecha: {{$mytime->toDateTimeString()}} </h4>
