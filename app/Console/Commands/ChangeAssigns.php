@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Event;
 use App\Models\EventAssignation;
 use App\Models\Screen;
+use App\Models\Device;
 
 class ChangeAssigns extends Command
 {
