@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Event;
 use App\Models\EventAssignation;
 use App\Models\Screen;
+use App\Models\Device;
 
 class ChangeAssigns extends Command
 {
@@ -48,8 +49,9 @@ class ChangeAssigns extends Command
 						if($assignation->content_id==$content->id){
 							if($assignation->state!=$content->event->state){
 								$assignation->state = $content->event->state;
-								$assignation->save();
-								$device = Device::find($assignation->screen_id);
+                                $assignation->save();
+                                 //cambiar screen por device 
+								$device = Device::find($assignation->device_id);
 								$device->version = $device->version+1;
 								$device->save();
 							}
