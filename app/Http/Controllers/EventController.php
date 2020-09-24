@@ -132,9 +132,12 @@ class EventController extends Controller
 				$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
 				$slug = Str::slug($name);
 
-        Log::debug('Antes de guardar');
+        Log::debug('Antes de guardar : '. $event->slug . "/" . $name );        
+
 				//Guardar archivos
         $path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
+
+
         Log::debug('Despues de guardar');
 
 				$request->merge([
@@ -163,6 +166,7 @@ class EventController extends Controller
 				if($contentValidate!=0){
 					Flash::error('Esta resolucion ya esta asignada al evento.');
 				}else{
+          Log::debug('Guardado en la base de datos');
 					$this->contentRepository->create($input);
 				}
 			}
