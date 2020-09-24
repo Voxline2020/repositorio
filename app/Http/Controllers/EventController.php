@@ -101,7 +101,7 @@ class EventController extends Controller
 
   public function fileStore(Request $request)
   {
-    console.log("DEBUG : en el filestore");
+    dd("DEBUG : en el filestore");
     $files = $request->file('file');
 
     $event = null;
