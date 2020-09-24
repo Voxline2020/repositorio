@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str as Str;
 use Response;
+use Illuminate\Support\Facades\Log;
 
 class EventController extends Controller
 {
@@ -102,7 +103,7 @@ class EventController extends Controller
   public function fileStore(Request $request)
   {
     //dd("DEBUG : en el filestore");
-    Log::debug('An informational message.');
+    Log::debug('En el fileStore.');
     $files = $request->file('file');
 
     $event = null;
@@ -112,6 +113,7 @@ class EventController extends Controller
       return response('Evento no existe o el id es incorrecto', 404)->header('Content-Type', 'text/plain');
 		}
 		if ($request->hasFile('file')) {
+      Log::debug('En el if');
 			//Rescata valores de los archivos subidos
 			foreach ($files as $file) {
 				//Analizar Video
