@@ -132,8 +132,10 @@ class EventController extends Controller
 				$original_name = Str::slug($event->slug . '_' . $width . 'x' . $height);
 				$slug = Str::slug($name);
 
+        Log::debug('Antes de guardar');
 				//Guardar archivos
-				$path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
+        $path = Storage::disk('videos')->put($event->slug . "/" . $name, $file);
+        Log::debug('Despues de guardar');
 
 				$request->merge([
 					'user_id' => $user_id,
