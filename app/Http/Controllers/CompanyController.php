@@ -1001,6 +1001,10 @@ class CompanyController extends AppBaseController
 			$objs->save();
 		}
 		$objIni->save();
+			//cambiamos version en pantalla
+			$device=Device::find($request->device_id);
+			$device->version = $device->version+1;
+			$device->save();
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
