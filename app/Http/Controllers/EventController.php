@@ -102,7 +102,6 @@ class EventController extends Controller
 
   public function fileStore(Request $request)
   {
-    //dd("DEBUG : en el filestore");
     Log::debug('En el fileStore.');
     $files = $request->file('file');
 

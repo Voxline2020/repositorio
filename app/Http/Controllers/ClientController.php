@@ -19,6 +19,8 @@ use Carbon\Carbon;
 use Flash;
 use Response;
 
+use Illuminate\Support\Facades\Log;
+
 class ClientController extends Controller
 {
     	/** @var  EventRepository */
@@ -32,6 +34,7 @@ class ClientController extends Controller
 	//mostrar compañias
 	public function index(Request $request)
 	{
+		Log::debug('En el index.');
 		$events = Event::where('company_id', Auth::user()->company_id);
 		$stores = Store::where('company_id', Auth::user()->company_id)->get();
 		$eventsmenu = $events->get();
