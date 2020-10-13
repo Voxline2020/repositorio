@@ -553,12 +553,14 @@ class ClientController extends Controller
 			Flash::error('La nueva posicion no puede ser igual a la actual.');
 			return redirect(url()->previous());
 		}
+		
+		/* Gustavo Desactivar esta validacion 
 		//si la nueva posicion excede el rango de elementos
 		$countObjs = EventAssignation::where('device_id',$device->id)->get();
 		if ($countObjs->count() < $request->neworder) {
 			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
 			return redirect(url()->previous());
-		}
+		}*/
 		//si la nueva posicion es menor de 1
 		if ($request->neworder < 1) {
 			Flash::error('La nueva posicion no puede ser menor que el primer elemento.');
@@ -599,10 +601,22 @@ class ClientController extends Controller
 		//$device->version = $device->version + 1;
 		//$device->save();
 
-
-
-
-
+		//Gustavo
+		$ordereventlist = EventAssignation::join("devices" , 'event_assignations.device_id' , '=' , "devices.id")
+							->where("devices.id" , "=",  $device->id)
+							->select("event_assignations.id" , "event_assignations.order", "devices.id as deviceId")
+							->orderBy('order', 'ASC')
+							->get();
+		$contadorOrden = 1;
+		//dd($ordereventlist);
+		foreach($ordereventlist as $event )
+		{
+			//$dbevent = EventAssignation::first();
+			
+			$event->order = $contadorOrden;
+			$event->save();
+			$contadorOrden =  $contadorOrden + 1 ;
+		}
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
