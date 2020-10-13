@@ -485,7 +485,31 @@
 					}
 					
 	            });
-	        }
+			}
+
+			function versionMasUNo($idDevice){
+				console.log("+1 version");				
+				
+				$.ajax({
+					dataType: 'json',
+					type: "POST",
+				 url: "/versionMasUno",
+				 data: {
+					 "_token": $("meta[name='csrf-token']").attr("content"),
+					 "idDevice": $idDevice,
+				 },
+				 success: function(data) {
+					 location.reload();
+					 console.log('success');
+				 	},
+				 error: function () {
+					 console.log('en el error');	  
+				 }
+				 
+			 });
+			}
+			
+
 
 
 		

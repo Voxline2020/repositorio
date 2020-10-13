@@ -48,6 +48,25 @@ class ClientStoreController extends Controller
 		->with('events',$events);		
 
 	}
+
+	public function versionMasUno(Request $request)
+	{
+		$data = $request->getContent();
+		
+		$device = Device::where('id' ,$request->idDevice)->first();
+		$device->version = $device->version + 1;
+		$device->save();
+		
+
+		//$jsondata['data'] =  $data;	
+		$jsondata['sucess'] = "true";		 
+		$jsondata['idDevice'] = $request->idDevice;		 
+		$jsondata['device'] = $device;		 
+		
+
+		echo json_encode($jsondata);		 
+		exit();
+	}
  
 
 	//Funcion ajax por post cuando se hace clic en una sucursal
