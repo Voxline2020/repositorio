@@ -267,3 +267,4 @@ Route::get('pdf/','ReportController@generateContent')->name('pdf.generateContent
 Route::post('/verScreens','ClientStoreController@funcionAjax');
 Route::post('/asignarContenido','ClientStoreController@guardarAsignar' );
 Route::get('vista','ClientStoreController@vista_previa' );
+Route::post('/versionMasUno','ClientStoreController@versionMasUno');

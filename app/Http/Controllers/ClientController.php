@@ -415,9 +415,9 @@ class ClientController extends Controller
   {
     $assign->delete();
 		Flash::success('Evento desasignado.');
-		$device = Device::find($assign->device_id);
-		$device->version = $device->version+1;
-		$device->save();
+		//$device = Device::find($assign->device_id);
+		//$device->version = $device->version+1;
+		//$device->save();
     return redirect()->route('clients.show', ['id'=>$assign->device_id]);
 	}
 	public function filter_device(Company $company,Request $request)
@@ -520,8 +520,8 @@ class ClientController extends Controller
 				"content_id"=>$content->id,
 				"order"=>$count_assigns,
 				]);
-				$device->version=$device->version+1;
-				$device->save();
+				//$device->version=$device->version+1;
+				//$device->save();
 				$input = $request->all();
 				EventAssignation::create($input);
 			}
@@ -596,8 +596,13 @@ class ClientController extends Controller
 		}
 		$objIni->save();
 		//+1 a la version de la playlist
-		$device->version = $device->version + 1;
-		$device->save();
+		//$device->version = $device->version + 1;
+		//$device->save();
+
+
+
+
+
 		Flash::success('Cambio de orden realizado.');
 		return redirect(url()->previous());
 	}
@@ -612,8 +617,8 @@ class ClientController extends Controller
 		$input = $request->all();
 		//cambiamos version en pantalla
 		$device=Device::find($request->device_id);
-		$device->version = $device->version+1;
-		$device->save();
+		//$device->version = $device->version+1;
+		//$device->save();
 		//creamos el nuevo elemento clonado
 		EventAssignation::create($input);
 		Flash::success('Se ha clonado el elemento correctamente.');

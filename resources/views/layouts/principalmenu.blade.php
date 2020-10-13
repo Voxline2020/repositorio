@@ -42,6 +42,8 @@
 	<script src="{{ asset('vendor/tempusdominus/js/tempusdominus-bootstrap-4.js')}}"></script>
 	<script src="{{ asset('vendor/moment/moment-with-locales.js')}}"></script>
 	<script src="{{ asset('vendor/jquery.datatable/js/jquery.dataTables.js')}}"></script>
+
+	<script src="{{ asset('js/clientStore.js') }}"></script> 
 	<!-- Languaje -->
 	<script>
 		$(function () {
