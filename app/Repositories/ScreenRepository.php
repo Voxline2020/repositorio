@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Screen;
+use App\Models\Device;
 use App\Repositories\BaseRepository;
 
 /**
@@ -38,6 +38,6 @@ class ScreenRepository extends BaseRepository
      **/
     public function model()
     {
-        return Screen::class;
+        return Device::class;
     }
 }
