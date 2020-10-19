@@ -196,9 +196,16 @@
 			 	seleccionarDevice($device_id , $width , $height);
 			}
 
-			function openScreenShot()
+			function openScreenShot($device_name, $device_id, $width , $height, $screens)
 			{
-				console.log("hellow");
+				console.log("hellow : "+$device_name);
+				$('#screenshot_device_id').val($device_id);
+				$('#screenshot_device_name').val($device_name);
+				$('#modalScreenShotTitle').html(""+$device_name+"")
+				$('#screenshoot').width(800);
+				$('#height').height(800);
+
+				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png");
 				$('#modalScreenShot').modal('show');										
 			}
 					
@@ -379,7 +386,8 @@
 					    }
 					    var resolucion = ""+value.width+" x "+value.height
 					    var state = value.state;	                    
-					    var device_id = value.id;
+						var device_id = value.id;
+						var device_name = value.name;
 					    var state = "inactivo";
 					    if(value.state == '1')
 					    {
@@ -391,7 +399,7 @@
 						     	output2 +='<tr onclick="openModal('+device_id+','+width+','+height+');">';
 						      		output2 +='<td>';
 										   //output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
-										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
+										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'" id="screen'+device_id+'">';
 						      		output2 +='</td>';
 						      		output2 +='<td>';
 						       			output2 +='<table id = "info_device">';
@@ -444,7 +452,7 @@
 						            	output2 +='<td>';
 						            	output2 +='</td>';
 										output2 +='<td id="tdbtneye">';
-											output2 += '<a href="#" onclick="openScreenShot()" id="btnsearch" class="btn btn-xxs primary"><i class="fas fa-search"></i></a>' ;
+											output2 += "<a href='#' onclick='openScreenShot(\""+ device_name + "\","+device_id+","+width+","+height+")' id='btnsearch' class='btn btn-xxs primary'><i class='fas fa-search'></i></a>" ;
 											output2 += '&nbsp;&nbsp;' ;											
 						            		output2 += '<a href="clients/device/'+value.id+'" id="btnorange" class="btn btn-xxs"><i class="fas fa-eye"></i></a>' ;
 						            	output2 +='</td>';
@@ -469,6 +477,11 @@
 					  	btn_back  = document.getElementById("btnback");
 						  if (btn_back.style.display === "none") {
 						    btn_back.style.display = "block";
+						  } 
+
+						  btnRefresh  = document.getElementById("btnRefresh");
+						  if (btnRefresh.style.display === "none") {
+						    btnRefresh.style.display = "block";
 						  } 
 					  	$("#devices").html(output2);
 
@@ -516,6 +529,12 @@
 				 }
 				 
 			 });
+			}
+
+			function actualizarSreenShots()
+			{
+				
+				console.log("hellow");
 			}
 			
 
