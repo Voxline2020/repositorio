@@ -384,7 +384,8 @@
 						    output2 +='<table>';
 						     	output2 +='<tr onclick="openModal('+device_id+','+width+','+height+');">';
 						      		output2 +='<td>';
-						       			output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
+										   //output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
+										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
 						      		output2 +='</td>';
 						      		output2 +='<td>';
 						       			output2 +='<table id = "info_device">';
