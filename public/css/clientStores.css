@@ -45,6 +45,12 @@
   text-align: right !important;
 }
 
+#btnsearch{
+  text-align: right !important;
+  background-color: darkorange !important;
+  color : black
+}
+
 #mensaje{
     margin-left: 270px;
     width: 79%;

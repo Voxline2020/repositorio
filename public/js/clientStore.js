@@ -195,6 +195,12 @@
 				$('#miModal').modal('show');										
 			 	seleccionarDevice($device_id , $width , $height);
 			}
+
+			function openScreenShot()
+			{
+				console.log("hellow");
+				$('#modalScreenShot').modal('show');										
+			}
 					
 			//agrega contenido a los inputs ocultos en el modal;
 			function seleccionarDevice($device_id , $width , $height)
@@ -437,7 +443,9 @@
 						            output2 +='<tr>';
 						            	output2 +='<td>';
 						            	output2 +='</td>';
-						            	output2 +='<td id="tdbtneye">';
+										output2 +='<td id="tdbtneye">';
+											output2 += '<a href="#" onclick="openScreenShot()" id="btnsearch" class="btn btn-xxs primary"><i class="fas fa-search"></i></a>' ;
+											output2 += '&nbsp;&nbsp;' ;											
 						            		output2 += '<a href="clients/device/'+value.id+'" id="btnorange" class="btn btn-xxs"><i class="fas fa-eye"></i></a>' ;
 						            	output2 +='</td>';
 						            output2 +='</tr>';
