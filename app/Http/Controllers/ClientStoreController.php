@@ -27,7 +27,7 @@ class ClientStoreController extends Controller
 	//funcion encargada de verificar que el usuario este autenticado.
 	public function __construct(EventRepository $eventRepo)
 	{
-		$this->middleware('auth');
+		$this->middleware('auth')->except(['upScreenShotApi']);;
 		$this->eventRepository = $eventRepo;
 	}
 	
