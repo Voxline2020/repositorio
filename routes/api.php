@@ -34,6 +34,10 @@ Route::middleware('api')->put('devices/{code}/put','ScreenController@apiPut')->n
 Route::middleware('api')->post('devices/{code}','ScreenController@apiPost')->name('api.device.post');
 Route::middleware('api')->delete('devices/{code}/','ScreenController@apiPost')->name('api.device.post');
 
+//Gustavo
+Route::middleware('api')->post('upScreenShotCms', 'ClientStoreController@upScreenShotApi');
+
+
 
 
 

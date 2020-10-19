@@ -425,5 +425,47 @@ class ClientStoreController extends Controller
 		
 	} //Final guardar asignar
 
+	public function upScreenShotApi(Request $request)
+	{
+		
+		//validacion del contenido del request
+		$validator = Validator::make($request->all(), 
+              [ 
+              //'user_id' => 'required',
+			  //'file' => 'required|mimes:png,jpg,jpg|max:2048',
+			  'file' => 'required',
+			  ]);   
+			
+			
+			
+			 //si la validacion tiene fallos
+			if ($validator->fails()) {          
+				return response()->json(['error'=>$validator->errors()], 401);                        
+			}  
+
+			
+			 //string del array byte codificado en base 64 de la imagen
+			 $stringCapturaBase64 =  $request->file;	
+			 //Correcciones al string		
+			 $stringCapturaBase64 = str_replace('data:image/png;base64,', '', $stringCapturaBase64); 
+			 $stringCapturaBase64 = str_replace(' ', '+', $stringCapturaBase64);
+
+			 //Nombre del archivo
+			 $imageName = "prueba" . '.png';
+
+			 //decodificar el string para crear la imagen
+			 $byteMapCaptura = base64_decode($stringCapturaBase64);
+			 
+			 //Guarda la imagen
+			 $file = Storage::disk('capturas')->put("p".$request->iddevice."screenshot.png", $byteMapCaptura);
+			
+			 //Respuesta
+				return response()->json([
+					"success" => true,
+					"message" => "File successfully uploaded",
+					"file" => $file
+				]);
+	} //fin function upScreenShotApi
+
 
 }

@@ -60,7 +60,14 @@ return [
 						'root' => storage_path('app/videos'),
 						'url' => env('APP_URL').'/storage',
 						'visibility' => 'public',
-				],
+                ],
+                
+                'capturas' => [
+                    'driver' => 'local',
+                    'root' => storage_path('app/public/capturas'),
+                    'url' => env('APP_URL').'/storage',
+                    'visibility' => 'public',
+            ],
 
         's3' => [
             'driver' => 's3',
