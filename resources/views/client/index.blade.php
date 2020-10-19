@@ -17,7 +17,7 @@
 					<div id="titulo" style="margin-left : 0px "> </div>		
 				</div>
 				<div class= "col-sm-6 col-md-2" >					
-					<a  style="text-decoration:none; display: none;" id="btnRefresh" type="button"  class="btnoutlineorange" href="#" onclick="actualizarSreenShots()">refrescar</a>
+					<a  style="text-decoration:none; display: none;" id="btnRefresh" type="button"  class="btnoutlineorange" href="#" onclick="actualizarSreenShots(751)">refrescar</a>
 				</div>
 				<div class= "col-sm-6 col-md-2" >					
 					<a  style="text-decoration:none; display: none;" id="btnback" type="button"  class="btnoutlineorange" href="/clients ">Atras</a>

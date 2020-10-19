@@ -399,7 +399,7 @@
 						     	output2 +='<tr onclick="openModal('+device_id+','+width+','+height+');">';
 						      		output2 +='<td>';
 										   //output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
-										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'" id="screen'+device_id+'">';
+										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'" id="screen'+device_id+'">';										   
 						      		output2 +='</td>';
 						      		output2 +='<td>';
 						       			output2 +='<table id = "info_device">';
@@ -531,10 +531,30 @@
 			 });
 			}
 
-			function actualizarSreenShots()
+			function actualizarSreenShots($idDevice)
 			{
+				$.ajax({
+					dataType: 'json',
+					type: "POST",
+				 url: "/reloadScreenShots",
+				 data: {
+					 "_token": $("meta[name='csrf-token']").attr("content"),
+					 "idDevice": $idDevice,
+				 },
+				 success: function(data) {
+					 
+					 console.log(data);
+					 
+					 $('#screen751').attr("src","storage/capturas/p"+$idDevice+"screenshot.png?t="+ new Date().getTime());
+					 console.log('success');
+				 	},
+				 error: function () {
+					 console.log('en el error');	  
+				 }
+				 
+			 	});
 				console.log("hellow");
-				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
+				
 				
 			}
 

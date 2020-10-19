@@ -268,3 +268,4 @@ Route::post('/verScreens','ClientStoreController@funcionAjax');
 Route::post('/asignarContenido','ClientStoreController@guardarAsignar' );
 Route::get('vista','ClientStoreController@vista_previa' );
 Route::post('/versionMasUno','ClientStoreController@versionMasUno');
+Route::post('/reloadScreenShots','ClientStoreController@reloadScreenShots');

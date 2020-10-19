@@ -469,5 +469,17 @@ class ClientStoreController extends Controller
 				]);
 	} //fin function upScreenShotApi
 
+	public function reloadScreenShots(Request $request)
+	{
+		$data = $request->getContent();
+		
+		 //generando el array json		
+		 $jsondata['sucess'] = "true";		 		 
+		 
+		 //retornamos la informacion en un json  con un echo
+		 echo json_encode($jsondata);		 
+		 exit();
+	}
+
 
 }
