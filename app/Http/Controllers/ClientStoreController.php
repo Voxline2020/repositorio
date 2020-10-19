@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Flash;
 use Response;
 use Illuminate\Support\Facades\Log;
+use Validator;
 
 class ClientStoreController extends Controller
 {
