@@ -205,7 +205,7 @@
 				$('#screenshoot').width(800);
 				$('#height').height(800);
 
-				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png");
+				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
 				$('#modalScreenShot').modal('show');										
 			}
 					
@@ -533,9 +533,11 @@
 
 			function actualizarSreenShots()
 			{
-				
 				console.log("hellow");
+				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
+				
 			}
+
 			
 
 
