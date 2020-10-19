@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Flash;
 use Response;
+use Illuminate\Support\Facades\Log;
 
 class ClientStoreController extends Controller
 {
@@ -427,7 +428,7 @@ class ClientStoreController extends Controller
 
 	public function upScreenShotApi(Request $request)
 	{
-		
+		Log::debug('En el upscreenApi');		
 		//validacion del contenido del request
 		$validator = Validator::make($request->all(), 
               [ 
