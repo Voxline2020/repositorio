@@ -545,7 +545,7 @@
 					 
 					 console.log(data);
 					 
-					 $('#screen751').attr("src","storage/capturas/p"+$idDevice+"screenshot.png?t="+ new Date().getTime());
+					 $('#screen910').attr("src","storage/capturas/p"+$idDevice+"screenshot.png?t="+ new Date().getTime());
 					 console.log('success');
 				 	},
 				 error: function () {
