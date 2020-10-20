@@ -531,7 +531,7 @@
 			 });
 			}
 
-			function actualizarSreenShots($idDevice)
+			function actualizarSreenShots()
 			{
 				$.ajax({
 					dataType: 'json',
@@ -539,13 +539,23 @@
 				 url: "/reloadScreenShots",
 				 data: {
 					 "_token": $("meta[name='csrf-token']").attr("content"),
-					 "idDevice": $idDevice,
+					 //"idDevice": $idDevice,
 				 },
 				 success: function(data) {
 					 
-					 console.log(data);
-					 
-					 $('#screen910').attr("src","storage/capturas/p"+$idDevice+"screenshot.png?t="+ new Date().getTime());
+					 //console.log(data['devices']);
+
+					 //obtenemos las pantallas desde el controlador
+					 $devices = data['devices']
+
+					 //recorremos las pantallas
+					 $.each($devices, function( index, device ) {
+						 //insertamos la imagen en cada panalla modificando el atributo src
+						$('#screen'+device['id']+'').attr("src","storage/capturas/p"+device['id']+"screenshot.png?t="+ new Date().getTime());
+
+						//console.log('#screen'+device['id']+'');
+					  });
+					 	
 					 console.log('success');
 				 	},
 				 error: function () {
@@ -553,7 +563,7 @@
 				 }
 				 
 			 	});
-				console.log("hellow");
+				//console.log("hellow");
 				
 				
 			}

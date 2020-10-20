@@ -80,6 +80,7 @@ class ClientStoreController extends Controller
 		 //Rescatamos la id de sucursal enviado por ajax
 		 $idSucursal = $request->idStore;
 
+		 session(['idStore' => $idSucursal]);		 
 		 //rescatamos la tienda asociado al id extraido
 		 $store = Store::where('id', $idSucursal)->first();
 
@@ -103,7 +104,7 @@ class ClientStoreController extends Controller
 		 $jsondata['sucess'] = "true";		 
 		 $jsondata['devices'] = $devices;
 		 $jsondata['sucursal'] = $nombreSucrusal;		 
-		 $jsondata['events'] = $events;		 		 
+		 $jsondata['events'] = $events;		 	
 		 
 		 //retornamos la informacion en un json  con un echo
 		 echo json_encode($jsondata);		 
@@ -471,14 +472,35 @@ class ClientStoreController extends Controller
 
 	public function reloadScreenShots(Request $request)
 	{
+
+		$idstore = $request->session()->get('idStore');
+
+		$devices = Device::join('computers','devices.computer_id','=','computers.id')
+								->where('computers.store_id' , '=', $idstore)
+								->where('devices.state' , '=','1')
+								->where('computers.deleted_at', '=' , null)
+								->where('devices.deleted_at', '=' , null)
+								->select('devices.id' , 'devices.name')
+								->get();
+
 		$data = $request->getContent();
+
+		
 		
 		 //generando el array json		
-		 $jsondata['sucess'] = "true";		 		 
+		 $jsondata['sucess'] = "true";	
+		 $jsondata['devices'] = $devices;	
+		 $jsondata['idStore'] = $idstore;		 		 
 		 
 		 //retornamos la informacion en un json  con un echo
 		 echo json_encode($jsondata);		 
 		 exit();
+
+	/*
+		 && computers.deleted_at IS NULL 
+		 
+		 && devices.deleted_At IS NULL 
+		 && devices.state = 1  */
 	}
 
 

@@ -18,6 +18,9 @@
                         <tr>
                             <td><img src="assets/pantalla.jpg" alt="Pantalla" id="screenshoot"></td>
                         </tr>
+                        <tr>
+                            <td> </td>
+                        </tr>
                     </table>
                         
                     
