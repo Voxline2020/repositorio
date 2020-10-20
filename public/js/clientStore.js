@@ -193,20 +193,34 @@
 				$('#textenddate').prop('readonly', false);
 				$("#event_id").val("");
 				$('#miModal').modal('show');										
-			 	seleccionarDevice($device_id , $width , $height);
+				 seleccionarDevice($device_id , $width , $height);
+				 
 			}
 
 			function openScreenShot($device_name, $device_id, $width , $height, $screens)
 			{
+				var modal = document.getElementById("modalScreenShot");
+				modal.style.display = "block";
+
+				var modalImg = document.getElementById("modalscreenshotimg");
+				modalImg.src = "storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime();
+
 				console.log("hellow : "+$device_name);
 				$('#screenshot_device_id').val($device_id);
 				$('#screenshot_device_name').val($device_name);
 				$('#modalScreenShotTitle').html(""+$device_name+"")
-				$('#screenshoot').width(800);
-				$('#height').height(800);
 
-				$('#screenshoot').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
-				$('#modalScreenShot').modal('show');										
+				$('#screenshoot').attr("src",);
+				//$('#modalScreenShot').modal('show');										
+			}
+
+			function closeScreenSHotModal()
+			{
+				var modal = document.getElementById("modalScreenShot");
+				modal.style.display = "none";
+
+				console.log("hellow close");
+													
 			}
 					
 			//agrega contenido a los inputs ocultos en el modal;
@@ -399,7 +413,7 @@
 						     	output2 +='<tr onclick="openModal('+device_id+','+width+','+height+');">';
 						      		output2 +='<td>';
 										   //output2 += '<img    src="assets/pantalla.jpg" alt="Pantalla" width="'+ancho+'" height="'+alto+'">';
-										   output2 += '<img   src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'" id="screen'+device_id+'">';										   
+										   output2 += '<img    src="storage/capturas/p'+device_id+'screenshot.png" alt="Pantalla" width="'+ancho+'" height="'+alto+'"  id="screen'+device_id+'">';										   
 						      		output2 +='</td>';
 						      		output2 +='<td>';
 						       			output2 +='<table id = "info_device">';
@@ -565,10 +579,9 @@
 			 	});
 				//console.log("hellow");
 				
-				
 			}
 
-			
+				
 
 
 
