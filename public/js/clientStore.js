@@ -585,9 +585,9 @@
 			
 
 			$(".refresh").click( function() {
-				var $device_id = $('modalscreenshot_device_id').val();
-
-				$('#modalscreenshotimg').attr("src","storage/capturas/p"+device_id+"screenshot.png?t="+ new Date().getTime());
+				var $device_id = $('#modalscreenshot_device_id').val();
+				console.log($device_id);
+				$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
 				console.log("hellow reload2 ")
 				
 			});
