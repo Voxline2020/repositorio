@@ -206,7 +206,7 @@
 				modalImg.src = "storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime();
 
 				console.log("hellow : "+$device_name);
-				$('#screenshot_device_id').val($device_id);
+				$('#modalscreenshot_device_id').val($device_id.toString());
 				$('#screenshot_device_name').val($device_name);
 				$('#modalScreenShotTitle').html(""+$device_name+"")
 
@@ -448,7 +448,7 @@
 						                    	output2 +='<td>';
 						                    		output2 += value.tipo_pantalla ;
 						                    	output2 +='</td>';
-						                    	output2 +='<tr>';
+						                    	output2 +='<tr>';7
 						                    		output2 +='<td></td>';					
 						                    		output2 +='<td></td>';					
 						                    	output2 +='</tr>';
@@ -581,6 +581,16 @@
 				//console.log("hellow");
 				
 			}
+
+			
+
+			$(".refresh").click( function() {
+				var $device_id = $('modalscreenshot_device_id').val();
+
+				$('#modalscreenshotimg').attr("src","storage/capturas/p"+device_id+"screenshot.png?t="+ new Date().getTime());
+				console.log("hellow reload2 ")
+				
+			});
 
 				
 

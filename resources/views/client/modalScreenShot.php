@@ -1,13 +1,20 @@
 <div id="modalScreenShot" class="modalScreenShot">
+	
+	<!-- The Close Button -->
+	
+  			<span onclick="closeScreenSHotModal()"  class="close">&times;</span>
+		
+  
 
-  <!-- The Close Button --><button onclick="closeScreenSHotModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-  						<span  class="close">&times;</span>
-		        	</button>
+<!-- The refresh Button -->
+			<span  onclick="refreshScreenSHotModal()" class="refresh">&#8635;</span>
+		
+		
   
 
   <!-- Modal Content (The Image) -->
   <img class="modal-contenido" id="modalscreenshotimg">
-
+  <input type="hidden"  class="form-control-file" id="modalscreenshot_device_id" name = "device_id">
   <!-- Modal Caption (Image Text) -->
   <div id="caption"></div>
 </div>
