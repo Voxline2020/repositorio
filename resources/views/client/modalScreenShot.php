@@ -7,7 +7,7 @@
   
 
 <!-- The refresh Button -->
-			<span  onclick="refreshScreenSHotModal()" class="refresh">&#8635;</span>
+			<span class="refresh">&#8635;</span>
 		
 		
   
