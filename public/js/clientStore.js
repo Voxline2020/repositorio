@@ -203,7 +203,10 @@
 				modal.style.display = "block";
 
 				var modalImg = document.getElementById("modalscreenshotimg");
-				modalImg.src = "storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime();
+				//modalImg.src = "storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime();
+				var random = Math.random();
+				modalImg.src = "storage/capturas/p"+$device_id+"screenshot.png?t="+ random.toString();
+				
 
 				console.log("hellow : "+$device_name);
 				$('#modalscreenshot_device_id').val($device_id.toString());
@@ -587,7 +590,9 @@
 			$(".refresh").click( function() {
 				var $device_id = $('#modalscreenshot_device_id').val();
 				console.log($device_id);
-				$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
+				var random = Math.random();
+				//$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
+				$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ random.toString());
 				console.log("hellow reload2 ")
 				
 			});
