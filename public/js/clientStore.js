@@ -561,10 +561,11 @@
 
 					 //obtenemos las pantallas desde el controlador
 					 $devices = data['devices']
-
+					 console.log(data);
 					 //recorremos las pantallas
 					 $.each($devices, function( index, device ) {
 						 //insertamos la imagen en cada panalla modificando el atributo src
+						 
 						$('#screen'+device['id']+'').attr("src","storage/capturas/p"+device['id']+"screenshot.png?t="+ new Date().getTime());
 
 						//console.log('#screen'+device['id']+'');

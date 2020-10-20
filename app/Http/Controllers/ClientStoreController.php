@@ -20,6 +20,7 @@ use Flash;
 use Response;
 use Illuminate\Support\Facades\Log;
 use Validator;
+use Session;
 
 class ClientStoreController extends Controller
 {
@@ -80,7 +81,10 @@ class ClientStoreController extends Controller
 		 //Rescatamos la id de sucursal enviado por ajax
 		 $idSucursal = $request->idStore;
 
-		 session(['idStore' => $idSucursal]);		 
+		//Guarda los los datos en la sesion
+		 session(['idStore' => $idSucursal]);		
+		 Session::save();
+		 
 		 //rescatamos la tienda asociado al id extraido
 		 $store = Store::where('id', $idSucursal)->first();
 
@@ -472,8 +476,9 @@ class ClientStoreController extends Controller
 
 	public function reloadScreenShots(Request $request)
 	{
-
 		$idstore = $request->session()->get('idStore');
+		//$sesiondata = $request->session()->all();
+		
 
 		$devices = Device::join('computers','devices.computer_id','=','computers.id')
 								->where('computers.store_id' , '=', $idstore)
@@ -483,14 +488,12 @@ class ClientStoreController extends Controller
 								->select('devices.id' , 'devices.name')
 								->get();
 
-		$data = $request->getContent();
-
+		$data = $request->getContent();				
 		
 		
 		 //generando el array json		
 		 $jsondata['sucess'] = "true";	
 		 $jsondata['devices'] = $devices;	
-		 $jsondata['idStore'] = $idstore;		 		 
 		 
 		 //retornamos la informacion en un json  con un echo
 		 echo json_encode($jsondata);		 
