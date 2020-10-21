@@ -616,7 +616,7 @@
 				$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ new Date().getTime());
 				//$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png"); 
 				//$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ random.toString());
-				//console.log("hellow reload2 ")
+				console.log("hellow reload2 ")
 				var boton = document.getElementById('btnRefreshModal');
 				
 				$(".refresh").unbind();
