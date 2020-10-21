@@ -443,8 +443,6 @@ class ClientStoreController extends Controller
 			  'file' => 'required',
 			  ]);   
 			
-			
-			
 			 //si la validacion tiene fallos
 			if ($validator->fails()) {          
 				return response()->json(['error'=>$validator->errors()], 401);                        

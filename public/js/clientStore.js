@@ -549,6 +549,13 @@
 			 });
 			}
 
+			function actualizaScreenShot()
+			{
+				console.log("actualiza screen")
+				$("#btnRefresh").attr("onclick", "").unbind("click");					
+				actualizarSreenShots()
+			}
+
 			function actualizarSreenShots()
 			{
 				$.ajax({
@@ -560,6 +567,13 @@
 					 //"idDevice": $idDevice,
 				 },
 				 success: function(data) {
+					
+					
+						setTimeout(function(){
+							$("#btnRefresh").click(function(){
+								$("#btnRefresh").attr("onclick", "actualizaScreenShot()").bind("click");					
+							});
+						}, 1000)
 					 
 					 //console.log(data['devices']);
 
@@ -583,12 +597,19 @@
 				 
 			 	});
 				//console.log("hellow");
+
+				
 				
 			}
 
 			
+			$(".refresh").click(function(){
+				 
+				refreshScreenShotModal();
+				
+			});
 
-			$(".refresh").click( function() {
+			function refreshScreenShotModal() {
 				var $device_id = $('#modalscreenshot_device_id').val();
 				console.log($device_id);
 				//var random = Math.random() * (5 - 1) + 1;
@@ -596,8 +617,20 @@
 				//$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png"); 
 				//$('#modalscreenshotimg').attr("src","storage/capturas/p"+$device_id+"screenshot.png?t="+ random.toString());
 				console.log("hellow reload2 ")
+				var boton = document.getElementById('btnRefreshModal');
 				
-			});
+				$(".refresh").unbind();
+				setTimeout(function(){
+					$(".refresh").click(function(){
+						refreshScreenShotModal()
+					});
+				}, 3000)
+				
+			}
+
+			
+				
+			
 
 				
 

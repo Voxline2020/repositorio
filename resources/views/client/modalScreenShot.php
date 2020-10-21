@@ -7,7 +7,7 @@
   
 
 <!-- The refresh Button -->
-			<span class="refresh">&#8635;</span>
+			<span class="refresh" id="btnRefreshModal">&#8635;</span>
 		
 		
   
