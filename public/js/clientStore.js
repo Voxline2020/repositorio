@@ -573,7 +573,7 @@
 							$("#btnRefresh").click(function(){
 								$("#btnRefresh").attr("onclick", "actualizaScreenShot()").bind("click");					
 							});
-						}, 1000)
+						}, 2000)
 					 
 					 //console.log(data['devices']);
 
