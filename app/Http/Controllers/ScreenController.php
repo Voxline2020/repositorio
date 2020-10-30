@@ -285,6 +285,11 @@ class ScreenController extends AppBaseController
 
   }
 
+  public function apiGetDeviceVersion(Request $request, $code, $key)
+	{
+    return "hello";
+  }
+
   public function apiIndex(Request $request)
   {
     $screens = Screen::all();

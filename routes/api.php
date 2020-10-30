@@ -36,6 +36,7 @@ Route::middleware('api')->delete('devices/{code}/','ScreenController@apiPost')->
 
 //Gustavo
 Route::middleware('api')->post('upScreenShotCms', 'ClientStoreController@upScreenShotApi');
+Route::middleware('api')->get('devices/{code}/{key}/','ScreenController@apiGetDeviceVersion');
 
 
 
