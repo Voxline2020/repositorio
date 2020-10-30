@@ -289,7 +289,7 @@ class ScreenController extends AppBaseController
 	{
     $device = Device::where('code' ,'=', $code);
     $jsonResponse = [];
-		$jsonResponse['device'] = $device->version;
+		$jsonResponse['version'] = json_encode($device);
     return response()->json($jsonResponse);
   }
 
