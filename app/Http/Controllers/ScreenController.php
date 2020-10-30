@@ -287,7 +287,8 @@ class ScreenController extends AppBaseController
 
   public function apiGetDeviceVersion(Request $request, $code, $key)
 	{
-    return "hello";
+    $device = Device::Find('code' ,'=', $code);
+    return $device;
   }
 
   public function apiIndex(Request $request)
