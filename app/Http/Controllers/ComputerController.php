@@ -185,7 +185,7 @@ class ComputerController extends AppBaseController
 				$jsonResponse['screens'][$key2]['type'] = $device->type->name;
 
 				//Realizar consulta por orden.
-				$aux_eventAssignations = $device->eventAssignations->where('state', 1);
+				$aux_eventAssignations = $device->eventAssignations->where('state', 1)->orderby('order' , 'desc');
 				if($device->id == 919)
 				{
 					return $aux_eventAssignations;
