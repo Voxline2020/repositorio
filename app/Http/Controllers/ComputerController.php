@@ -186,7 +186,7 @@ class ComputerController extends AppBaseController
 
 				//Realizar consulta por orden.
 				$aux_eventAssignations = $device->eventAssignations->where('state', 1);
-				
+				return $aux_eventAssignations;
 
 				$i = 0;
 				foreach ($aux_eventAssignations as $eventAsignation) {
