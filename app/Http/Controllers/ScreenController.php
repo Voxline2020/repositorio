@@ -312,7 +312,7 @@ class ScreenController extends AppBaseController
   public function apiView(Request $request, $code)
   {
 		$screen = Device::where('code', $code)->get()->first();
-		return json_encode(screen);
+		return json_encode($screen);
   }
 
 	public function apiPut(Request $request, $code)
