@@ -288,7 +288,9 @@ class ScreenController extends AppBaseController
   public function apiGetDeviceVersion(Request $request, $code, $key)
 	{
     $device = Device::where('code' ,'=', $code);
-    return $device;
+    $jsonResponse = [];
+		$jsonResponse['device'] = $device;
+    return response()->json($jsonResponse);
   }
 
   public function apiIndex(Request $request)
@@ -300,7 +302,7 @@ class ScreenController extends AppBaseController
   public function apiView(Request $request, $code)
   {
 		$screen = Device::where('code', $code)->get()->first();
-		return $screen;
+		return json_encode(screen);
   }
 
 	public function apiPut(Request $request, $code)
