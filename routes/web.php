@@ -272,4 +272,4 @@ Route::post('/reloadScreenShots','ClientStoreController@reloadScreenShots');
 
 
 //Reproductor
-Route::get('hola/{storeName}','ReproductorController@index' );
+Route::get('reproductor/{storeName}','ReproductorController@index' );

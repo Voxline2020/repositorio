@@ -1,14 +1,30 @@
-@extends('layouts.app')
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<!-- CSRF Token -->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-@section('content')
+	<title>Reproductor</title>
 
+	<!-- Scripts -->
+	<script src="{{ asset('js/app.js') }}" defer></script>
 
-<video width="800" height="600" id="videoplayer" controls loop >
+	<!-- Fonts -->
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+	<!-- Styles -->
+	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+<video id="videoplayer"  preload="auto" autoplay="autoplay"  width="100%" height="100%"  controls loop  muted autoplay>
     
     @foreach ($videos as $video)            
             <source src="/storage/{{$tienda}}/{{$video}}" type="video/mp4">  
-        @endforeach 
+        @endforeach
 
     Your browser does not support the video tag.
 
@@ -22,37 +38,40 @@
 <!-- <img  class="img-responsive img-rounded" src="/storage/imagen/pantalla.jpg" alt="User picture">	        	 -->
 
 
-@endsection
-
+</body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!--<script>
+<script>
     
-    window.onload = function () {
-        alert("cargado...");
-    }
+  /*window.onload = function ready() {
+    alert('DOM is ready');
 
-    $(document).ready(function(){
-        alert("cargado...2");
+    $("videoplayer").on("loadstart", function() {
+      alert("video");
+        console.log(3);
     });
+  };*/
 
-    var myvid = document.getElementById('videoplayer');
-    var myvids = [
-    "http://www.w3schools.com/html/mov_bbb.mp4", 
-    "http://www.w3schools.com/html/movie.mp4"
-    ];
+ /*var video = document.getElementById("videoplayer");
+        video.onloadeddata = function() {
+            alert("Browser has loaded the current frame");
+            
+            var promise = document.querySelector('#videoplayer').play();
+            
+            if (promise !== undefined) {
+            promise.then(_ => {
+                // Autoplay started!
+                console.log("start");
+            }).catch(error => {
+                // Autoplay was prevented.
+                // Show a "Play" button so that user can start playback.
+                console.log(error);
+            });
+            }
+        }; */
 
-    var activeVideo = 0;
+ 
 
-    
-    myvid.addEventListener('ended', function(e) {
-        console.log("add event 2");
-        // update the new active video index
-        activeVideo = (++activeVideo) % myvids.length;
+  //document.addEventListener("load", ready);
 
-        // update the video source and play
-        myvid.src = myvids[activeVideo];
-        myvid.play();
-        
-    });
-</script> -->
+
+</script> 
