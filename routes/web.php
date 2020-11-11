@@ -269,3 +269,7 @@ Route::post('/asignarContenido','ClientStoreController@guardarAsignar' );
 Route::get('vista','ClientStoreController@vista_previa' );
 Route::post('/versionMasUno','ClientStoreController@versionMasUno');
 Route::post('/reloadScreenShots','ClientStoreController@reloadScreenShots');
+
+
+//Reproductor
+Route::get('hola/{storeName}','ReproductorController@index' );
