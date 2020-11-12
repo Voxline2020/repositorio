@@ -27,4 +27,44 @@ class ReproductorController extends Controller
         return view('reproductor.index');
         
     }
+
+
+    
+	public function changueVideo(Request $request)
+	{
+        $data = $request->getContent();
+        $video_name = $request->video;
+        $tienda_name = $request->tienda;
+
+        $videos = scandir('storage/'.$tienda_name);
+        unset($videos[0]);
+        unset($videos[1]);
+
+            
+        
+        
+        //$videoNameNuevo = $videos[2];
+        if($video_name != $videos[2])
+        {
+            $success = "true"  ;
+        }else
+        {
+            $success = "false" ;
+        }
+
+		
+
+		//$jsondata['data'] =  $data;	
+        $jsondata['sucess'] = $success;		 
+        $jsondata['data'] = $data;
+        $jsondata['video_name'] = $video_name;
+        //$jsondata['video_name2'] = $videoNameNuevo;
+        $jsondata['tienda_name'] = $tienda_name;
+        $jsondata['videos'] = $videos;
+
+
+		echo json_encode($jsondata);		 
+		exit();
+	}
 }
+

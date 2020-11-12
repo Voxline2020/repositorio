@@ -273,3 +273,4 @@ Route::post('/reloadScreenShots','ClientStoreController@reloadScreenShots');
 
 //Reproductor
 Route::get('reproductor/{storeName}','ReproductorController@index' );
+Route::post('/versionMasUno','ReproductorController@changueVideo');

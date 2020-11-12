@@ -70,7 +70,7 @@ class ClientStoreController extends Controller
 		echo json_encode($jsondata);		 
 		exit();
 	}
- 
+ 7
 
 	//Funcion ajax por post cuando se hace clic en una sucursal
 	public function funcionajax(Request $request)

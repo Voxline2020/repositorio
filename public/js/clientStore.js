@@ -541,7 +541,7 @@
 				 success: function(data) {
 					 location.reload();
 					 console.log('success');
-				 	},
+					 console.log(data);				 	},
 				 error: function () {
 					 console.log('en el error');	  
 				 }
