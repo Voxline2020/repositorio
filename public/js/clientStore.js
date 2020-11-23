@@ -528,7 +528,7 @@
 	            });
 			}
 
-			function asd($idDevice){
+			function versionMasUno($idDevice){
 				console.log("+1 version");				
 				
 				$.ajax({
