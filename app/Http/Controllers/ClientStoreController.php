@@ -54,6 +54,7 @@ class ClientStoreController extends Controller
 
 	public function versionMasUno(Request $request)
 	{
+		
 		$data = $request->getContent();
 		
 		$device = Device::where('id' ,$request->idDevice)->first();
@@ -61,12 +62,13 @@ class ClientStoreController extends Controller
 		$device->save();
 		
 
-		//$jsondata['data'] =  $data;	
+		$jsondata['data'] =  $data;	
 		$jsondata['sucess'] = "true";		 
 		$jsondata['idDevice'] = $request->idDevice;		 
 		$jsondata['device'] = $device;		 
+		//$jsondata['control'] = $device;		 
 		
-
+		
 		echo json_encode($jsondata);		 
 		exit();
 	}

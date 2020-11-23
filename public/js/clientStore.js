@@ -522,13 +522,13 @@
 					},
 					error: function (xhr, status, error) {
 						var err = eval("(" + xhr.responseText + ")");
-						//console.log(xhr.responseText );
+						console.log(xhr.responseText );
 					}
 					
 	            });
 			}
 
-			function versionMasUNo($idDevice){
+			function versionMasUno($idDevice){
 				console.log("+1 version");				
 				
 				$.ajax({
@@ -545,6 +545,7 @@
 					 console.log(data);				 	},
 				 error: function () {
 					 console.log('en el error');	  
+					 
 				 }
 				 
 			 });

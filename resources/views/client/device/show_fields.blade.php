@@ -3,10 +3,10 @@
 	<h3>Eventos Actuales: ( {{ \Carbon\Carbon::parse($mytime)->format('d-m-Y')}} )</h3>
 </div>
 <div class="col-md-2.5">
-	<a href="#" onclick="versionMasUNo({{$device->id}})" id="btnSubirCambios" type="button" class="btn btn-warning w-100" >Subir cambios</a>
+	<a href="#" onclick="versionMasUno({{$device->id}})" id="btnSubirCambios" type="button" class="btn btn-warning w-100" >Subir cambios</a>
 </div>
 <div class="col-md-2">
-	<a href="#" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">Añadir
+	<a href="" type="button" class="btn btn-success w-100" data-toggle="modal" data-target="#assignEvent">Añadir
 		Evento</a>
 </div>
 <div class="col-md-1.5">
