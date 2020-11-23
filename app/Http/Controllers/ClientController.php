@@ -63,6 +63,7 @@ class ClientController extends Controller
 	}
 	public function show($id)
 	{
+		echo($id);
 		//fijamos el hoy
 		$today=date('Y-m-d H:i:s');
 		//filtramos la pantalla que queremos ver con el id
@@ -71,6 +72,7 @@ class ClientController extends Controller
 				$query->where('company_id', Auth::user()->company_id);
 			});
 		})->find($id);
+
 		//ahora buscamos los eventos compatibles con la pantalla
 		$contents = Content::whereHas('event', function ($query) use ($today) {
 			$query->where('company_id', Auth::user()->company_id)->where('enddate','>=',$today);

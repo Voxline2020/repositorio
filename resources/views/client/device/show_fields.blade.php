@@ -37,10 +37,14 @@
 				<td>{!! \Carbon\Carbon::parse($assign->content->event->enddate)->format('d-m-Y H:i') !!}</td>
 				<td>
 					<div class='btn-group'>
-						<a href="{!! route('clients.events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
-								class="fas fa-eye"></i></a>
+						{{ Form::open([ 'method' => '']) }}
+							<a href="{!! route('clients.events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
+									class="fas fa-eye"></i></a>
+						{!! Form::close() !!}
+						{{ Form::open([ 'method' => '']) }}
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
 						data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
+						{!! Form::close() !!}
 						{!! Form::model($device,['route' => ['clients.devices.cloneEvent'], 'method' => 'put']) !!}
 						{!! Form::hidden('content_id',$assign->content->id) !!}
 						{!! Form::hidden('device_id',$device->id) !!}

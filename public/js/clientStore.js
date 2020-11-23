@@ -520,8 +520,9 @@
 						console.log('en el success');
 						//alert(msg);
 					},
-					error: function () {
-						console.log('en el error');	  
+					error: function (xhr, status, error) {
+						var err = eval("(" + xhr.responseText + ")");
+						//console.log(xhr.responseText );
 					}
 					
 	            });
