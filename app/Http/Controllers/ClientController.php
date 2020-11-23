@@ -63,7 +63,7 @@ class ClientController extends Controller
 	}
 	public function show($id)
 	{
-		echo($id);
+		//echo($id);
 		//fijamos el hoy
 		$today=date('Y-m-d H:i:s');
 		//filtramos la pantalla que queremos ver con el id
