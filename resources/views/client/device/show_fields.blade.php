@@ -41,10 +41,12 @@
 							<a href="{!! route('clients.events.show', [ $assign->content->event->id]) !!}" class='btn btn-info'><i
 									class="fas fa-eye"></i></a>
 						{!! Form::close() !!}
+						&nbsp;
 						{{ Form::open([ 'method' => '']) }}
 						<a type="button" class="btn btn-info" data-toggle="modal" data-target="#changeOrder" data-id="{{$assign->id}}"
 						data-device="{{$device->id}}"><i class="fas fa-sync"></i></a>
 						{!! Form::close() !!}
+						&nbsp;
 						{!! Form::model($device,['route' => ['clients.devices.cloneEvent'], 'method' => 'put']) !!}
 						{!! Form::hidden('content_id',$assign->content->id) !!}
 						{!! Form::hidden('device_id',$device->id) !!}
@@ -53,6 +55,7 @@
 						{!! Form::hidden('state',$assign->state) !!}
 						<button type="submit" href="#" class="btn btn-info"><i class="fas fa-clone"></i></button>
 						{!! Form::close() !!}
+						&nbsp;
 						{{ Form::open(['route' => ['clients.events.destroyAssign',$assign], 'method' => 'delete']) }}
 						{!! Form::button('<i class="fas fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs',
 							'onclick' => "return confirm('¿Estas seguro que quieres eliminar?')"]) !!}

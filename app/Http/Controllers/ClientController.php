@@ -89,6 +89,8 @@ class ClientController extends Controller
 				 $query->where('enddate','>=',$today);
 			});
 		})->where('device_id',$id)->where('state',1)->orderBy('order','ASC')->orderBy('content_id','ASC')->paginate();
+
+	
 		//eventos asignados inactivos
 		$eventInactives = EventAssignation::whereHas('content', function ($query) use ($today) {
 			$query->whereHas('event', function ($query) use ($today) {
@@ -106,6 +108,8 @@ class ClientController extends Controller
 				$total += $parts[2] + $parts[1]*60 + $parts[0]*3600;
 		}
 		$totalduration = Carbon::parse($total)->format("H:i:s");
+
+		//dd($eventAssigns);
 		return view('client.device.show')
 		->with('device',$device)
 		->with('events', $events)
@@ -366,7 +370,10 @@ class ClientController extends Controller
 			}
 			$content->delete();
 		}
-    $event->delete();
+	$event->delete();
+	
+	
+
     Flash::success('Evento borrado.');
     return redirect(route('clients.events.index'));
 	}
@@ -415,11 +422,18 @@ class ClientController extends Controller
 	}
 	public function destroyEventAssign(EventAssignation $assign)
   {
-    $assign->delete();
+	$event_id = $assign->device_id; 	   
+	
+	$assign->delete();
+	$this->orderEvents($event_id);
+
 		Flash::success('Evento desasignado.');
 		//$device = Device::find($assign->device_id);
 		//$device->version = $device->version+1;
 		//$device->save();
+
+		
+
     return redirect()->route('clients.show', ['id'=>$assign->device_id]);
 	}
 	public function filter_device(Company $company,Request $request)
@@ -556,18 +570,22 @@ class ClientController extends Controller
 			return redirect(url()->previous());
 		}
 		
-		/* Gustavo Desactivar esta validacion 
+		/* Gustavo 
+		Desactivar esta validacion 
+
 		//si la nueva posicion excede el rango de elementos
 		$countObjs = EventAssignation::where('device_id',$device->id)->get();
 		if ($countObjs->count() < $request->neworder) {
 			Flash::error('La nueva posicion no puede ser mayor a la cantidad total de elementos.');
 			return redirect(url()->previous());
 		}*/
+
 		//si la nueva posicion es menor de 1
 		if ($request->neworder < 1) {
 			Flash::error('La nueva posicion no puede ser menor que el primer elemento.');
 			return redirect(url()->previous());
 		}
+
 		//llamado coleccion de objs intermedios
 		if($objIni->order < $request->neworder){
 			$listobjs = EventAssignation::where('device_id',$device->id)
@@ -584,6 +602,8 @@ class ClientController extends Controller
 			->where('state',1)
 			->get();
 		}
+
+	
 		//intercambio de orden y guardado
 		$order = $objIni->order;
 		$neworder = $request->neworder;
@@ -598,30 +618,75 @@ class ClientController extends Controller
 			}
 			$objs->save();
 		}
+		
 		$objIni->save();
+
+
 		//+1 a la version de la playlist
 		//$device->version = $device->version + 1;
 		//$device->save();
 
 		//Gustavo
-		$ordereventlist = EventAssignation::join("devices" , 'event_assignations.device_id' , '=' , "devices.id")
+		/*$ordereventlist = EventAssignation::join("devices" , 'event_assignations.device_id' , '=' , "devices.id")
 							->where("devices.id" , "=",  $device->id)
 							->select("event_assignations.id" , "event_assignations.order", "devices.id as deviceId")
 							->orderBy('order', 'ASC')
-							->get();
+							->get(); */
+
+		//Ordena  los eventos
+		$ordenar = $this->orderEvents($device->id);
+		if($ordenar)
+		{
+			Flash::success('Cambio de orden realizado.');
+			return redirect(url()->previous());
+		}else
+		{
+			Flash::error('Error con el cambio de orden.');
+			return redirect(url()->previous());
+		}
+		
+	}
+
+	private function orderEvents(int $device_id)
+	{
+		$ok = 0;
+		$ordeneventlist = EventAssignation::where('device_id',$device_id)
+		->orderby('order','ASC')
+		->where('state',1)
+		->get();
+
+
 		$contadorOrden = 1;
 		//dd($ordereventlist);
-		foreach($ordereventlist as $event )
+		//dd($ordereventlist);
+
+		foreach($ordeneventlist as $event )
 		{
 			//$dbevent = EventAssignation::first();
-			
+
 			$event->order = $contadorOrden;
-			$event->save();
+			if($event->save())
+			{
+				$ok = 1;
+			}else
+			{
+				$ok = 0;
+			}
+
 			$contadorOrden =  $contadorOrden + 1 ;
+
 		}
-		Flash::success('Cambio de orden realizado.');
-		return redirect(url()->previous());
+
+		if($ok == 1)
+		{
+			return true;
+		}else
+		{
+			return false;
+		}
+
 	}
+
 	public function cloneEvent(Request $request)
 	{
 		//asignamos el order para el clon
@@ -637,6 +702,9 @@ class ClientController extends Controller
 		//$device->save();
 		//creamos el nuevo elemento clonado
 		EventAssignation::create($input);
+
+		$this->orderEvents($request->device_id);
+
 		Flash::success('Se ha clonado el elemento correctamente.');
 		return redirect(url()->previous());
 
