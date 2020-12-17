@@ -43,33 +43,41 @@ class ClientStoreController extends Controller
 		 
 		 //$events = Event::where("company_id","=",$company_id)->where("state","=",1)->get();
 		 
+		 //Obtiene los eventos de la base de datos
+		 //Mejorar
 		$events = DB::select( DB::raw("SELECT events.* FROM events WHERE  events.company_id = :idcp && events.deleted_at IS NULL ORDER BY 'events.name' ASC "),["idcp" => $company_id] );
 		 
-		
+		//retorna ala vista las tiendas y los eventos
 		return view('client.clientStoresScreens')
 		->with('stores',$stores)
 		->with('events',$events);		
 
 	}
 
+	//Agrega +1 a la version de la pantalla
 	public function versionMasUno(Request $request)
 	{
-		
+		//obtiene la informacion de la solicitud
 		$data = $request->getContent();
 		
+		//obtiene la pantalla segun el id 
 		$device = Device::where('id' ,$request->idDevice)->first();
+		//agrega +1 a la version
 		$device->version = $device->version + 1;
+		//guarda la pantalla con la nueva version
 		$device->save();
 		
 
+		//Crea una lista 
 		$jsondata['data'] =  $data;	
 		$jsondata['sucess'] = "true";		 
 		$jsondata['idDevice'] = $request->idDevice;		 
 		$jsondata['device'] = $device;		 
 		//$jsondata['control'] = $device;		 
 		
-		
+		//Codifica la lista para devolverla por medio del "echo"
 		echo json_encode($jsondata);		 
+		//sale del proceso
 		exit();
 	}
  
@@ -273,26 +281,6 @@ class ClientStoreController extends Controller
 													return redirect()->back()->with('error', 'ERROR: No se pudo asignar el contenido <br> *No existe el video ???  ');  
 												}
 
-												//comprovamos que no se pueden agregar 2 videos de igual resolcuion a un mismo evento 
-												//comprovamos si es un evento existente
-											/*	if(!(is_null($request->event_id)) )
-												{
-													
-													//si el evento existe traemos los contenidos asociados al evento
-													$contents = Content::where('event_id',$request->event_id)->get();
-
-													/*foreach ($contents as $comparecontent) {
-														if(($comparecontent->height == $height ) && ($comparecontent->width == $width))
-														{
-															return redirect()->back()->with('error', 'ERROR: No se puede asignar dos contenidos de igual resolucion en un mismo evento');  
-														}
-																			
-													}//fin foreach */
-															
-													
-												//}//fin comprovar evento = resolucion 
-
-
 												//cargamos el video al servido y obtenemos la location	
 												$location = Storage::disk('videos')->put($evento->slug . "/" . $name, $file);
 												if($location == '')
@@ -434,9 +422,10 @@ class ClientStoreController extends Controller
 		
 	} //Final guardar asignar
 
+	//Funcion subir captura de pantalla // pertenece a las rutas configuradas para la API
 	public function upScreenShotApi(Request $request)
 	{
-		Log::debug('En el upscreenApi');		
+		//Log::debug('En el upscreenApi');		
 		//validacion del contenido del request
 		$validator = Validator::make($request->all(), 
               [ 
@@ -474,12 +463,14 @@ class ClientStoreController extends Controller
 				]);
 	} //fin function upScreenShotApi
 
+	//FUncion recargar capturas de pantalla
 	public function reloadScreenShots(Request $request)
 	{
+		//Obtiene el id de la tienda 
 		$idstore = $request->session()->get('idStore');
 		//$sesiondata = $request->session()->all();
 		
-
+		//Obtiene las pantallas asociadas a la tienda
 		$devices = Device::join('computers','devices.computer_id','=','computers.id')
 								->where('computers.store_id' , '=', $idstore)
 								->where('devices.state' , '=','1')
@@ -488,6 +479,7 @@ class ClientStoreController extends Controller
 								->select('devices.id' , 'devices.name')
 								->get();
 
+		//Obtiene la informacion de la solicitud							
 		$data = $request->getContent();				
 		
 		
@@ -499,11 +491,6 @@ class ClientStoreController extends Controller
 		 echo json_encode($jsondata);		 
 		 exit();
 
-	/*
-		 && computers.deleted_at IS NULL 
-		 
-		 && devices.deleted_At IS NULL 
-		 && devices.state = 1  */
 	}
 
 
