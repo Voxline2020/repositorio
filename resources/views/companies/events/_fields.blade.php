@@ -75,9 +75,11 @@
 
 		$("#initdate").on("change.datetimepicker", function (e) {
 				$('#enddate').datetimepicker('minDate', e.date);
+				console.log("change");
 		});
 		$("#enddate").on("change.datetimepicker", function (e) {
-				$('#initdate').datetimepicker('maxDate', e.date);
+				//$('#initdate').datetimepicker('maxDate', e.date);
+				console.log("change END");
 		});
 	});
 </script>
